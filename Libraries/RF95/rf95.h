@@ -36,6 +36,8 @@
 #include "driverlib.h"
 #include "spi_interface.h"
 #include "delay.h"
+#include "radio.h"
+#include "math.h"
 
 /*****************************************************************************
  *                                DEFINES
@@ -46,8 +48,6 @@
 #define CS_PIN      GPIO_PIN6
 #define INT_PORT    GPIO_PORT_P2
 #define INT_PIN     GPIO_PIN5
-
-#define RF_BROADCAST_ADDRESS 0xFF
 
 #define DEFAULT_FREQ    915.0
 #define DEFAULT_POWER   23
@@ -79,6 +79,14 @@
 
 // The Frequency Synthesizer step = FXOSC / 2^^19
 #define FSTEP  (FXOSC / 524288)
+
+#define RF_MID_BAND_THRESH                          525
+
+/*!
+ * Constant values need to compute the RSSI value
+ */
+#define RSSI_OFFSET_LF                              -164
+#define RSSI_OFFSET_HF                              -157
 
 #define RF_SPI_WRITE_MASK                           0x80
 
@@ -248,79 +256,64 @@
 #define PA_DAC_DISABLE                        0x84//0x04
 #define PA_DAC_ENABLE                         0x87//0x07
 
-typedef struct{
-    uint8_t    reg_1d;   ///< Value for register REG_1D_MODEM_CONFIG1
-    uint8_t    reg_1e;   ///< Value for register REG_1E_MODEM_CONFIG2
-    uint8_t    reg_26;   ///< Value for register REG_26_MODEM_CONFIG3
-} ModemConfig;
-    
-typedef enum{
-    Bw125Cr45Sf128 = 0,    ///< Bw = 125 kHz, Cr = 4/5, Sf = 128chips/symbol, CRC on. Default medium range
-    Bw500Cr45Sf128,            ///< Bw = 500 kHz, Cr = 4/5, Sf = 128chips/symbol, CRC on. Fast+short range
-    Bw31_25Cr48Sf512,      ///< Bw = 31.25 kHz, Cr = 4/8, Sf = 512chips/symbol, CRC on. Slow+long range
-    Bw125Cr48Sf4096,           ///< Bw = 125 kHz, Cr = 4/8, Sf = 4096chips/symbol, CRC on. Slow+long range
-} ModemConfigChoice;
+/*!
+ * Radio wakeup time from SLEEP mode
+ */
+#define RADIO_OSC_STARTUP                           1 // [ms]
 
-typedef enum{
-	RFModeInitialising = 0, ///< Transport is initialising. Initial default value until init() is called..
-	RFModeSleep,            ///< Transport hardware is in low power sleep mode (if supported)
-	RFModeIdle,             ///< Transport is idle.
-	RFModeTx,               ///< Transport is in the process of transmitting a message.
-	RFModeRx,               ///< Transport is in the process of receiving a message.
-	RFModeCad               ///< Transport is in the process of detecting channel activity (if supported)
-} RFMode;
+/*!
+ * Radio PLL lock and Mode Ready delay which can vary with the temperature
+ */
+#define RADIO_SLEEP_TO_RX                           2 // [ms]
+
+/*!
+ * Radio complete Wake-up Time with margin for temperature compensation
+ */
+#define RADIO_WAKEUP_TIME                           ( RADIO_OSC_STARTUP + RADIO_SLEEP_TO_RX )
+
+/*!
+ * Radio LoRa modem parameters
+ */
+typedef struct
+{
+    int8_t   Power;
+    uint32_t Bandwidth;
+    uint32_t Datarate;
+    bool     LowDatarateOptimize;
+    uint8_t  Coderate;
+    uint16_t PreambleLen;
+    bool     FixLen;
+    uint8_t  PayloadLen;
+    bool     CrcOn;
+    bool     RxContinuous;
+    uint32_t TxTimeout;
+}RadioLoRaSettings_t;
+
+/*!
+ * Radio LoRa packet handler state
+ */
+typedef struct
+{
+    int8_t SnrValue;
+    int16_t RssiValue;
+    uint8_t Size;
+}RadioLoRaPacketHandler_t;
+
+/*!
+ * Radio Settings
+ */
+typedef struct
+{
+    RadioState_t             State;
+    RadioModems_t            Modem;
+    uint32_t                 Channel;
+    RadioLoRaSettings_t      LoRa;
+    RadioLoRaPacketHandler_t LoRaPacketHandler;
+}RadioSettings_t;
 
 /*******************************************************************************
- * Node specific definitions 
+ * 							Node specific definitions
  ******************************************************************************/
-/// The current transport operating mode
-volatile RFMode     _mode;
-
-/// This node id
-uint8_t             _thisAddress;
-
-/// Whether the transport is in promiscuous mode
-bool                _promiscuous;
-
-/// TO header in the last received mesasge
-volatile uint8_t    _rxHeaderTo;
-
-/// FROM header in the last received mesasge
-volatile uint8_t    _rxHeaderFrom;
-
-/// ID header in the last received mesasge
-volatile uint8_t    _rxHeaderId;
-
-/// FLAGS header in the last received mesasge
-volatile uint8_t    _rxHeaderFlags;
-
-/// TO header to send in all messages
-uint8_t             _txHeaderTo;
-
-/// FROM header to send in all messages
-uint8_t             _txHeaderFrom;
-
-/// ID header to send in all messages
-uint8_t             _txHeaderId;
-
-/// FLAGS header to send in all messages
-uint8_t             _txHeaderFlags;
-
-/// The value of the last received RSSI value, in some transport specific units
-volatile int8_t     _lastRssi;
-
-/// Count of the number of bad messages (eg bad checksum etc) received
-volatile uint16_t   _rxBad;
-
-/// Count of the number of successfully transmitted messaged
-volatile uint16_t   _rxGood;
-
-/// Count of the number of bad messages (correct checksum etc) received
-volatile uint16_t   _txGood;
-
-/// Channel activity detected
-volatile bool       _cad;
-unsigned int        _cad_timeout;
     
 
 /*****************************************************************************
@@ -330,158 +323,237 @@ unsigned int        _cad_timeout;
 /// Initialise the Driver transport hardware and software.
 /// Make sure the Driver is properly configured before calling init().
 /// \return true if initialisation succeeded.
-bool    initRF(void);
+bool    RFInit(RadioEvents_t *events);
 
-/// Prints the value of all chip registers
-/// to the Serial device if RH_HAVE_SERIAL is defined for the current platform
-/// For debugging purposes only.
-/// \return true on success
-bool printRegisters(void);
+/*!
+ * Return current radio status
+ *
+ * \param status Radio status.[RF_IDLE, RF_RX_RUNNING, RF_TX_RUNNING]
+ */
+RadioState_t RFGetStatus(void);
 
-/// Sets all the registered required to configure the data modem in the RF95/96/97/98, including the bandwidth, 
-/// spreading factor etc. You can use this to configure the modem with custom configurations if none of the 
-/// canned configurations in ModemConfigChoice suit you.
-/// \param[in] config A ModemConfig structure containing values for the modem configuration registers.
-void           setModemRegisters(const ModemConfig* config);
+/*!
+ * \brief Configures the radio with the given modem
+ *
+ * \param [IN] modem Modem to be used [0: FSK, 1: LoRa]
+ */
+bool RFInitModem( RadioModems_t modem );
 
-/// Select one of the predefined modem configurations. If you need a modem configuration not provided 
-/// here, use setModemRegisters() with your own ModemConfig.
-/// \param[in] index The configuration choice.
-/// \return true if index is a valid choice.
-bool        setModemConfig(ModemConfigChoice index);
+/*!
+ * \brief Sets the channels configuration
+ *
+ * \param [IN] freq         Channel RF frequency
+ */
+void RFSetChannel( uint32_t freq );
 
-/// Tests whether a new message is available
-/// from the Driver. 
-/// On most drivers, this will also put the Driver into RHModeRx mode until
-/// a message is actually received by the transport, when it wil be returned to RHModeIdle.
-/// This can be called multiple times in a timeout loop
-/// \return true if a new, complete, error-free uncollected message is available to be retreived by recv()
-bool    available();
+/*!
+ * \brief Sets the channels configuration
+ *
+ * \param [IN] modem      Radio modem to be used [0: FSK, 1: LoRa]
+ * \param [IN] freq       Channel RF frequency
+ * \param [IN] rssiThresh RSSI threshold
+ *
+ * \retval isFree         [true: Channel is free, false: Channel is not free]
+ */
+bool RFIsChannelFree (uint32_t freq, int16_t rssiThresh);
 
-/// Turns the receiver on if it not already on.
-/// If there is a valid message available, copy it to buf and return true
-/// else return false.
-/// If a message is copied, *len is set to the length (Caution, 0 length messages are permitted).
-/// You should be sure to call this function frequently enough to not miss any messages
-/// It is recommended that you call it in your main loop.
-/// \param[in] buf Location to copy the received message
-/// \param[in,out] len Pointer to available space in buf. Set to the actual number of octets copied.
-/// \return true if a valid message was copied to buf
-bool    recv(uint8_t* buf, uint8_t* len);
+/*!
+ * \brief Generates a 32 bits random value based on the RSSI readings
+ *
+ * \remark This function sets the radio in LoRa modem mode and disables
+ *         all interrupts.
+ *         After calling this function either SX1276SetRxConfig or
+ *         SX1276SetTxConfig functions must be called.
+ *
+ * \retval randomValue    32 bits random value
+ */
+uint32_t RFRandom( void );
 
-/// Waits until any previous transmit packet is finished being transmitted with waitPacketSent().
-/// Then optionally waits for Channel Activity Detection (CAD) 
-/// to show the channnel is clear (if the radio supports CAD) by calling waitCAD().
-/// Then loads a message into the transmitter and starts the transmitter. Note that a message length
-/// of 0 is permitted. 
-/// \param[in] data Array of data to be sent
-/// \param[in] len Number of bytes of data to send
-/// specify the maximum time in ms to wait. If 0 (the default) do not wait for CAD before transmitting.
-/// \return true if the message length was valid and it was correctly queued for transmit. Return false
-/// if CAD was requested and the CAD timeout timed out before clear channel was detected.
-bool    send(const uint8_t* data, uint8_t len);
+/*!
+ * \brief Sets the reception parameters
+ *
+ * \remark When using LoRa modem only bandwidths 125, 250 and 500 kHz are supported
+ *
+ * \param [IN] modem        Radio modem to be used [0: FSK, 1: LoRa]
+ * \param [IN] bandwidth    Sets the bandwidth
+ *                          FSK : >= 2600 and <= 250000 Hz
+ *                          LoRa: [0: 125 kHz, 1: 250 kHz,
+ *                                 2: 500 kHz, 3: Reserved]
+ * \param [IN] datarate     Sets the Datarate
+ *                          FSK : 600..300000 bits/s
+ *                          LoRa: [6: 64, 7: 128, 8: 256, 9: 512,
+ *                                10: 1024, 11: 2048, 12: 4096  chips]
+ * \param [IN] coderate     Sets the coding rate (LoRa only)
+ *                          FSK : N/A ( set to 0 )
+ *                          LoRa: [1: 4/5, 2: 4/6, 3: 4/7, 4: 4/8]
+ * \param [IN] bandwidthAfc Sets the AFC Bandwidth (FSK only)
+ *                          FSK : >= 2600 and <= 250000 Hz
+ *                          LoRa: N/A ( set to 0 )
+ * \param [IN] preambleLen  Sets the Preamble length
+ *                          FSK : Number of bytes
+ *                          LoRa: Length in symbols (the hardware adds 4 more symbols)
+ * \param [IN] symbTimeout  Sets the RxSingle timeout value (LoRa only)
+ *                          FSK : N/A ( set to 0 )
+ *                          LoRa: timeout in symbols
+ * \param [IN] fixLen       Fixed length packets [0: variable, 1: fixed]
+ * \param [IN] payloadLen   Sets payload length when fixed lenght is used
+ * \param [IN] crcOn        Enables/Disables the CRC [0: OFF, 1: ON]
+ * \param [IN] FreqHopOn    Enables disables the intra-packet frequency hopping
+ *                          FSK : N/A ( set to 0 )
+ *                          LoRa: [0: OFF, 1: ON]
+ * \param [IN] HopPeriod    Number of symbols bewteen each hop
+ *                          FSK : N/A ( set to 0 )
+ *                          LoRa: Number of symbols
+ * \param [IN] iqInverted   Inverts IQ signals (LoRa only)
+ *                          FSK : N/A ( set to 0 )
+ *                          LoRa: [0: not inverted, 1: inverted]
+ * \param [IN] rxContinuous Sets the reception in continuous mode
+ *                          [false: single mode, true: continuous mode]
+ */
+void RFSetRxConfig( uint32_t bandwidth, uint32_t datarate,
+					uint8_t coderate, uint16_t preambleLen,
+					uint16_t symbTimeout, bool fixLen,
+					uint8_t payloadLen,	bool crcOn, bool rxContinuous);
 
-/// Sets the length of the preamble
-/// in bytes. 
-/// Caution: this should be set to the same 
-/// value on all nodes in your network. Default is 8.
-/// Sets the message preamble length in REG_??_PREAMBLE_?SB
-/// \param[in] bytes Preamble length in bytes.  
-void           setPreambleLength(uint16_t bytes);
+/*!
+ * \brief Sets the transmission parameters
+ *
+ * \remark When using LoRa modem only bandwidths 125, 250 and 500 kHz are supported
+ *
+ * \param [IN] modem        Radio modem to be used [0: FSK, 1: LoRa]
+ * \param [IN] power        Sets the output power [dBm]
+ * \param [IN] fdev         Sets the frequency deviation (FSK only)
+ *                          FSK : [Hz]
+ *                          LoRa: 0
+ * \param [IN] bandwidth    Sets the bandwidth (LoRa only)
+ *                          FSK : 0
+ *                          LoRa: [0: 125 kHz, 1: 250 kHz,
+ *                                 2: 500 kHz, 3: Reserved]
+ * \param [IN] datarate     Sets the Datarate
+ *                          FSK : 600..300000 bits/s
+ *                          LoRa: [6: 64, 7: 128, 8: 256, 9: 512,
+ *                                10: 1024, 11: 2048, 12: 4096  chips]
+ * \param [IN] coderate     Sets the coding rate (LoRa only)
+ *                          FSK : N/A ( set to 0 )
+ *                          LoRa: [1: 4/5, 2: 4/6, 3: 4/7, 4: 4/8]
+ * \param [IN] preambleLen  Sets the preamble length
+ *                          FSK : Number of bytes
+ *                          LoRa: Length in symbols (the hardware adds 4 more symbols)
+ * \param [IN] fixLen       Fixed length packets [0: variable, 1: fixed]
+ * \param [IN] crcOn        Enables disables the CRC [0: OFF, 1: ON]
+ * \param [IN] FreqHopOn    Enables disables the intra-packet frequency hopping
+ *                          FSK : N/A ( set to 0 )
+ *                          LoRa: [0: OFF, 1: ON]
+ * \param [IN] HopPeriod    Number of symbols bewteen each hop
+ *                          FSK : N/A ( set to 0 )
+ *                          LoRa: Number of symbols
+ * \param [IN] iqInverted   Inverts IQ signals (LoRa only)
+ *                          FSK : N/A ( set to 0 )
+ *                          LoRa: [0: not inverted, 1: inverted]
+ * \param [IN] timeout      Transmission timeout [ms]
+ */
+void RFSetTxConfig(int8_t power, uint32_t bandwidth, uint32_t datarate,
+                        uint8_t coderate, uint16_t preambleLen,
+                        bool fixLen, bool crcOn, uint32_t timeout );
 
-/// Returns the maximum message length 
-/// available in this Driver.
-/// \return The maximum legal message length
-uint8_t maxMessageLength();
+/*!
+ * \brief Checks if the given RF frequency is supported by the hardware
+ *
+ * \param [IN] frequency RF frequency to be checked
+ * \retval isSupported [true: supported, false: unsupported]
+ */
+bool RFCheckRfFrequency( uint32_t frequency );
 
-/// Sets the transmitter and receiver 
-/// centre frequency.
-/// \param[in] centre Frequency in MHz. 137.0 to 1020.0. Caution: RFM95/96/97/98 comes in several
-/// different frequency ranges, and setting a frequency outside that range of your radio will probably not work
-/// \return true if the selected frquency centre is within range
-bool        setFrequency(float centre);
+/*!
+ * \brief Computes the packet time on air in us for the given payload
+ *
+ * \Remark Can only be called once SetRxConfig or SetTxConfig have been called
+ *
+ * \param [IN] modem      Radio modem to be used [0: FSK, 1: LoRa]
+ * \param [IN] pktLen     Packet payload length
+ *
+ * \retval airTime        Computed airTime (us) for the given packet payload length
+ */
+uint32_t RFGetTimeOnAir(uint8_t pktLen );
 
-/// If current mode is Rx or Tx changes it to Idle. If the transmitter or receiver is running, 
-/// disables them.
-void           setModeIdle();
+/*!
+ * \brief Sends the buffer of size. Prepares the packet to be sent and sets
+ *        the radio in transmission
+ *
+ * \param [IN]: buffer     Buffer pointer
+ * \param [IN]: size       Buffer size
+ */
+void RFSend( uint8_t *buffer, uint8_t size );
 
-/// If current mode is Tx or Idle, changes it to Rx. 
-/// Starts the receiver in the RF95/96/97/98.
-void           setModeRx();
+/*!
+ * \brief Sets the radio in sleep mode
+ */
+void RFSetSleep( void );
 
-/// If current mode is Rx or Idle, changes it to Rx. F
-/// Starts the transmitter in the RF95/96/97/98.
-void           setModeTx();
+/*!
+ * \brief Sets the radio in standby mode
+ */
+void RFSetStby( void );
 
-/// Wait until idle then sleep
-void		   setModeSleep();
+/*!
+ * \brief Sets the radio in reception mode for the given time
+ * \param [IN] timeout Reception timeout [ms] [0: continuous, others timeout]
+ */
+void RFSetRx( uint32_t timeout );
 
-/// Sets the transmitter power output level, and configures the transmitter pin.
-/// Be a good neighbour and set the lowest power level you need.
-/// Some SX1276/77/78/79 and compatible modules (such as RFM95/96/97/98) 
-/// use the PA_BOOST transmitter pin for high power output (and optionally the PA_DAC)
-/// while some (such as the Modtronix inAir4 and inAir9) 
-/// use the RFO transmitter pin for lower power but higher efficiency.
-/// You must set the appropriate power level and useRFO argument for your module.
-/// Check with your module manufacturer which transmtter pin is used on your module
-/// to ensure you are setting useRFO correctly. 
-/// Failure to do so will result in very low 
-/// transmitter power output.
-/// Caution: legal power limits may apply in certain countries.
-/// After init(), the power will be set to 13dBm, with useRFO false (ie PA_BOOST enabled).
-/// \param[in] power Transmitter power level in dBm. For RFM95/96/97/98 LORA with useRFO false, 
-/// valid values are from +5 to +23.
-/// For Modtronix inAir4 and inAir9 with useRFO true (ie RFO pins in use), 
-/// valid values are from -1 to 14.
-/// \param[in] useRFO If true, enables the use of the RFO transmitter pins instead of
-/// the PA_BOOST pin (false). Choose the correct setting for your module.
-void            setTxPower(int8_t power, bool useRFO);
+/*!
+ * \brief Start a Channel Activity Detection
+ */
+void RFStartCad( void );
 
-/// Galal Hassan (galalmounir@gmail.com), 10/25/2016
-/// Transmits on SPI
-void            spiWrite(uint8_t reg, uint8_t val);
+/*!
+ * \brief Reads the current RSSI value
+ *
+ * \retval rssiValue Current RSSI value in [dBm]
+ */
+int16_t RFReadRssi(void);
 
-/// Galal Hassan (galalmounir@gmail.com), 10/25/2016
-/// Reads from SPI
-uint8_t         spiRead(uint8_t reg);
+/*!
+ * \brief Writes the radio register at the specified address
+ *
+ * \param [IN]: addr Register address
+ * \param [IN]: data New register value
+ */
+void RFWrite( uint8_t addr, uint8_t data );
 
-/// Sets the radio into low-power sleep mode.
-/// If successful, the transport will stay in sleep mode until woken by 
-/// changing mode it idle, transmit or receive (eg by calling send(), recv(), available() etc)
-/// Caution: there is a time penalty as the radio takes a finite time to wake from sleep mode.
-/// \return true if sleep mode was successfully entered.
-bool    sleep();
+/*!
+ * \brief Reads the radio register at the specified address
+ *
+ * \param [IN]: addr Register address
+ * \retval data Register value
+ */
+uint8_t RFRead( uint8_t addr );
 
-// Bent G Christensen (bentor@gmail.com), 08/15/2016
-/// Use the radio's Channel Activity Detect (CAD) function to detect channel activity.
-/// Sets the RF95 radio into CAD mode and waits until CAD detection is complete.
-/// To be used in a listen-before-talk mechanism (Collision Avoidance)
-/// with a reasonable time backoff algorithm.
-/// This is called automatically by waitCAD().
-/// \return true if channel is in use.  
-bool    isChannelActive();
+/*!
+ * \brief Writes multiple radio registers starting at address
+ *
+ * \param [IN] addr   First Radio register address
+ * \param [IN] buffer Buffer containing the new register's values
+ * \param [IN] size   Number of registers to be written
+ */
+void RFWriteBuffer( uint8_t reg, uint8_t* src, uint8_t len );
 
-/// This is a low level function to handle the interrupts for one instance of RH_RF95.
-/// Called automatically by isr*()
-/// Should not need to be called by user code.
-void           handleInterrupt();
+/*!
+ * \brief Reads multiple radio registers starting at address
+ *
+ * \param [IN] addr First Radio register address
+ * \param [OUT] buffer Buffer where to copy the registers data
+ * \param [IN] size Number of registers to be read
+ */
+void RFReadBuffer( uint8_t addr, uint8_t *buffer, uint8_t size );
 
-/// Examine the revceive buffer to determine whether the message is for this node
-void validateRxBuf();
-
-/// Clear our local receive buffer
-void clearRxBuf();
-
-bool waitPacketSent();
-
-/// Number of octets in the buffer
-volatile uint8_t    _bufLen;
-
-/// The receiver/transmitter buffer
-volatile uint8_t    _buf[MAX_PAYLOAD_LEN];
-
-/// True when there is a valid message in the buffer
-volatile bool       _rxBufValid;
+/*!
+ * \brief Sets the maximum payload length.
+ *
+ * \param [IN] modem      Radio modem to be used [0: FSK, 1: LoRa]
+ * \param [IN] max        Maximum payload length in bytes
+ */
+void RFSetMaxPayloadLength( RadioModems_t modem, uint8_t max );
 
 #endif
 

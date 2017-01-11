@@ -8,7 +8,7 @@ volatile uint32_t   _totalms = 0;
 
 void Init_SysTick(uint32_t freq){
     MAP_SysTick_enableModule();
-    MAP_SysTick_setPeriod(freq/1000);
+    MAP_SysTick_setPeriod(freq/1000/8);
     MAP_Interrupt_setPriority(FAULT_SYSTICK, 0x20);
     MAP_SysTick_enableInterrupt();
     MAP_Interrupt_enableMaster();   
@@ -35,6 +35,8 @@ void SysTick_Handler(void){
         _totalms++;
     else
         _totalms = 0;
+
+    GPIO_toggleOutputOnPin(GPIO_PORT_P4, GPIO_PIN2);
     // if (_msTime <1000){
     //     _msTime++;
     // }

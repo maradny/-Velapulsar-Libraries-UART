@@ -47,8 +47,11 @@ AdapterNode_main.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP43
 AdapterNode_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/rf95.h
 AdapterNode_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/spi_interface.h
 AdapterNode_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/delay.h
-AdapterNode_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdio.h
+AdapterNode_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/Radio/radio.h
+AdapterNode_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/math.h
 AdapterNode_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/linkage.h
+AdapterNode_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/_defs.h
+AdapterNode_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdio.h
 AdapterNode_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdarg.h
 AdapterNode_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdlib.h
 
@@ -99,7 +102,10 @@ C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/wdt_a.h:
 C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/rf95.h: 
 C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/spi_interface.h: 
 C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/delay.h: 
-C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdio.h: 
+C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/Radio/radio.h: 
+C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/math.h: 
 C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/linkage.h: 
+C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/_defs.h: 
+C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdio.h: 
 C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdarg.h: 
 C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdlib.h: 

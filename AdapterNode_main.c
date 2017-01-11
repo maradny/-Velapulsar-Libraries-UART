@@ -33,12 +33,6 @@
 /* Application Includes */
 #include "velapulsar.h"
 
-/* Standard Includes */
-#include <stdint.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-
 /*****************************************************************************
  *                             LOCAL FUNCTIONS
  *****************************************************************************/
@@ -52,6 +46,10 @@
 *
 * Returns: Null
 ******************************************************************************/
+uint8_t buf[20];
+uint8_t len = sizeof(buf);
+uint32_t goodPkts = 0;
+
 int main(void)
 {
 	/* Set clocks to pre defined frequencies */
@@ -62,6 +60,8 @@ int main(void)
     
     uint8_t packetNum = 0;
     
+    RFSetTxConfig(23, 9, 10,1, 20, true, true, 1000);
+
     while(1){
         printf("Sending to sink\n");
         
@@ -71,40 +71,45 @@ int main(void)
         printf("Sending "); printf(radioPacket); printf("\n");
         radioPacket[19] = 0;
         
+
+
         printf("Sending....\n"); delay_ms(10);
-        sendBuffer(radioPacket, 20);
-        
-        printf("Waiting for packet to complete...\n"); //delay_ms(10);
-        waitPacketSent();
-        
-        uint8_t buf[MAX_MESSAGE_LEN];
-        uint8_t len = sizeof(buf);
-        
-        setModeRx();
-        printf("Waiting for reply...\n"); //delay_ms(10);
-        delay_ms(1000);
-        if (available()){
-            receiveBuffer(buf, &len);
-            printf("Got reply: "); printf(buf); printf("\n");
-            GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN0);
-            GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN1);
-            GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN2);
-            GPIO_setOutputHighOnPin(GPIO_PORT_P2, 0x01 << buf[0]);
-            //sendBuffer(radioPacket, 20);
-            //waitPacketSent();
-            //printf("RSSI: "); printf()
+        RFSend(radioPacket, 20);
+        while (RFGetStatus() == RF_TX_RUNNING){
+        	delay_ms(50);
         }
-        else{
-            printf("No reply, is there a listener around?\n");
-        }
-    	setModeIdle();
-		GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
-		printf("going to bed\n");
-		sleepFor(1);
-		GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
+//        printf("Modem Config1: %X\n",spiRead(REG_1D_MODEM_CONFIG1));
+//        printf("Modem Config2: %X\n",spiRead(REG_1E_MODEM_CONFIG2));
+//        printf("Modem Config3: %X\n",spiRead(REG_26_MODEM_CONFIG3));
+//        printf("Preamble: %X%X\n", spiRead(REG_20_PREAMBLE_MSB), spiRead(REG_21_PREAMBLE_LSB));
+//      printf("Waiting for packet to complete...\n"); //delay_ms(10);
+//      waitPacketSent();
+        
+        
+
+//        setModeRx();
+//        printf("Waiting for reply...\n"); //delay_ms(10);
+//        delay_ms(1000);
+//        if (available()){
+//            receiveBuffer(buf, &len);
+//            printf("Got reply: %X%X\n", buf[0], buf[1]);
+//
+//            GPIO_toggleOutputOnPin(GPIO_PORT_P2, GPIO_PIN0);
+//            GPIO_toggleOutputOnPin(GPIO_PORT_P2, GPIO_PIN1);
+//            GPIO_toggleOutputOnPin(GPIO_PORT_P2, GPIO_PIN2);
+//            goodPkts++;
+//        }
+//        else{
+//            printf("No reply, is there a listener around?\n");
+//        }
+//    	setModeIdle();
+//		GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
+//		printf("Received %d correctly.\n", goodPkts);
+//		printf("going to bed\n");
+//		//sleepFor(1);
+//		GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
 
     }
-    
     PCM_gotoLPM0();
     __no_operation();
 }

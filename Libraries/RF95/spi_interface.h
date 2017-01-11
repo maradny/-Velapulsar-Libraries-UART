@@ -4,4 +4,6 @@
 #include "driverlib.h"
 #include "delay.h"
 
+void initSPI(void);
+
 #endif

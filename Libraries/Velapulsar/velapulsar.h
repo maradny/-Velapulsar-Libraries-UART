@@ -15,8 +15,14 @@
 #include "rf95.h"
 #include "delay.h"
 
+/* Standard Includes */
+#include <stdint.h>
+#include <stdbool.h>
+#include "stdio.h"
+#include "stdlib.h"
+
 /* Defines */
-#define CLK_FREQ 10000000
+#define CLK_FREQ 48000000
 
 /* Function defines */
 void initPeripherals (void);

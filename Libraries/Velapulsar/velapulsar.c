@@ -1,17 +1,57 @@
 /*
- * velapulsar.c
+ * Description: Velapulsar application interface, provides an interface for
+ * 				all the application functions
+ * Maintainer: Galal Hassan
  *
- *  Created on: Jan 3, 2017
- *      Author: Galal Hassan
+ *	____   ____     .__                      .__
+ *	\   \ /   /____ |  | _____  ______  __ __|  |   ___________ _______
+ *	 \   Y   // __ \|  | \__  \ \____ \|  |  \  |  /  ___/\__  \\_  __ \
+ *	  \     /\  ___/|  |__/ __ \|  |_> >  |  /  |__\___ \  / __ \|  | \/
+ *	   \___/  \___  >____(____  /   __/|____/|____/____  >(____  /__|
+ *				  \/          \/|__|                   \/      \/
+ *				  (C)2017 TRL Queen's University
+ *
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Copyright 2015 Queen's University TRL. All rights reserved.
+ * Should you have any questions regarding your right to use this Software,
+ * contact TRL at www.queenstrl.ca.
  */
 
+/*****************************************************************************
+ *                                INCLUDES
+ *****************************************************************************/
 #include "velapulsar.h"
 
-/* Local Defines */
+/*****************************************************************************
+ *                                DEFINES
+ *****************************************************************************/
 static RTC_C_Calendar calendarTime;
 volatile bool awake = true;
+RadioEvents_t radioEvents;
 
-/* Function definitions */
+/*****************************************************************************
+ *                        LOCAL FUNCTION PROTOYPES
+ *****************************************************************************/
+static void OnRadioTxDone (void);
+static void OnRadioRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr);
+static void OnRadioRxError (void);
+static void OnRadioTxTimeout (void);
+static void OnRadioRxTimeout (void);
+
+/*****************************************************************************
+ *                        FUNCTION IMPLEMENTATIONS
+ *****************************************************************************/
 void initPeripherals (void){
     /* Halting WDT  */
     MAP_WDT_A_holdTimer();
@@ -23,7 +63,13 @@ void initPeripherals (void){
 	initPorts();
 
 	/* Initialize radio */
-	if (initRF()){
+	radioEvents.TxDone = OnRadioTxDone;
+	radioEvents.RxDone = OnRadioRxDone;
+	radioEvents.RxError = OnRadioRxError;
+	radioEvents.TxTimeout = OnRadioTxTimeout;
+	radioEvents.RxTimeout = OnRadioRxTimeout;
+
+	if (RFInit(&radioEvents)){
 		GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
 	}
 }
@@ -42,6 +88,9 @@ void initPorts (void){
 
 	MAP_GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN2);
 	GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN2);
+
+	MAP_GPIO_setAsOutputPin(GPIO_PORT_P4, GPIO_PIN2);
+	GPIO_setOutputLowOnPin(GPIO_PORT_P4, GPIO_PIN2);
 }
 
 void initClocks (void){
@@ -69,7 +118,7 @@ void initClocks (void){
      *      SMCLK = DCO/4 = 750kHz
      *      BCLK  = REFO = 32kHz
      */
-    MAP_CS_initClockSignal(CS_MCLK, CS_HFXTCLK_SELECT, CS_CLOCK_DIVIDER_1);
+    MAP_CS_initClockSignal(CS_MCLK, CS_HFXTCLK_SELECT, CS_CLOCK_DIVIDER_8);
     // MAP_CS_initClockSignal(CS_ACLK, CS_REFOCLK_SELECT, CS_CLOCK_DIVIDER_2);
     // MAP_CS_initClockSignal(CS_HSMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_2);
     MAP_CS_initClockSignal(CS_SMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
@@ -89,7 +138,8 @@ void initClocks (void){
 
 void sleepFor(int minutes){
 
-	setModeSleep();
+	RFSetSleep();
+	//setModeSleep();
 
 	RTC_C_Calendar currentTime = RTC_C_getCalendarTime();
 
@@ -148,7 +198,8 @@ void sleepFor(int minutes){
     }
     printf("woke up\n");
     initPeripherals();
-    setModeIdle();
+    RFSetStby();
+    //setModeIdle();
 }
 
 void initCalendar (void){
@@ -179,4 +230,27 @@ void RTC_AlarmHandler(void){
     if(status & RTC_C_CLOCK_ALARM_INTERRUPT){
     	awake = true;
     }
+}
+
+/*****************************************************************************
+ *                            LOCAL FUNCTIONS
+ *****************************************************************************/
+static void OnRadioTxDone (void){
+	printf("Sent OK\n");
+}
+
+static void OnRadioRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr){
+	printf("Message received: %s\n", payload);
+}
+
+static void OnRadioRxError (void){
+	printf("Received error Pkt\n");
+}
+
+static void OnRadioTxTimeout (void){
+	printf("TX timeout\n");
+}
+
+static void OnRadioRxTimeout (void){
+	printf("RX timeout\n");
 }

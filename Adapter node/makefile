@@ -13,6 +13,7 @@ ORDERED_OBJS += \
 "./AdapterNode_main.obj" \
 "./startup_msp432p401r_ccs.obj" \
 "./system_msp432p401r.obj" \
+"./Libraries/Mac/velapulsar_mac.obj" \
 "./Libraries/RF95/delay.obj" \
 "./Libraries/RF95/rf95.obj" \
 "./Libraries/RF95/spi_interface.obj" \
@@ -30,9 +31,11 @@ RMDIR := RMDIR /S/Q
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir_vars.mk
+-include Libraries/Mac/subdir_vars.mk
 -include Libraries/RF95/subdir_vars.mk
 -include Libraries/Velapulsar/subdir_vars.mk
 -include subdir_rules.mk
+-include Libraries/Mac/subdir_rules.mk
 -include Libraries/RF95/subdir_rules.mk
 -include Libraries/Velapulsar/subdir_rules.mk
 -include objects.mk
@@ -163,8 +166,8 @@ Velapulsar.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)$(BIN_OUTPUTS__QUOTED)
-	-$(RM) "AdapterNode_main.d" "startup_msp432p401r_ccs.d" "system_msp432p401r.d" "Libraries\RF95\delay.d" "Libraries\RF95\rf95.d" "Libraries\RF95\spi_interface.d" "Libraries\Velapulsar\velapulsar.d" 
-	-$(RM) "AdapterNode_main.obj" "startup_msp432p401r_ccs.obj" "system_msp432p401r.obj" "Libraries\RF95\delay.obj" "Libraries\RF95\rf95.obj" "Libraries\RF95\spi_interface.obj" "Libraries\Velapulsar\velapulsar.obj" 
+	-$(RM) "AdapterNode_main.d" "startup_msp432p401r_ccs.d" "system_msp432p401r.d" "Libraries\Mac\velapulsar_mac.d" "Libraries\RF95\delay.d" "Libraries\RF95\rf95.d" "Libraries\RF95\spi_interface.d" "Libraries\Velapulsar\velapulsar.d" 
+	-$(RM) "AdapterNode_main.obj" "startup_msp432p401r_ccs.obj" "system_msp432p401r.obj" "Libraries\Mac\velapulsar_mac.obj" "Libraries\RF95\delay.obj" "Libraries\RF95\rf95.obj" "Libraries\RF95\spi_interface.obj" "Libraries\Velapulsar\velapulsar.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
