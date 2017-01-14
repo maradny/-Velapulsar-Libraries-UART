@@ -421,7 +421,7 @@ bool RFInitModem (RadioModems_t modem){
 	RFSetOpMode(MODE_SLEEP);
 	RFWrite(REG_01_OP_MODE, LONG_RANGE_MODE);
     uint8_t val = RFRead(REG_01_OP_MODE);
-
+    printf("val: %x\n", val);
     if (val != LONG_RANGE_MODE){
         return false;
     }

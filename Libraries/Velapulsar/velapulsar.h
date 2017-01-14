@@ -12,7 +12,7 @@
 #include "driverlib.h"
 
 /* Application includes */
-#include "rf95.h"
+#include "velapulsar_mac.h"
 #include "delay.h"
 
 /* Standard Includes */

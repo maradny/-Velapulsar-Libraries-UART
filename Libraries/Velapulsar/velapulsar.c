@@ -38,16 +38,16 @@
  *****************************************************************************/
 static RTC_C_Calendar calendarTime;
 volatile bool awake = true;
-RadioEvents_t radioEvents;
+
+VelaMacPrimitives_t VelaMacPrimitives;
+VelaMacStatus_t Status;
 
 /*****************************************************************************
  *                        LOCAL FUNCTION PROTOYPES
  *****************************************************************************/
-static void OnRadioTxDone (void);
-static void OnRadioRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr);
-static void OnRadioRxError (void);
-static void OnRadioTxTimeout (void);
-static void OnRadioRxTimeout (void);
+static void McpsConfirm (McpsConfirm_t *McpsConfirm);
+static void McpsIndication (McpsIndication_t *McpsIndication);
+static void MlmeConfirm (MlmeConfirm_t *MlmeConfirm);
 
 /*****************************************************************************
  *                        FUNCTION IMPLEMENTATIONS
@@ -63,13 +63,11 @@ void initPeripherals (void){
 	initPorts();
 
 	/* Initialize radio */
-	radioEvents.TxDone = OnRadioTxDone;
-	radioEvents.RxDone = OnRadioRxDone;
-	radioEvents.RxError = OnRadioRxError;
-	radioEvents.TxTimeout = OnRadioTxTimeout;
-	radioEvents.RxTimeout = OnRadioRxTimeout;
-
-	if (RFInit(&radioEvents)){
+	VelaMacPrimitives.MacMcpsConfirm = McpsConfirm;
+	VelaMacPrimitives.MacMcpsIndication = McpsIndication;
+	VelaMacPrimitives.MacMlmeConfirm = MlmeConfirm;
+	if (VelaMacInitialization(&VelaMacPrimitives) == VELAMAC_STATUS_OK){
+		printf("initialized\n");
 		GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
 	}
 }
@@ -235,22 +233,14 @@ void RTC_AlarmHandler(void){
 /*****************************************************************************
  *                            LOCAL FUNCTIONS
  *****************************************************************************/
-static void OnRadioTxDone (void){
-	printf("Sent OK\n");
+static void McpsConfirm (McpsConfirm_t *McpsConfirm){
+
 }
 
-static void OnRadioRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr){
-	printf("Message received: %s\n", payload);
+static void McpsIndication (McpsIndication_t *McpsIndication){
+
 }
 
-static void OnRadioRxError (void){
-	printf("Received error Pkt\n");
-}
+static void MlmeConfirm (MlmeConfirm_t *MlmeConfirm){
 
-static void OnRadioTxTimeout (void){
-	printf("TX timeout\n");
-}
-
-static void OnRadioRxTimeout (void){
-	printf("RX timeout\n");
 }

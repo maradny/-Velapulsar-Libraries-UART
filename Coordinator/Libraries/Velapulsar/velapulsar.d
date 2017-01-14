@@ -44,6 +44,7 @@ Libraries/Velapulsar/velapulsar.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/
 Libraries/Velapulsar/velapulsar.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/timer_a.h
 Libraries/Velapulsar/velapulsar.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/uart.h
 Libraries/Velapulsar/velapulsar.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/wdt_a.h
+Libraries/Velapulsar/velapulsar.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/Mac/velapulsar_mac.h
 Libraries/Velapulsar/velapulsar.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/rf95.h
 Libraries/Velapulsar/velapulsar.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/spi_interface.h
 Libraries/Velapulsar/velapulsar.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/delay.h
@@ -99,6 +100,7 @@ C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/timer32.h:
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/timer_a.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/uart.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/wdt_a.h: 
+C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/Mac/velapulsar_mac.h: 
 C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/rf95.h: 
 C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/spi_interface.h: 
 C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/delay.h: 
