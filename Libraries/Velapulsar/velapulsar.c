@@ -66,10 +66,10 @@ void initPeripherals (void){
 	VelaMacPrimitives.MacMcpsConfirm = McpsConfirm;
 	VelaMacPrimitives.MacMcpsIndication = McpsIndication;
 	VelaMacPrimitives.MacMlmeConfirm = MlmeConfirm;
-	if (VelaMacInitialization(&VelaMacPrimitives) == VELAMAC_STATUS_OK){
-		printf("initialized\n");
-		GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
-	}
+//	if (VelaMacInitialization(&VelaMacPrimitives) == VELAMAC_STATUS_OK){
+//		printf("initialized\n");
+//		GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
+//	}
 }
 
 void initPorts (void){

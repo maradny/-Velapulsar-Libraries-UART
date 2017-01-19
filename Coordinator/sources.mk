@@ -112,7 +112,7 @@ S64_DEPS__QUOTED :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 . \
-Libraries/Mac \
+Libraries/LMiC \
 Libraries/RF95 \
 Libraries/Velapulsar \
 

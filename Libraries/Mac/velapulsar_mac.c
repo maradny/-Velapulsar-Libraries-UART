@@ -352,6 +352,7 @@ static void OnRadioTxDone (void){
 
 static void OnRadioRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr){
 	printf("Message received: %s\n", payload);
+
 }
 
 static void OnRadioRxError (void){

@@ -128,9 +128,11 @@ u1_t os_getBattLevel (void) {
 u2_t os_crc16 (xref2u1_t data, uint len) {
     u2_t remainder = 0;
     u2_t polynomial = 0x1021;
-    for( uint i = 0; i < len; i++ ) {
+    uint i;
+    for( i = 0; i < len; i++ ) {
         remainder ^= data[i] << 8;
-        for( u1_t bit = 8; bit > 0; bit--) {
+        u1_t bit;
+        for( bit = 8; bit > 0; bit--) {
             if( (remainder & 0x8000) )
                 remainder = (remainder << 1) ^ polynomial;
             else 
@@ -750,7 +752,8 @@ static ostime_t nextJoinState (void) {
 
 
 static void initDefaultChannels (void) {
-    for( u1_t i=0; i<4; i++ )
+	u1_t i;
+    for( i=0; i<4; i++ )
         LMIC.channelMap[i] = 0xFFFF;
     LMIC.channelMap[4] = 0x00FF;
 }
@@ -780,7 +783,8 @@ void LMIC_disableChannel (u1_t channel) {
 static u1_t mapChannels (u1_t chpage, u2_t chmap) {
     if( chpage == MCMD_LADR_CHP_125ON || chpage == MCMD_LADR_CHP_125OFF ) {
         u2_t en125 = chpage == MCMD_LADR_CHP_125ON ? 0xFFFF : 0x0000;
-        for( u1_t u=0; u<4; u++ )
+        u1_t u;
+        for( u=0; u<4; u++ )
             LMIC.channelMap[u] = en125;
         LMIC.channelMap[64/16] = chmap;
     } else {
@@ -820,14 +824,16 @@ static void _nextTx (void) {
         LMIC.chRnd = os_getRndU1() & 0x3F;
     if( LMIC.datarate >= DR_SF8C ) { // 500kHz
         u1_t map = LMIC.channelMap[64/16]&0xFF;
-        for( u1_t i=0; i<8; i++ ) {
+        u1_t i;
+        for( i=0; i<8; i++ ) {
             if( (map & (1<<(++LMIC.chRnd & 7))) != 0 ) {
                 LMIC.txChnl = 64 + (LMIC.chRnd & 7);
                 return;
             }
         }
     } else { // 125kHz
-        for( u1_t i=0; i<64; i++ ) {
+    	u1_t i;
+        for( i=0; i<64; i++ ) {
             u1_t chnl = ++LMIC.chRnd & 0x3F;
             if( (LMIC.channelMap[(chnl >> 4)] & (1<<(chnl & 0xF))) != 0 ) {
                 LMIC.txChnl = chnl;
@@ -1395,7 +1401,8 @@ static bit_t processJoinAccept (void) {
         goto badframe;
 #endif
         dlen = OFF_CFLIST;
-        for( u1_t chidx=3; chidx<8; chidx++, dlen+=3 ) {
+        u1_t chidx;
+        for( chidx=3; chidx<8; chidx++, dlen+=3 ) {
             u4_t freq = convFreq(&LMIC.frame[dlen]);
             if( freq )
                 LMIC_setupChannel(chidx, freq, 0, -1);

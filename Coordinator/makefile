@@ -13,7 +13,11 @@ ORDERED_OBJS += \
 "./Coordinator_main.obj" \
 "./startup_msp432p401r_ccs.obj" \
 "./system_msp432p401r.obj" \
-"./Libraries/Mac/velapulsar_mac.obj" \
+"./Libraries/LMiC/aes.obj" \
+"./Libraries/LMiC/hal.obj" \
+"./Libraries/LMiC/lmic.obj" \
+"./Libraries/LMiC/oslmic.obj" \
+"./Libraries/LMiC/radio.obj" \
 "./Libraries/RF95/delay.obj" \
 "./Libraries/RF95/rf95.obj" \
 "./Libraries/RF95/spi_interface.obj" \
@@ -31,11 +35,11 @@ RMDIR := RMDIR /S/Q
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir_vars.mk
--include Libraries/Mac/subdir_vars.mk
+-include Libraries/LMiC/subdir_vars.mk
 -include Libraries/RF95/subdir_vars.mk
 -include Libraries/Velapulsar/subdir_vars.mk
 -include subdir_rules.mk
--include Libraries/Mac/subdir_rules.mk
+-include Libraries/LMiC/subdir_rules.mk
 -include Libraries/RF95/subdir_rules.mk
 -include Libraries/Velapulsar/subdir_rules.mk
 -include objects.mk
@@ -153,7 +157,7 @@ all: Velapulsar.out
 Velapulsar.out: $(OBJS) $(CMD_SRCS) $(LIB_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MSP432 Linker'
-	"C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me -O2 --advice:power=all --gcc --define=__MSP432P401R__ --define=TARGET_IS_MSP432P4XX --define=ccs --diag_wrap=off --diag_warning=225 --display_error_number -z -m"Velapulsar.map" --stack_size=512 -i"C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/lib" -i"C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include" --reread_libs --diag_wrap=off --warn_sections --display_error_number --xml_link_info="Velapulsar_linkInfo.xml" --rom_model -o "Velapulsar.out" $(ORDERED_OBJS)
+	"C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me -O2 --advice:power=all --gcc --define=__MSP432P401R__ --define=CFG_us915 --define=TARGET_IS_MSP432P4XX --define=ccs --diag_wrap=off --diag_warning=225 --display_error_number -z -m"Velapulsar.map" --stack_size=512 -i"C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/lib" -i"C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include" --reread_libs --diag_wrap=off --warn_sections --display_error_number --xml_link_info="Velapulsar_linkInfo.xml" --rom_model -o "Velapulsar.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -166,8 +170,8 @@ Velapulsar.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)$(BIN_OUTPUTS__QUOTED)
-	-$(RM) "Coordinator_main.d" "startup_msp432p401r_ccs.d" "system_msp432p401r.d" "Libraries\Mac\velapulsar_mac.d" "Libraries\RF95\delay.d" "Libraries\RF95\rf95.d" "Libraries\RF95\spi_interface.d" "Libraries\Velapulsar\velapulsar.d" 
-	-$(RM) "Coordinator_main.obj" "startup_msp432p401r_ccs.obj" "system_msp432p401r.obj" "Libraries\Mac\velapulsar_mac.obj" "Libraries\RF95\delay.obj" "Libraries\RF95\rf95.obj" "Libraries\RF95\spi_interface.obj" "Libraries\Velapulsar\velapulsar.obj" 
+	-$(RM) "Coordinator_main.d" "startup_msp432p401r_ccs.d" "system_msp432p401r.d" "Libraries\LMiC\aes.d" "Libraries\LMiC\hal.d" "Libraries\LMiC\lmic.d" "Libraries\LMiC\oslmic.d" "Libraries\LMiC\radio.d" "Libraries\RF95\delay.d" "Libraries\RF95\rf95.d" "Libraries\RF95\spi_interface.d" "Libraries\Velapulsar\velapulsar.d" 
+	-$(RM) "Coordinator_main.obj" "startup_msp432p401r_ccs.obj" "system_msp432p401r.obj" "Libraries\LMiC\aes.obj" "Libraries\LMiC\hal.obj" "Libraries\LMiC\lmic.obj" "Libraries\LMiC\oslmic.obj" "Libraries\LMiC\radio.obj" "Libraries\RF95\delay.obj" "Libraries\RF95\rf95.obj" "Libraries\RF95\spi_interface.obj" "Libraries\Velapulsar\velapulsar.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

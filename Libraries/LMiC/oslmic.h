@@ -50,6 +50,30 @@ typedef          long long s8_t;
 typedef unsigned int       uint;
 typedef const char* str_t;
 
+typedef     struct osjob_t osjob_t;
+typedef      struct band_t band_t;
+typedef   struct chnldef_t chnldef_t;
+typedef   struct rxsched_t rxsched_t;
+typedef   struct bcninfo_t bcninfo_t;
+typedef        const u1_t* xref2cu1_t;
+typedef              u1_t* xref2u1_t;
+#define TYPEDEF_xref2rps_t     typedef         rps_t* xref2rps_t
+#define TYPEDEF_xref2rxsched_t typedef     rxsched_t* xref2rxsched_t
+#define TYPEDEF_xref2chnldef_t typedef     chnldef_t* xref2chnldef_t
+#define TYPEDEF_xref2band_t    typedef        band_t* xref2band_t
+#define TYPEDEF_xref2osjob_t   typedef       osjob_t* xref2osjob_t
+
+typedef s4_t  ostime_t;
+
+struct osjob_t;  // fwd decl.
+typedef void (*osjobcb_t) (struct osjob_t*);
+struct osjob_t {
+    struct osjob_t* next;
+    ostime_t deadline;
+    osjobcb_t  func;
+};
+TYPEDEF_xref2osjob_t;
+
 #include <string.h>
 #include "hal.h"
 #define EV(a,b,c) /**/
@@ -63,18 +87,7 @@ typedef const char* str_t;
 #define os_clearMem(a,b)   memset(a,0,b)
 #define os_copyMem(a,b,c)  memcpy(a,b,c)
 
-typedef     struct osjob_t osjob_t;
-typedef      struct band_t band_t;
-typedef   struct chnldef_t chnldef_t;
-typedef   struct rxsched_t rxsched_t;
-typedef   struct bcninfo_t bcninfo_t;
-typedef        const u1_t* xref2cu1_t;
-typedef              u1_t* xref2u1_t;
-#define TYPEDEF_xref2rps_t     typedef         rps_t* xref2rps_t
-#define TYPEDEF_xref2rxsched_t typedef     rxsched_t* xref2rxsched_t
-#define TYPEDEF_xref2chnldef_t typedef     chnldef_t* xref2chnldef_t
-#define TYPEDEF_xref2band_t    typedef        band_t* xref2band_t
-#define TYPEDEF_xref2osjob_t   typedef       osjob_t* xref2osjob_t
+
 
 #define SIZEOFEXPR(x) sizeof(x)
 
@@ -114,7 +127,7 @@ void os_runloop (void);
 #error Illegal OSTICKS_PER_SEC - must be in range [10000:64516]. One tick must be 15.5us .. 100us long.
 #endif
 
-typedef s4_t  ostime_t;
+
 
 #if !HAS_ostick_conv
 #define us2osticks(us)   ((ostime_t)( ((s8_t)(us) * OSTICKS_PER_SEC) / 1000000))
@@ -130,14 +143,7 @@ typedef s4_t  ostime_t;
 #endif
 
 
-struct osjob_t;  // fwd decl.
-typedef void (*osjobcb_t) (struct osjob_t*);
-struct osjob_t {
-    struct osjob_t* next;
-    ostime_t deadline;
-    osjobcb_t  func;
-};
-TYPEDEF_xref2osjob_t;
+
 
 
 #ifndef HAS_os_calls

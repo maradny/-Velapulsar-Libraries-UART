@@ -1,4 +1,32 @@
 /*
+ * Description: Hardware abstraction layer implementation
+ * Maintainer: Galal Hassan
+ *
+ *	____   ____     .__                      .__
+ *	\   \ /   /____ |  | _____  ______  __ __|  |   ___________ _______
+ *	 \   Y   // __ \|  | \__  \ \____ \|  |  \  |  /  ___/\__  \\_  __ \
+ *	  \     /\  ___/|  |__/ __ \|  |_> >  |  /  |__\___ \  / __ \|  | \/
+ *	   \___/  \___  >____(____  /   __/|____/|____/____  >(____  /__|
+ *				  \/          \/|__|                   \/      \/
+ *				  (C)2017 TRL Queen's University
+ *
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Copyright 2015 Queen's University TRL. All rights reserved.
+ * Should you have any questions regarding your right to use this Software,
+ * contact TRL at www.queenstrl.ca.
+ */
+/*
  * Copyright (c) 2014-2016 IBM Corporation.
  * All rights reserved.
  *
@@ -27,6 +55,39 @@
 
 #ifndef _hal_hpp_
 #define _hal_hpp_
+/*****************************************************************************
+ *                                INCLUDES
+ *****************************************************************************/
+#include "lmic.h"
+#include "driverlib.h"
+#include "delay.h"
+
+/*****************************************************************************
+ *                                DEFINES
+ *****************************************************************************/
+#define CLK_FREQ 48000000
+
+#define NSS_PORT 	GPIO_PORT_P4
+#define NSS_PIN 	GPIO_PIN6
+
+#define RST_PORT	GPIO_PORT_P5
+#define RST_PIN		GPIO_PIN2
+
+#define DIO0_PORT   GPIO_PORT_P2
+#define DIO0_PIN    GPIO_PIN5
+#define DIO1_PORT   GPIO_PORT_P2
+#define DIO1_PIN    GPIO_PIN5
+#define DIO2_PORT   GPIO_PORT_P2
+#define DIO2_PIN    GPIO_PIN5
+
+#define SCK_PORT	GPIO_PORT_P1
+#define SCK_PIN		GPIO_PIN5
+#define MISO_PORT	GPIO_PORT_P1
+#define MISO_PIN	GPIO_PIN7
+#define MOSI_PORT	GPIO_PORT_P1
+#define MOSI_PIN	GPIO_PIN6
+
+
 
 /*
  * initialize hardware (IO, SPI, TIMER, IRQ).
