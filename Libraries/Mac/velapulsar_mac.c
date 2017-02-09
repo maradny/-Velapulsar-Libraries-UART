@@ -280,7 +280,8 @@ VelaMacStatus_t VelaMacInitialization (VelaMacPrimitives_t *primitives){
 		 (primitives->MacMlmeConfirm == 0) ){
 		return VELAMAC_STATUS_PARAMETER_INVALID;
 	}
-
+	char x = LINK_CHAR;
+	printf ("x is: %x\n", x);
 	VelaMacPrimitives = primitives;
 
 	VelaMacFlags.Value = 0;

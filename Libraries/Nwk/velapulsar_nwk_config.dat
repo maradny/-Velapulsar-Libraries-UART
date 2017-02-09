@@ -1,0 +1,91 @@
+/*
+ * Description: Network Layer definitions data file
+ * Maintainer: Galal Hassan
+ *
+ *	____   ____     .__                      .__
+ *	\   \ /   /____ |  | _____  ______  __ __|  |   ___________ _______
+ *	 \   Y   // __ \|  | \__  \ \____ \|  |  \  |  /  ___/\__  \\_  __ \
+ *	  \     /\  ___/|  |__/ __ \|  |_> >  |  /  |__\___ \  / __ \|  | \/
+ *	   \___/  \___  >____(____  /   __/|____/|____/____  >(____  /__|
+ *				  \/          \/|__|                   \/      \/
+ *				  (C)2017 TRL Queen's University
+ *
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Copyright 2015 Queen's University TRL. All rights reserved.
+ * Should you have any questions regarding your right to use this Software,
+ * contact TRL at www.queenstrl.ca.
+ */
+
+/* Maximum size of Network application payload. Do not change unless
+ * protocol changes are reflected in different maximum network
+ * application payload size.
+ */
+-DMAX_NWK_PAYLOAD=50
+
+/* Maximum size of application payload. */
+-DMAX_APP_PAYLOAD=50
+
+/* default Link token */
+-DDEFAULT_LINK_TOKEN=0x01020304
+
+/* default Join token */
+-DDEFAULT_JOIN_TOKEN=0x05060708
+
+/* Remove 'x' corruption to enable application autoacknowledge support. Requires extended API as well */
+-DAPP_AUTO_ACK
+
+/* Remove 'x' corruption to enable security. */
+-DxSMPL_SECURE
+
+/* Remove 'x' corruption to enable vibration interrupt to wake up the SoC */
+-DWAKEUP_ON_VIBRATION
+
+-DUART_NUMBER=UART_NUMBER_0
+-DUART_LOCATION=UART_LOCATION_1
+-DUART_BAUD_RATE=9600
+-DUART_FLOW_CONTROL=UART_FLOW_CONTROL_OFF
+-DUART_PARITY_MODE=UART_PARITY_NONE
+-DUART_STOP_BITS=UART_1_STOP_BIT
+
+/* All the communication command characters */
+-DUSTART_CHAR='+'
+-DUEND_CHAR='-'
+-DSTART_CHAR='*'
+-DEND_CHAR='$'
+
+-DLINK_CHAR='L'
+-DCONNECT_CHAR='C'
+-DDISCONNECT_CHAR='D'
+-DMAC_CHAR='@'
+-DGOTOSTATE_CHAR='G'
+-DRESET_CHAR='R'
+-DCHANGEADDR_CHAR='c'
+-DSEND_CHAR='s'
+-DSEND_ALL_CHAR='S'
+-DCHANGE_TIMER_CHAR='T'
+-DFAULTY_CHAR='F'
+-DPING_CHAR='P'
+-DFORWARD_CHAR='>'
+-DBEACON_CHAR='B'
+-DINSTALL_CHAR='I'
+
+-DLIGHT1_SENSOR=0X01
+-DLIGHT2_SENSOR=0X02
+-DMAGNETIC_SENSOR=0X04
+-DCLAW_SENSOR=0X08
+-DPROXIMITY_SENSOR=0X10
+
+/* UART Communication command characters */
+-DUSTART_CHAR='+'
+-DUEND_CHAR='-'

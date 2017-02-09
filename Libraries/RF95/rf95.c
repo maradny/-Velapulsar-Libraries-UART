@@ -302,7 +302,7 @@ void RFSetTxConfig(int8_t power, uint32_t bandwidth, uint32_t datarate,
 		settings.LoRa.LowDatarateOptimize = 0x00;
 	}
 
-    RFWrite(REG_1D_MODEM_CONFIG1, (bandwidth << 4) | (coderate << 1) | fixLen);
+    RFWrite(REG_1D_MODEM_CONFIG1, (bandwidth << 4) | (coderate << 1) | fixLen | 0x01);
     RFWrite(REG_1E_MODEM_CONFIG2, (RFRead(REG_1E_MODEM_CONFIG2) & 0x0B) | (datarate << 4) | (crcOn << 2));
     RFWrite(REG_26_MODEM_CONFIG3, (settings.LoRa.LowDatarateOptimize << 3));
     RFWrite(REG_20_PREAMBLE_MSB, (uint8_t)((preambleLen >> 8) & 0xFF));
@@ -419,8 +419,12 @@ int16_t RFReadRssi (void){
 
 bool RFInitModem (RadioModems_t modem){
 	RFSetOpMode(MODE_SLEEP);
+	uint8_t val = RFRead(REG_01_OP_MODE);
+	printf("val: %x\n", val);
+	val = RFRead(REG_24_HOP_PERIOD);
+	printf("val: %x\n", val);
 	RFWrite(REG_01_OP_MODE, LONG_RANGE_MODE);
-    uint8_t val = RFRead(REG_01_OP_MODE);
+    val = RFRead(REG_01_OP_MODE);
     printf("val: %x\n", val);
     if (val != LONG_RANGE_MODE){
         return false;
@@ -591,6 +595,10 @@ void RFSetTx (uint32_t timeout){
 
 	settings.State = RF_TX_RUNNING;
 
+	uint8_t val = RFRead(REG_01_OP_MODE);
+	printf("val: %x\n", val);
+	val = RFRead(REG_24_HOP_PERIOD);
+	printf("val: %x\n", val);
 	// Start timer with timeout
 	RFSetOpMode (MODE_TX);
 	//delay_ms(timeout);

@@ -1,5 +1,5 @@
 /*
- * Description: Velapulsar layer header file
+ * Description: Network layer header file
  * Maintainer: Galal Hassan
  *
  *	____   ____     .__                      .__
@@ -26,78 +26,28 @@
  * Should you have any questions regarding your right to use this Software,
  * contact TRL at www.queenstrl.ca.
  */
+
+#ifndef LIBRARIES_NWK_VELAPULSAR_NWK_H_
+#define LIBRARIES_NWK_VELAPULSAR_NWK_H_
 /*****************************************************************************
  *                                INCLUDES
  *****************************************************************************/
-#ifndef LIBRARIES_VELAPULSAR_VELAPULSAR_H_
-#define LIBRARIES_VELAPULSAR_VELAPULSAR_H_
-
-/* DriverLib Includes */
-#include "driverlib.h"
-
-/* Application includes */
-#include "velapulsar_mac.h"
-#include "sensor_interface.h"
-#include "comms_interface.h"
-#include "delay.h"
-
-/* Standard Includes */
-#include <stdint.h>
-#include <stdbool.h>
-#include "stdio.h"
-#include "stdlib.h"
+#include "velapulsar.h"
 
 /*****************************************************************************
  *                                DEFINES
  *****************************************************************************/
-#define CLK_FREQ 				  48000000
-
-#define FAIL_JOIN                 10   //Number of times to fail joining a network
-#define FAIL_LINK                 3    //Number of times to fail linking a network
-#define FAIL_JOIN_DELAY           1000 //Number of milliseconds to wait before retrying to join
-#define FAIL_LINK_DELAY           1000 //Number of miliseconds to wait before retrying to link
-#define OPERATIONAL_SLEEP_TIMER   2000 //Number of miliseconds to sleep in operational mode
-#define DETACHED_SLEEP_TIMER      1000 //Number of miliseconds to sleep in detached mode
-#define MAX_FAIL_SEND             5    //Number of failed attempts to send a pkg
-
-//state definitions
-typedef enum{
-	  UP_FROM_RESET = 0x1,		// 0x01
-	  UP_FROM_SLEEP,			// 0x02
-	  DEEP_SLEEP,				// 0x03
-	  CONNECTING,				// 0x04
-	  DISCONNECTING,			// 0x05
-	  SLEEP_JOIN_FAIL,			// 0x06
-	  SLEEP_LINK_FAIL,			// 0x07
-
-	  /* OPERATIONAL */
-	  OPERATIONAL,				// 0x08
-	  STATIONARY,				// 0x09
-	  ENGAGED,					// 0x0A
-	  VERTICAL_UP,				// 0x0B
-	  VERTICAL_DOWN,			// 0x0C
-	  HORIZONTAL,				// 0x0D
-	  DIAGONAL,					// 0x0E
-	  OPERATIONAL_SLEEPING,		// 0x0F
-
-	  /* FAULTY */
-	  DIAGNOSIS,				// 0x10
-	  DETACHED,					// 0x11
-	  ON_GROUND,				// 0x12
-	  ON_TRUCK,					// 0x13
-	  BURIED,					// 0x14
-	  CANT_LOCATE				// 0x15
-}states;
+typedef struct{
+	uint16_t	pktID;
+	uint8_t		myShovel;
+	uint8_t		myUnit;
+	uint16_t	myType;
+	appPayLoad		payload;
+}frameStructure;
 
 /*****************************************************************************
  *                             Functions - API
  *****************************************************************************/
-void initPeripherals (void);
-void initPorts (void);
-void initClocks (void);
-void sleepFor(int minutes);
-void initCalendar (void);
-void RTC_AlarmHandler(void);
 
 
-#endif /* LIBRARIES_VELAPULSAR_VELAPULSAR_H_ */
+#endif /* LIBRARIES_NWK_VELAPULSAR_NWK_H_ */

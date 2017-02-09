@@ -34,8 +34,35 @@
 #include "velapulsar.h"
 
 /*****************************************************************************
+ *                                DEFINES
+ *****************************************************************************/
+states			currentState;
+states*			stateToReport;
+sensorData*		currentSensorData;
+payLoad*		payload;
+dataPkt			packetl
+addr_t			myAddr;
+uint8_t			myShovel = MY_SHOVEL;
+uint8_t			myUnit = MY_UNIT;
+uint8_t			myType = MY_TYPE;
+bool			ableToConnect = false;
+bool			lostConnection = true;
+
+/*****************************************************************************
  *                             LOCAL FUNCTIONS
  *****************************************************************************/
+static uint8_t messageReceivedCallBack(void);
+void updateCurrentSensorData (void);
+
+/* State functions */
+void initEndNode(void);
+void changeState(states);
+bool connect(void);
+void report (void);
+void disconnect(void);
+void operate(void);
+void diagnose(void);
+void detached(void);
 
 /******************************************************************************
 * Function: Main
@@ -50,6 +77,50 @@ uint8_t buf[20];
 uint8_t len = sizeof(buf);
 uint32_t goodPkts = 0;
 
+int main (void){
+	initEndNode();
+
+	while(1){
+		switch (currentState){
+		case OPERATIONAL:
+			operate();
+			break;
+
+		case DIAGNOSIS:
+			diagnose();
+			break;
+
+		case DETACHED:
+			detached();
+			break;
+		}
+	}
+
+	PCM_gotoLPM0();
+	__no_operation();
+}
+
+
+/******************************************************************************
+* Function: initEndNode
+***********************
+* Initializess the main components of the End Node
+*
+* Parameters: Null
+*
+* Returns: Null
+******************************************************************************/
+void initEndNode(void){
+	/* Initialize board */
+	initClocks();
+	initPeripherals();
+	//initSensors();
+
+	payload = &packet.data.payload;
+	currentSensorData = &packet.data.payload.sensorData;
+	stateToReport = &packet.data.payload.
+}
+
 int main(void)
 {
 	/* Set clocks to pre defined frequencies */
@@ -57,35 +128,38 @@ int main(void)
 
     /* Initialize all peripherals */
     initPeripherals();
-    
+
     uint8_t packetNum = 0;
-    
-    RFSetTxConfig(23, 9, 10,1, 20, true, true, 1000);
+
+   RFSetTxConfig(23, 0, 12,1, 10, true, false, 1000);
+    //RFSetTxConfig(23, 9, 10,1, 20, true, false, 1000);
 
     while(1){
         printf("Sending to sink\n");
-        
+
         uint8_t radioPacket[20] = "Hello World #      ";
-        
+
         sprintf(radioPacket+13, "%d", packetNum++);
         printf("Sending "); printf(radioPacket); printf("\n");
         radioPacket[19] = 0;
-        
+
 
 
         printf("Sending....\n"); delay_ms(10);
+//        RFSend(packetNum, 1);
         RFSend(radioPacket, 20);
         while (RFGetStatus() == RF_TX_RUNNING){
         	delay_ms(50);
         }
+        delay_ms(1000);
 //        printf("Modem Config1: %X\n",spiRead(REG_1D_MODEM_CONFIG1));
 //        printf("Modem Config2: %X\n",spiRead(REG_1E_MODEM_CONFIG2));
 //        printf("Modem Config3: %X\n",spiRead(REG_26_MODEM_CONFIG3));
 //        printf("Preamble: %X%X\n", spiRead(REG_20_PREAMBLE_MSB), spiRead(REG_21_PREAMBLE_LSB));
 //      printf("Waiting for packet to complete...\n"); //delay_ms(10);
 //      waitPacketSent();
-        
-        
+
+
 
 //        setModeRx();
 //        printf("Waiting for reply...\n"); //delay_ms(10);

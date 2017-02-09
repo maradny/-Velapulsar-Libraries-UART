@@ -1,5 +1,5 @@
 /*
- * Description: Velapulsar layer header file
+ * Description: Communications interface API for Velapulsar (application layer)
  * Maintainer: Galal Hassan
  *
  *	____   ____     .__                      .__
@@ -26,78 +26,48 @@
  * Should you have any questions regarding your right to use this Software,
  * contact TRL at www.queenstrl.ca.
  */
+
 /*****************************************************************************
  *                                INCLUDES
  *****************************************************************************/
-#ifndef LIBRARIES_VELAPULSAR_VELAPULSAR_H_
-#define LIBRARIES_VELAPULSAR_VELAPULSAR_H_
+#ifndef LIBRARIES_VELAPULSAR_COMMS_INTERFACE_H_
+#define LIBRARIES_VELAPULSAR_COMMS_INTERFACE_H_
 
-/* DriverLib Includes */
-#include "driverlib.h"
-
-/* Application includes */
-#include "velapulsar_mac.h"
-#include "sensor_interface.h"
-#include "comms_interface.h"
-#include "delay.h"
-
-/* Standard Includes */
-#include <stdint.h>
-#include <stdbool.h>
-#include "stdio.h"
-#include "stdlib.h"
+#include "velapulsar.h"
 
 /*****************************************************************************
  *                                DEFINES
  *****************************************************************************/
-#define CLK_FREQ 				  48000000
+typedef struct{
+	sensorData 	sensorData;
+	states		currentState;
+}appPayLoad;	// app layer payload
 
-#define FAIL_JOIN                 10   //Number of times to fail joining a network
-#define FAIL_LINK                 3    //Number of times to fail linking a network
-#define FAIL_JOIN_DELAY           1000 //Number of milliseconds to wait before retrying to join
-#define FAIL_LINK_DELAY           1000 //Number of miliseconds to wait before retrying to link
-#define OPERATIONAL_SLEEP_TIMER   2000 //Number of miliseconds to sleep in operational mode
-#define DETACHED_SLEEP_TIMER      1000 //Number of miliseconds to sleep in detached mode
-#define MAX_FAIL_SEND             5    //Number of failed attempts to send a pkg
-
-//state definitions
+// Move next defines to lower network layers
 typedef enum{
-	  UP_FROM_RESET = 0x1,		// 0x01
-	  UP_FROM_SLEEP,			// 0x02
-	  DEEP_SLEEP,				// 0x03
-	  CONNECTING,				// 0x04
-	  DISCONNECTING,			// 0x05
-	  SLEEP_JOIN_FAIL,			// 0x06
-	  SLEEP_LINK_FAIL,			// 0x07
+	COMMAND,
+	FORWARD,
+	REPORT,
+	LONG_REPORT
+}messageType;
 
-	  /* OPERATIONAL */
-	  OPERATIONAL,				// 0x08
-	  STATIONARY,				// 0x09
-	  ENGAGED,					// 0x0A
-	  VERTICAL_UP,				// 0x0B
-	  VERTICAL_DOWN,			// 0x0C
-	  HORIZONTAL,				// 0x0D
-	  DIAGONAL,					// 0x0E
-	  OPERATIONAL_SLEEPING,		// 0x0F
+typedef enum{
+	RESET,
+	GOTO_STATE,
+	NO_CMD
+}command;
 
-	  /* FAULTY */
-	  DIAGNOSIS,				// 0x10
-	  DETACHED,					// 0x11
-	  ON_GROUND,				// 0x12
-	  ON_TRUCK,					// 0x13
-	  BURIED,					// 0x14
-	  CANT_LOCATE				// 0x15
-}states;
+typedef union{
+	frameStructure	data;
+	uint8_t			pkt[sizeof(frameStructure)];
+}dataPkt; //should be final packet in mac layer
 
 /*****************************************************************************
  *                             Functions - API
  *****************************************************************************/
-void initPeripherals (void);
-void initPorts (void);
-void initClocks (void);
-void sleepFor(int minutes);
-void initCalendar (void);
-void RTC_AlarmHandler(void);
+bool CommsSend(uint8_t linkID, dataPkt pkt, int size);
+bool CommsReceive(uint8_t linkID, dataPkt* pkt);
+bool CommsInit(uint8_t linkID, bool);
 
+#endif /* LIBRARIES_VELAPULSAR_COMMS_INTERFACE_H_ */
 
-#endif /* LIBRARIES_VELAPULSAR_VELAPULSAR_H_ */
