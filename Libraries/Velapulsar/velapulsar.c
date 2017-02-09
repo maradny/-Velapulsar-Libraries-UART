@@ -45,9 +45,6 @@ VelaMacStatus_t Status;
 /*****************************************************************************
  *                        LOCAL FUNCTION PROTOYPES
  *****************************************************************************/
-static void McpsConfirm (McpsConfirm_t *McpsConfirm);
-static void McpsIndication (McpsIndication_t *McpsIndication);
-static void MlmeConfirm (MlmeConfirm_t *MlmeConfirm);
 
 /*****************************************************************************
  *                        FUNCTION IMPLEMENTATIONS
@@ -63,11 +60,9 @@ void initPeripherals (void){
 	initPorts();
 
 	/* Initialize radio */
-	VelaMacPrimitives.MacMcpsConfirm = McpsConfirm;
-	VelaMacPrimitives.MacMcpsIndication = McpsIndication;
-	VelaMacPrimitives.MacMlmeConfirm = MlmeConfirm;
+
 	printf("initializing\n");
-	if (VelaMacInitialization(&VelaMacPrimitives) == VELAMAC_STATUS_OK){
+	if (VelaMacInitialization() == VELAMAC_STATUS_OK){
 		printf("initialized\n");
 		GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
 	}
@@ -234,14 +229,3 @@ void RTC_AlarmHandler(void){
 /*****************************************************************************
  *                            LOCAL FUNCTIONS
  *****************************************************************************/
-static void McpsConfirm (McpsConfirm_t *McpsConfirm){
-
-}
-
-static void McpsIndication (McpsIndication_t *McpsIndication){
-
-}
-
-static void MlmeConfirm (MlmeConfirm_t *MlmeConfirm){
-
-}
