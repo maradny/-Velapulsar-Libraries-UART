@@ -32,22 +32,35 @@
 /*****************************************************************************
  *                                INCLUDES
  *****************************************************************************/
-#include "velapulsar.h"
+#include "velapulsar_mac.h"
 
 /*****************************************************************************
  *                                DEFINES
  *****************************************************************************/
 typedef struct{
-	uint16_t	pktID;
 	uint8_t		myShovel;
 	uint8_t		myUnit;
 	uint16_t	myType;
-	appPayLoad		payload;
-}frameStructure;
+	uint8_t		appPayload[MAX_APP_PAYLOAD];
+}nwkPayLoad;
+
+typedef union{
+	nwkPayLoad	data;
+	uint8_t		pkt[sizeof(nwkPayLoad)];
+}nwkDataPkt;
+
+typedef struct{
+	void    ( *NwkTxDone )( void );
+	void    ( *NwkRxDone )( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr );
+	void    ( *NwkRxError )( void );
+	void    ( *NwkTxTimeout )( void );
+	void    ( *NwkRxTimeout )( void );
+}nwkCallbacks;
 
 /*****************************************************************************
  *                             Functions - API
  *****************************************************************************/
-
+VelaMacStatus VelaNwkInitialization(nwkCallbacks* callbacks, uint8_t linkID); //maybe change return type later
+VelaMacStatus VelaNwkSend(uint8_t linkID, uint8_t appPayload[], int size);
 
 #endif /* LIBRARIES_NWK_VELAPULSAR_NWK_H_ */

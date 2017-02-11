@@ -62,8 +62,8 @@ int main(void)
 
     uint8_t packetNum = 0;
 
-    RFSetRxConfig(0, 12,1, 20, 1000000, true, 20, false, true);
-    //RFSetRxConfig(9, 10,1, 20, 1000, true, 20, false, true);
+    //RFSetRxConfig(0, 12,1, 20, 1000000, true, 20, false, true);
+    RFSetRxConfig(9, 10,1, 20, 1000, true, 20, false, true);
     RFSetRx(1000);
     while(1){
 

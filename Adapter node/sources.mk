@@ -113,6 +113,7 @@ S64_DEPS__QUOTED :=
 SUBDIRS := \
 . \
 Libraries/Mac \
+Libraries/Nwk \
 Libraries/RF95 \
 Libraries/Velapulsar \
 

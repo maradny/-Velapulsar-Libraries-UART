@@ -33,41 +33,32 @@
 #ifndef LIBRARIES_VELAPULSAR_COMMS_INTERFACE_H_
 #define LIBRARIES_VELAPULSAR_COMMS_INTERFACE_H_
 
-#include "velapulsar.h"
+#include <stdint.h>
+#include <stdbool.h>
+#include "stdio.h"
+#include "stdlib.h"
+
+#include "sensor_interface.h"
+#include "velapulsar_nwk.h"
 
 /*****************************************************************************
  *                                DEFINES
  *****************************************************************************/
 typedef struct{
 	sensorData 	sensorData;
-	states		currentState;
+	//states		currentState;
 }appPayLoad;	// app layer payload
 
-// Move next defines to lower network layers
-typedef enum{
-	COMMAND,
-	FORWARD,
-	REPORT,
-	LONG_REPORT
-}messageType;
-
-typedef enum{
-	RESET,
-	GOTO_STATE,
-	NO_CMD
-}command;
-
 typedef union{
-	frameStructure	data;
-	uint8_t			pkt[sizeof(frameStructure)];
-}dataPkt; //should be final packet in mac layer
+	appPayLoad		data;
+	uint8_t			pkt[sizeof(appPayLoad)];
+}appDataPkt;
 
 /*****************************************************************************
  *                             Functions - API
  *****************************************************************************/
-bool CommsSend(uint8_t linkID, dataPkt pkt, int size);
-bool CommsReceive(uint8_t linkID, dataPkt* pkt);
-bool CommsInit(uint8_t linkID, bool);
+VelaMacStatus CommsInit(uint8_t linkID);
+VelaMacStatus CommsSend(uint8_t linkID, appDataPkt pkt);
 
 #endif /* LIBRARIES_VELAPULSAR_COMMS_INTERFACE_H_ */
 

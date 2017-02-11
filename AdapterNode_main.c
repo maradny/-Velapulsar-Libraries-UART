@@ -36,15 +36,11 @@
 /*****************************************************************************
  *                                DEFINES
  *****************************************************************************/
-states			currentState;
+states			currentState = OPERATIONAL;
 states*			stateToReport;
-sensorData*		currentSensorData;
-payLoad*		payload;
-dataPkt			packetl
-addr_t			myAddr;
-uint8_t			myShovel = MY_SHOVEL;
-uint8_t			myUnit = MY_UNIT;
-uint8_t			myType = MY_TYPE;
+//uint8_t			myShovel = MY_SHOVEL;
+//uint8_t			myUnit = MY_UNIT;
+//uint8_t			myType = MY_TYPE;
 bool			ableToConnect = false;
 bool			lostConnection = true;
 
@@ -87,11 +83,11 @@ int main (void){
 			break;
 
 		case DIAGNOSIS:
-			diagnose();
+			//diagnose();
 			break;
 
 		case DETACHED:
-			detached();
+			//detached();
 			break;
 		}
 	}
@@ -116,22 +112,16 @@ void initEndNode(void){
 	initPeripherals();
 	//initSensors();
 
-	payload = &packet.data.payload;
-	currentSensorData = &packet.data.payload.sensorData;
-	stateToReport = &packet.data.payload.
+//	payload = &packet.data.payload;
+//	currentSensorData = &packet.data.payload.sensorData;
+//	stateToReport = &packet.data.payload.
 }
 
-int main(void)
+void operate(void)
 {
-	/* Set clocks to pre defined frequencies */
-	initClocks();
-
-    /* Initialize all peripherals */
-    initPeripherals();
-
     uint8_t packetNum = 0;
 
-   RFSetTxConfig(23, 0, 12,1, 10, true, false, 1000);
+   //RFSetTxConfig(23, 0, 12,1, 10, true, false, 1000);
     //RFSetTxConfig(23, 9, 10,1, 20, true, false, 1000);
 
     while(1){
@@ -143,11 +133,18 @@ int main(void)
         printf("Sending "); printf(radioPacket); printf("\n");
         radioPacket[19] = 0;
 
-
-
+        appDataPkt pkt;
+        pkt.data.sensorData.battery = FULL;
+        pkt.data.sensorData.claw = true;
+        pkt.data.sensorData.magnetic = true;
+        pkt.data.sensorData.light = true;
+        printf("Sending ");
+        debug_print_pkt(pkt.pkt , sizeof(pkt.pkt));
         printf("Sending....\n"); delay_ms(10);
 //        RFSend(packetNum, 1);
-        RFSend(radioPacket, 20);
+        //RFSend(radioPacket, 20);
+        CommsSend(0, pkt);
+
         while (RFGetStatus() == RF_TX_RUNNING){
         	delay_ms(50);
         }
@@ -184,8 +181,6 @@ int main(void)
 //		GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
 
     }
-    PCM_gotoLPM0();
-    __no_operation();
 }
 
 

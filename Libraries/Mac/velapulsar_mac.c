@@ -67,6 +67,7 @@ enum eVelaMacState
 };
 
 static RadioEvents_t radioEvents;
+static macCallbacks* macEvents;
 
 /*
  * Device IEEE EUI
@@ -117,141 +118,15 @@ static uint32_t VelaMacNetID;
  */
 static uint32_t VelaMacDevAddr;
 
-// VelaMac upper layer event functions
-static VelaMacPrimitives_t *VelaMacPrimitives;
-
-/*
- * Actual device type
- */
-static DeviceType_t VelaMacDeviceType;
-
 /*
  * VelaMac internal state
  */
 uint32_t VelaMacState = MAC_IDLE;
 
-// VelaMac tx/rx/ operation state
-VelaMacFlags_t VelaMacFlags;
-
-/*
- * Number of trials for the Join Request
- */
-static uint16_t JoinRequestTrials;
-
-/*!
- * VelaMac parameters
- */
-VelaMacParams_t VelaMacParams;
-
-/*!
- * VelaMac default parameters
- */
-VelaMacParams_t VelaMacParamsDefaults;
-
 /*!
  * Indicates if the MAC layer has already joined a network.
  */
 static bool IsVelaMacNetworkJoined = false;
-
-/*!
- * Data rates table definition
- */
-const uint8_t Datarates[]  = { 10, 9, 8,  7,  8,  0,  0, 0, 12, 11, 10, 9, 8, 7, 0, 0 };
-
-/*!
- * Up/Down link data rates offset definition
- */
-const int8_t datarateOffsets[16][4] =
-{
-    { DR_10, DR_9 , DR_8 , DR_8  }, // DR_0
-    { DR_11, DR_10, DR_9 , DR_8  }, // DR_1
-    { DR_12, DR_11, DR_10, DR_9  }, // DR_2
-    { DR_13, DR_12, DR_11, DR_10 }, // DR_3
-    { DR_13, DR_13, DR_12, DR_11 }, // DR_4
-};
-
-/*!
- * VelaMAC channels
- */
-static ChannelParams_t Channels[VELA_MAX_NB_CHANNELS];
-
-/*!
- * Contains the channels which remain to be applied.
- */
-static uint16_t ChannelsMaskRemaining[6];
-
-/*!
- * Multicast channels linked list
- */
-static MulticastParams_t *MulticastChannels = 0;
-
-/*!
- * VelaMAC frame counter. Each time a packet is sent the counter is incremented.
- * Only the 16 LSB bits are sent
- */
-static uint32_t UpLinkCounter = 1;
-
-/*!
- * VelaMAC frame counter. Each time a packet is received the counter is incremented.
- * Only the 16 LSB bits are received
- */
-static uint32_t DownLinkCounter = 0;
-
-/*!
- * Counts the number of missed ADR acknowledgements
- */
-static uint32_t AdrAckCounter = 0;
-
-/*!
- * Uplink messages repetitions counter
- */
-static uint8_t ChannelsNbRepCounter = 0;
-
-/*!
- * Number of trials to get a frame acknowledged
- */
-static uint8_t AckTimeoutRetries = 1;
-
-/*!
- * Number of trials to get a frame acknowledged
- */
-static uint8_t AckTimeoutRetriesCounter = 1;
-
-/*!
- * Indicates if the AckTimeout timer has expired or not
- */
-static bool AckTimeoutRetry = false;
-
-/*!
- * Maximum duty cycle
- * \remark Possibility to shutdown the device.
- */
-static uint8_t MaxDCycle = 0;
-
-/*!
- * Contains the current MacCommandsBuffer index
- */
-static uint8_t MacCommandsBufferIndex = 0;
-
-/*!
- * Contains the current MacCommandsBuffer index for MAC commands to repeat
- */
-static uint8_t MacCommandsBufferToRepeatIndex = 0;
-
-/*!
- * Used for test purposes. Disables the opening of the reception windows.
- */
-static bool IsRxWindowsEnabled = true;
-
-/*!
- * Indicates if the MAC layer wants to send MAC commands
- */
-static bool MacCommandsInNextTx = false;
-
-/*!
- * Current channel index
- */
-static uint8_t Channel;
 
 /*****************************************************************************
  *                        LOCAL FUNCTION PROTOYPES
@@ -270,67 +145,13 @@ static void OnRadioRxTimeout (void);
 /*****************************************************************************
  *                        FUNCTION IMPLEMENTATIONS
  *****************************************************************************/
-VelaMacStatus_t VelaMacInitialization (VelaMacPrimitives_t *primitives){
-	if (primitives == 0){
-		return VELAMAC_STATUS_PARAMETER_INVALID;
-	}
-
-	if ( (primitives->MacMcpsConfirm == 0) ||
-		 (primitives->MacMcpsIndication ==0) ||
-		 (primitives->MacMlmeConfirm == 0) ){
-		return VELAMAC_STATUS_PARAMETER_INVALID;
-	}
-	char x = LINK_CHAR;
-	printf ("x is: %x\n", x);
-	VelaMacPrimitives = primitives;
-
-	VelaMacFlags.Value = 0;
-
-	VelaMacDeviceType = TYPE_VELA_ADAPTER;
-	VelaMacState = MAC_IDLE;
-
-	JoinRequestTrials = 0;
-
-	VelaMacParamsDefaults.ChannelsTxPower = VELAMAC_DEFAULT_TX_POWER;
-	VelaMacParamsDefaults.ChannelsDatarate = VELAMAC_DEFAULT_DATARATE;
-
-	VelaMacParamsDefaults.MaxRxWindow = MAX_RX_WINDOW;
-	VelaMacParamsDefaults.ReceiveDelay1 = RECEIVE_DELAY1;
-	VelaMacParamsDefaults.ReceiveDelay2 = RECEIVE_DELAY2;
-	VelaMacParamsDefaults.JoinAcceptDelay1 = JOIN_ACCEPT_DELAY1;
-	VelaMacParamsDefaults.JoinAcceptDelay2 = JOIN_ACCEPT_DELAY2;
-
-	VelaMacParamsDefaults.ChannelsNbRep = 1;
-	VelaMacParamsDefaults.Rx1DrOffset = 0;
-
-	VelaMacParamsDefaults.Rx2Channel = (Rx2ChannelParams_t)RX_WND_2_CHANNEL;
-
-	VelaMacParamsDefaults.ChannelsMask[0] = 0xFFFF;
-	VelaMacParamsDefaults.ChannelsMask[1] = 0xFFFF;
-	VelaMacParamsDefaults.ChannelsMask[2] = 0xFFFF;
-	VelaMacParamsDefaults.ChannelsMask[3] = 0xFFFF;
-	VelaMacParamsDefaults.ChannelsMask[4] = 0x00FF;
-	VelaMacParamsDefaults.ChannelsMask[5] = 0x0000;
-
-	uint8_t i;
-	// 125 kHz channels
-	for( i = 0; i < VELA_MAX_NB_CHANNELS - 8; i++ ){
-		Channels[i].Frequency = 902.3e6 + i * 200e3;
-		Channels[i].DrRange.Value = ( DR_3 << 4 ) | DR_0;
-		Channels[i].Band = 0;
-	}
-	// 500 kHz channels
-	for( i = VELA_MAX_NB_CHANNELS - 8; i < VELA_MAX_NB_CHANNELS; i++ ){
-		Channels[i].Frequency = 903.0e6 + ( i - ( VELA_MAX_NB_CHANNELS - 8 ) ) * 1.6e6;
-		Channels[i].DrRange.Value = ( DR_4 << 4 ) | DR_4;
-		Channels[i].Band = 0;
-	}
-
+VelaMacStatus VelaMacInitialization (uint8_t linkID, macCallbacks* callbacks){
+	macEvents = callbacks; // callbacks back to nwk layer
 	ResetMacParameters();
 
 	// Initialize timers here.....
 
-	// Initialize radio
+	// Initialize radio callbacks
 	radioEvents.TxDone = OnRadioTxDone;
 	radioEvents.RxDone = OnRadioRxDone;
 	radioEvents.RxError = OnRadioRxError;
@@ -343,78 +164,50 @@ VelaMacStatus_t VelaMacInitialization (VelaMacPrimitives_t *primitives){
 	return VELAMAC_STATUS_OK;
 }
 
+VelaMacStatus VelaMacSend (uint8_t linkID, uint8_t nwkPayload[], int size){
+	dataPkt pkt;
+	pkt.data.myAddr = MY_ADDR;
+	pkt.data.toAddr = 0x00;
+	pkt.data.msgType = COMMAND;
+	pkt.data.pktID = 0;
+	pkt.data.myType = 0;
+	memcpy(&pkt.data.nwkPayload, nwkPayload, size);
+	printf("size rx in mac: %d", size);
+	//RFSetTxConfig(23, 0, 12,1, 10, true, false, 1000);
+	RFSetTxConfig(23, 9, 10,1, 20, true, false, 1000);
+	printf("MAC sending: ");
+	debug_print_pkt(pkt.pkt , sizeof(pkt.pkt) - (MAX_NWK_PAYLOAD -size));
+	RFSend(pkt.pkt,sizeof(pkt.pkt) - (MAX_NWK_PAYLOAD -size));
+}
 /*****************************************************************************
  *                            LOCAL FUNCTIONS
  *****************************************************************************/
-static void OnRadioTxDone (void){
-	printf("Sent OK\n");
+static void ResetMacParameters (void){
+	IsVelaMacNetworkJoined = false;
+}
 
+static void OnRadioTxDone (void){
+	printf("Sent OK MAC\n");
+	macEvents->MacTxDone();
 }
 
 static void OnRadioRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr){
-	printf("Message received: %s\n", payload);
+	printf("Message received (MAC): ");
+	debug_print_pkt(payload , size);
+	macEvents->MacRxDone(payload, size, rssi, snr);
 }
 
 static void OnRadioRxError (void){
 	printf("Received error Pkt\n");
+	macEvents->MacRxError();
 }
 
 static void OnRadioTxTimeout (void){
 	printf("TX timeout\n");
+	macEvents->MacTxTimeout();
 }
 
 static void OnRadioRxTimeout (void){
 	printf("RX timeout\n");
-}
-
-static void ResetMacParameters (void){
-	IsVelaMacNetworkJoined = false;
-
-	//Counters
-	UpLinkCounter = 1;
-	DownLinkCounter = 0;
-	AdrAckCounter = 0;
-
-	ChannelsNbRepCounter = 0;
-
-	AckTimeoutRetries = 1;
-	AckTimeoutRetriesCounter = 1;
-	AckTimeoutRetry = false;
-
-	MaxDCycle = 0;
-
-	MacCommandsBufferIndex = 0;
-	MacCommandsBufferToRepeatIndex = 0;
-
-	IsRxWindowsEnabled = true;
-
-	VelaMacParams.ChannelsTxPower = VelaMacParamsDefaults.ChannelsTxPower;
-	VelaMacParams.ChannelsDatarate = VelaMacParamsDefaults.ChannelsDatarate;
-
-	VelaMacParams.MaxRxWindow = VelaMacParamsDefaults.MaxRxWindow;
-	VelaMacParams.ReceiveDelay1 = VelaMacParamsDefaults.ReceiveDelay1;
-	VelaMacParams.ReceiveDelay2 = VelaMacParamsDefaults.ReceiveDelay2;
-	VelaMacParams.JoinAcceptDelay1 = VelaMacParamsDefaults.JoinAcceptDelay1;
-	VelaMacParams.JoinAcceptDelay2 = VelaMacParamsDefaults.JoinAcceptDelay2;
-
-	VelaMacParams.Rx1DrOffset = VelaMacParamsDefaults.Rx1DrOffset;
-	VelaMacParams.ChannelsNbRep = VelaMacParamsDefaults.ChannelsNbRep;
-
-	VelaMacParams.Rx2Channel = VelaMacParamsDefaults.Rx2Channel;
-
-	memcpy( ( uint8_t* ) VelaMacParams.ChannelsMask, ( uint8_t* ) VelaMacParamsDefaults.ChannelsMask, sizeof( VelaMacParams.ChannelsMask ) );
-	memcpy( ( uint8_t* ) ChannelsMaskRemaining, ( uint8_t* ) VelaMacParamsDefaults.ChannelsMask, sizeof( VelaMacParams.ChannelsMask ) );
-
-	MacCommandsInNextTx = false;
-
-	// Reset Multicast downlink counters
-	MulticastParams_t *cur = MulticastChannels;
-	while( cur != 0 )
-	{
-		cur->DownLinkCounter = 0;
-		cur = cur->Next;
-	}
-
-	// Initialize channel index.
-	Channel = VELA_MAX_NB_CHANNELS;
+	macEvents->MacRxTimeout();
 }

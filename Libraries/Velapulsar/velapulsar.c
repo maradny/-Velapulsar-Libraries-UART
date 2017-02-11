@@ -39,8 +39,7 @@
 static RTC_C_Calendar calendarTime;
 volatile bool awake = true;
 
-VelaMacPrimitives_t VelaMacPrimitives;
-VelaMacStatus_t Status;
+VelaMacStatus Status;
 
 /*****************************************************************************
  *                        LOCAL FUNCTION PROTOYPES
@@ -62,7 +61,7 @@ void initPeripherals (void){
 	/* Initialize radio */
 
 	printf("initializing\n");
-	if (VelaMacInitialization() == VELAMAC_STATUS_OK){
+	if (CommsInit(0) == VELAMAC_STATUS_OK){
 		printf("initialized\n");
 		GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
 	}
@@ -226,6 +225,14 @@ void RTC_AlarmHandler(void){
     }
 }
 
+
+void debug_print_pkt (uint8_t pkt[], int size){
+	int i;
+	for (i = 0; i < size;i ++){
+		printf("0x%02x ", pkt[i]);
+	}
+	printf ("\n");
+}
 /*****************************************************************************
  *                            LOCAL FUNCTIONS
  *****************************************************************************/

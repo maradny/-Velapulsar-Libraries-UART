@@ -1,6 +1,8 @@
 eclipse.preferences.version=1
 encoding//Adapter\ node/Libraries/Mac/subdir_rules.mk=UTF-8
 encoding//Adapter\ node/Libraries/Mac/subdir_vars.mk=UTF-8
+encoding//Adapter\ node/Libraries/Nwk/subdir_rules.mk=UTF-8
+encoding//Adapter\ node/Libraries/Nwk/subdir_vars.mk=UTF-8
 encoding//Adapter\ node/Libraries/RF95/subdir_rules.mk=UTF-8
 encoding//Adapter\ node/Libraries/RF95/subdir_vars.mk=UTF-8
 encoding//Adapter\ node/Libraries/Velapulsar/subdir_rules.mk=UTF-8
@@ -12,6 +14,8 @@ encoding//Adapter\ node/subdir_rules.mk=UTF-8
 encoding//Adapter\ node/subdir_vars.mk=UTF-8
 encoding//Coordinator/Libraries/Mac/subdir_rules.mk=UTF-8
 encoding//Coordinator/Libraries/Mac/subdir_vars.mk=UTF-8
+encoding//Coordinator/Libraries/Nwk/subdir_rules.mk=UTF-8
+encoding//Coordinator/Libraries/Nwk/subdir_vars.mk=UTF-8
 encoding//Coordinator/Libraries/RF95/subdir_rules.mk=UTF-8
 encoding//Coordinator/Libraries/RF95/subdir_vars.mk=UTF-8
 encoding//Coordinator/Libraries/Velapulsar/subdir_rules.mk=UTF-8

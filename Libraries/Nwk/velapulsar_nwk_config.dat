@@ -31,22 +31,16 @@
  * protocol changes are reflected in different maximum network
  * application payload size.
  */
--DMAX_NWK_PAYLOAD=50
+-DMAX_NWK_PAYLOAD=4
 
 /* Maximum size of application payload. */
--DMAX_APP_PAYLOAD=50
+-DMAX_APP_PAYLOAD=5
 
 /* default Link token */
 -DDEFAULT_LINK_TOKEN=0x01020304
 
 /* default Join token */
 -DDEFAULT_JOIN_TOKEN=0x05060708
-
-/* Remove 'x' corruption to enable application autoacknowledge support. Requires extended API as well */
--DAPP_AUTO_ACK
-
-/* Remove 'x' corruption to enable security. */
--DxSMPL_SECURE
 
 /* Remove 'x' corruption to enable vibration interrupt to wake up the SoC */
 -DWAKEUP_ON_VIBRATION

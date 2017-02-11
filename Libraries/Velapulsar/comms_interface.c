@@ -36,21 +36,65 @@
 /*****************************************************************************
  *                                DEFINES
  *****************************************************************************/
+static nwkCallbacks nwkEvents;
+
+/*****************************************************************************
+ *                        LOCAL FUNCTION PROTOYPES
+ *****************************************************************************/
+/*!
+ * \brief Resets MAC specific parameters to default
+ */
+static void ResetParameters( void );
+
+static void OnTxDone (void);
+static void OnRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr);
+static void OnRxError (void);
+static void OnTxTimeout (void);
+static void OnRxTimeout (void);
 
 /*****************************************************************************
  *                        FUNCTION IMPLEMENTATIONS
  *****************************************************************************/
-bool CommsSend(uint8_t linkID, dataPkt pkt, int size){// change later after implementing mac layer
-	RFSetTxConfig(23, 0, 12,1, 10, true, false, 1000);
-	RFSend(pkt, size);
+VelaMacStatus CommsSend(uint8_t linkID, appDataPkt pkt){// change later after implementing mac layer
+	printf("APP sending: ");
+	debug_print_pkt(pkt.pkt , sizeof(pkt.pkt));
+	VelaNwkSend (linkID, pkt.pkt, sizeof(pkt.pkt));
 }
 
-bool CommsReceive(uint8_t linkID, dataPkt* pkt){
-	RFSetRxConfig(0, 12,1, 20, 1000000, true, 20, false, true);
-	    //RFSetRxConfig(9, 10,1, 20, 1000, true, 20, false, true);
-	RFSetRx(1000);
+VelaMacStatus CommsInit(uint8_t linkID){
+		nwkEvents.NwkTxDone = OnTxDone;
+		nwkEvents.NwkRxDone = OnRxDone;
+		nwkEvents.NwkRxError = OnRxError;
+		nwkEvents.NwkTxTimeout = OnTxTimeout;
+		nwkEvents.NwkRxTimeout = OnTxTimeout;
+
+		return VelaNwkInitialization(&nwkEvents, linkID);
 }
 
-bool CommsInit(uint8_t linkID, bool){
+/*****************************************************************************
+ *                            LOCAL FUNCTIONS
+ *****************************************************************************/
+static void ResetParameters (void){
+	//IsVelaMacNetworkJoined = false;
+}
 
+static void OnTxDone (void){
+	printf("Sent OK APP\n");
+}
+
+static void OnRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr){
+	printf("Message received (APP): ");
+	debug_print_pkt(payload , size);
+}
+
+static void OnRxError (void){
+	printf("Received error Pkt\n");
+}
+
+static void OnTxTimeout (void){
+	printf("TX timeout\n");
+}
+
+static void OnRxTimeout (void){
+	printf("RX timeout\n");
 }

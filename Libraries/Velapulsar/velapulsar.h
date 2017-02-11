@@ -36,9 +36,8 @@
 #include "driverlib.h"
 
 /* Application includes */
-#include "velapulsar_mac.h"
-#include "sensor_interface.h"
 #include "comms_interface.h"
+#include "sensor_interface.h"
 #include "delay.h"
 
 /* Standard Includes */
@@ -99,5 +98,6 @@ void sleepFor(int minutes);
 void initCalendar (void);
 void RTC_AlarmHandler(void);
 
+void debug_print_pkt (uint8_t pkt[], int size);
 
 #endif /* LIBRARIES_VELAPULSAR_VELAPULSAR_H_ */
