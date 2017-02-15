@@ -1,4 +1,17 @@
 eclipse.preferences.version=1
+encoding//Adapter\ node\ -\ KIT/Libraries/Mac/subdir_rules.mk=UTF-8
+encoding//Adapter\ node\ -\ KIT/Libraries/Mac/subdir_vars.mk=UTF-8
+encoding//Adapter\ node\ -\ KIT/Libraries/Nwk/subdir_rules.mk=UTF-8
+encoding//Adapter\ node\ -\ KIT/Libraries/Nwk/subdir_vars.mk=UTF-8
+encoding//Adapter\ node\ -\ KIT/Libraries/RF95/subdir_rules.mk=UTF-8
+encoding//Adapter\ node\ -\ KIT/Libraries/RF95/subdir_vars.mk=UTF-8
+encoding//Adapter\ node\ -\ KIT/Libraries/Velapulsar/subdir_rules.mk=UTF-8
+encoding//Adapter\ node\ -\ KIT/Libraries/Velapulsar/subdir_vars.mk=UTF-8
+encoding//Adapter\ node\ -\ KIT/makefile=UTF-8
+encoding//Adapter\ node\ -\ KIT/objects.mk=UTF-8
+encoding//Adapter\ node\ -\ KIT/sources.mk=UTF-8
+encoding//Adapter\ node\ -\ KIT/subdir_rules.mk=UTF-8
+encoding//Adapter\ node\ -\ KIT/subdir_vars.mk=UTF-8
 encoding//Adapter\ node/Libraries/Mac/subdir_rules.mk=UTF-8
 encoding//Adapter\ node/Libraries/Mac/subdir_vars.mk=UTF-8
 encoding//Adapter\ node/Libraries/Nwk/subdir_rules.mk=UTF-8
