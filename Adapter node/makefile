@@ -21,7 +21,7 @@ ORDERED_OBJS += \
 "./Libraries/Velapulsar/comms_interface.obj" \
 "./Libraries/Velapulsar/sensor_interface.obj" \
 "./Libraries/Velapulsar/velapulsar.obj" \
-"../msp432p401r.cmd" \
+"../msp432p401m.cmd" \
 "C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/ccs/msp432p4xx_driverlib.lib" \
 $(GEN_CMDS__FLAG) \
 -llibc.a \

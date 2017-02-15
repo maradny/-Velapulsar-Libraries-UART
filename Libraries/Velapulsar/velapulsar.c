@@ -63,27 +63,30 @@ void initPeripherals (void){
 	printf("initializing\n");
 	if (CommsInit(0) == VELAMAC_STATUS_OK){
 		printf("initialized\n");
-		GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
+		//GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
+	}
+	else{
+		printf("Not initialized\n");
 	}
 }
 
 void initPorts (void){
 	MAP_Interrupt_disableSleepOnIsrExit();
 
-	MAP_GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN0);
-	GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
-
-	MAP_GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN0);
-	GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN0);
-
-	MAP_GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN1);
-	GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN1);
-
-	MAP_GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN2);
-	GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN2);
-
-	MAP_GPIO_setAsOutputPin(GPIO_PORT_P4, GPIO_PIN2);
-	GPIO_setOutputLowOnPin(GPIO_PORT_P4, GPIO_PIN2);
+//	MAP_GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN0);
+//	GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
+//
+//	MAP_GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN0);
+//	GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN0);
+//
+//	MAP_GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN1);
+//	GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN1);
+//
+//	MAP_GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN2);
+//	GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN2);
+//
+//	MAP_GPIO_setAsOutputPin(GPIO_PORT_P4, GPIO_PIN2);
+//	GPIO_setOutputLowOnPin(GPIO_PORT_P4, GPIO_PIN2);
 }
 
 void initClocks (void){

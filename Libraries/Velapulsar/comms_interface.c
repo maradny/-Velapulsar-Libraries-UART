@@ -85,10 +85,14 @@ static void OnTxDone (void){
 static void OnRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr){
 	printf("Message received (APP): ");
 	debug_print_pkt(payload , size);
+	appDataPkt pkt;
+	memcpy (&pkt.pkt, payload, size);
+	PktReceived(0, pkt);
 }
 
 static void OnRxError (void){
 	printf("Received error Pkt\n");
+    RFSetRx(1000);
 }
 
 static void OnTxTimeout (void){

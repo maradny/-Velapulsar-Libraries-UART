@@ -87,9 +87,15 @@ static void OnMacTxDone (void){
 }
 
 static void OnMacRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr){
-	printf("Message received (NWK): ");
-	debug_print_pkt(payload , size);
-	nwkEvents->NwkRxDone(payload, size, rssi, snr);
+	nwkDataPkt pkt;
+	memcpy (&pkt.pkt, payload, size);
+//	printf("Pkt received (NWK): ");
+//	debug_print_pkt(pkt.pkt , size);
+//	printf("Message received (NWK) %d: ", size);
+//	debug_print_pkt(payload , size);
+	nwkEvents->NwkRxDone(pkt.data.appPayload,
+			size - sizeof pkt.data.myShovel - sizeof pkt.data.myType -
+			sizeof pkt.data.myUnit, rssi, snr);
 }
 
 static void OnMacRxError (void){

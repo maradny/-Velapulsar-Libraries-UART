@@ -42,6 +42,7 @@
 /*****************************************************************************
  *                             LOCAL FUNCTIONS
  *****************************************************************************/
+void ReceivedPkt(uint8_t linkID, appDataPkt pkt);
 
 /******************************************************************************
 * Function: Main
@@ -62,8 +63,10 @@ int main(void)
 
     uint8_t packetNum = 0;
 
+    PktReceived = ReceivedPkt;
+
     //RFSetRxConfig(0, 12,1, 20, 1000000, true, 20, false, true);
-    RFSetRxConfig(9, 10,1, 20, 1000, true, 20, false, true);
+    RFSetRxConfig(9, 10,1, 50, 1000, false, 20, false, true);
     RFSetRx(1000);
     while(1){
 
@@ -89,7 +92,16 @@ int main(void)
     __no_operation();
 }
 
+int _system_pre_init( void )
+{
+  WDTCTL = WDTPW | WDTHOLD;
 
+  return 1;
+}
+
+void ReceivedPkt(uint8_t linkID, appDataPkt pkt){
+	printf("received this: %x, %x, %x\n", pkt.data.sensorData.battery, pkt.data.sensorData.claw, pkt.data.sensorData.light);
+}
 
 ///*
 // * -------------------------------------------

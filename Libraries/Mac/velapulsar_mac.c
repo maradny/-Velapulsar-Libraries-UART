@@ -174,9 +174,11 @@ VelaMacStatus VelaMacSend (uint8_t linkID, uint8_t nwkPayload[], int size){
 	memcpy(&pkt.data.nwkPayload, nwkPayload, size);
 	printf("size rx in mac: %d", size);
 	//RFSetTxConfig(23, 0, 12,1, 10, true, false, 1000);
-	RFSetTxConfig(23, 9, 10,1, 20, true, false, 1000);
+	RFSetTxConfig(23, 9, 10,1, 20, false, false, 1000);
 	printf("MAC sending: ");
 	debug_print_pkt(pkt.pkt , sizeof(pkt.pkt) - (MAX_NWK_PAYLOAD -size));
+	printf("size of pkt.pkt: %d\n", sizeof(pkt.pkt));
+	printf("size of pkt im sending: %d\n", sizeof(pkt.pkt) - (MAX_NWK_PAYLOAD -size));
 	RFSend(pkt.pkt,sizeof(pkt.pkt) - (MAX_NWK_PAYLOAD -size));
 }
 /*****************************************************************************
@@ -192,9 +194,16 @@ static void OnRadioTxDone (void){
 }
 
 static void OnRadioRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr){
-	printf("Message received (MAC): ");
-	debug_print_pkt(payload , size);
-	macEvents->MacRxDone(payload, size, rssi, snr);
+//	printf("Message received (MAC): ");
+//	debug_print_pkt(payload , size);
+	dataPkt pkt;
+	memcpy (&pkt.pkt, payload, size);
+//	printf("Pkt received (MAC): ");
+//	debug_print_pkt(pkt.pkt , size);
+	macEvents->MacRxDone(pkt.data.nwkPayload,
+			size - sizeof pkt.data.msgType - sizeof pkt.data.myAddr -
+					sizeof pkt.data.myType - sizeof pkt.data.pktID -
+					sizeof pkt.data.toAddr, rssi, snr);
 }
 
 static void OnRadioRxError (void){

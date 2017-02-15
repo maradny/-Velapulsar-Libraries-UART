@@ -59,6 +59,7 @@ typedef union{
  *****************************************************************************/
 VelaMacStatus CommsInit(uint8_t linkID);
 VelaMacStatus CommsSend(uint8_t linkID, appDataPkt pkt);
+void    ( *PktReceived )( uint8_t linkID, appDataPkt pkt);
 
 #endif /* LIBRARIES_VELAPULSAR_COMMS_INTERFACE_H_ */
 

@@ -302,7 +302,7 @@ void RFSetTxConfig(int8_t power, uint32_t bandwidth, uint32_t datarate,
 		settings.LoRa.LowDatarateOptimize = 0x00;
 	}
 
-    RFWrite(REG_1D_MODEM_CONFIG1, (bandwidth << 4) | (coderate << 1) | fixLen | 0x01);
+    RFWrite(REG_1D_MODEM_CONFIG1, (bandwidth << 4) | (coderate << 1) | fixLen);
     RFWrite(REG_1E_MODEM_CONFIG2, (RFRead(REG_1E_MODEM_CONFIG2) & 0x0B) | (datarate << 4) | (crcOn << 2));
     RFWrite(REG_26_MODEM_CONFIG3, (settings.LoRa.LowDatarateOptimize << 3));
     RFWrite(REG_20_PREAMBLE_MSB, (uint8_t)((preambleLen >> 8) & 0xFF));
@@ -364,7 +364,7 @@ void RFSend (uint8_t *buffer, uint8_t size){
 	// write payload buffer
 	RFWriteFifo (buffer, size);
 	txTimeout = settings.LoRa.TxTimeout;
-
+	printf("sending %d bytes\n", size);
 	RFSetTx (txTimeout);
 }
 
@@ -442,8 +442,8 @@ bool RFInitModem (RadioModems_t modem){
 
 void RFWrite(uint8_t reg, uint8_t val){
     GPIO_setOutputLowOnPin(CS_PORT, CS_PIN);
-    SPI_transmitData(EUSCI_B0_BASE, reg | RF_SPI_WRITE_MASK);
-    SPI_transmitData(EUSCI_B0_BASE, val);
+    SPI_transmitData(SPI_PORT, reg | RF_SPI_WRITE_MASK);
+    SPI_transmitData(SPI_PORT, val);
     delay_ms(10);
     GPIO_setOutputHighOnPin(CS_PORT, CS_PIN);
 }
@@ -451,9 +451,9 @@ void RFWrite(uint8_t reg, uint8_t val){
 void RFWriteBuffer(uint8_t reg, uint8_t* src, uint8_t len)
 {
     GPIO_setOutputLowOnPin(CS_PORT, CS_PIN);
-    SPI_transmitData(EUSCI_B0_BASE, reg | RF_SPI_WRITE_MASK);
+    SPI_transmitData(SPI_PORT, reg | RF_SPI_WRITE_MASK);
     while (len--){
-        SPI_transmitData(EUSCI_B0_BASE, *src++);
+        SPI_transmitData(SPI_PORT, *src++);
         delay_ms(1);
     }
     delay_ms(10);
@@ -463,10 +463,10 @@ void RFWriteBuffer(uint8_t reg, uint8_t* src, uint8_t len)
 uint8_t RFRead(uint8_t reg){
     uint8_t val = 0;
     GPIO_setOutputLowOnPin(CS_PORT, CS_PIN);
-    SPI_transmitData(EUSCI_B0_BASE, reg & ~RF_SPI_WRITE_MASK);
-    SPI_transmitData(EUSCI_B0_BASE, 0);
+    SPI_transmitData(SPI_PORT, reg & ~RF_SPI_WRITE_MASK);
+    SPI_transmitData(SPI_PORT, 0);
     delay_ms(5);
-    val = SPI_receiveData(EUSCI_B0_BASE);
+    val = SPI_receiveData(SPI_PORT);
     delay_ms(10);
     GPIO_setOutputHighOnPin(CS_PORT, CS_PIN);
     return val;
@@ -474,11 +474,11 @@ uint8_t RFRead(uint8_t reg){
 //
 void RFReadBuffer(uint8_t reg, uint8_t* dest, uint8_t len){
     GPIO_setOutputLowOnPin(CS_PORT, CS_PIN);
-    SPI_transmitData(EUSCI_B0_BASE, reg & ~RF_SPI_WRITE_MASK);
+    SPI_transmitData(SPI_PORT, reg & ~RF_SPI_WRITE_MASK);
     while (len--){
-        SPI_transmitData(EUSCI_B0_BASE, 0);
+        SPI_transmitData(SPI_PORT, 0);
         delay_ms(2);
-        *dest++ = SPI_receiveData(EUSCI_B0_BASE);
+        *dest++ = SPI_receiveData(SPI_PORT);
     }
     delay_ms(10);
     GPIO_setOutputHighOnPin(CS_PORT, CS_PIN);
@@ -533,6 +533,7 @@ void PORT2_IRQHandler(void){
 
 				//Get Pkt
 				settings.LoRaPacketHandler.Size = RFRead(REG_13_RX_NB_BYTES);
+				printf("received %d bytes\n", settings.LoRaPacketHandler.Size);
 				RFWrite(REG_0D_FIFO_ADDR_PTR, RFRead(REG_10_FIFO_RX_CURRENT_ADDR));
 				RFReadBuffer(REG_00_FIFO, RxTxBuffer, settings.LoRaPacketHandler.Size);
 				if (!settings.LoRa.RxContinuous){

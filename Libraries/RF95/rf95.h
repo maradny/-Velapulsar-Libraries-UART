@@ -42,12 +42,21 @@
 /*****************************************************************************
  *                                DEFINES
  *****************************************************************************/
+#ifdef KIT
 #define RST_PORT    GPIO_PORT_P5
 #define RST_PIN     GPIO_PIN2
 #define CS_PORT     GPIO_PORT_P4
 #define CS_PIN      GPIO_PIN6
 #define INT_PORT    GPIO_PORT_P2
 #define INT_PIN     GPIO_PIN5
+#else
+#define RST_PORT    GPIO_PORT_P1
+#define RST_PIN     GPIO_PIN4
+#define CS_PORT     GPIO_PORT_P1
+#define CS_PIN      GPIO_PIN0
+#define INT_PORT    GPIO_PORT_P1
+#define INT_PIN     GPIO_PIN5
+#endif
 
 #define DEFAULT_FREQ    915.0
 #define DEFAULT_POWER   23
