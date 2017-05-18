@@ -58,6 +58,10 @@ void initPeripherals (void){
 	/* Initialize ports */
 	initPorts();
 
+#ifdef COORDINATOR
+	UARTinit();
+#endif
+
 	/* Initialize radio */
 
 	printf("initializing\n");

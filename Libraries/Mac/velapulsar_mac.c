@@ -34,94 +34,31 @@
 /*****************************************************************************
  *                                DEFINES
  *****************************************************************************/
-/*
- * Maximum PHY layer payload size
- */
-#define VELA_MAC_PHY_MAXPAYLOAD                      255
-
-/*
- * Maximum MAC commands buffer size
- */
-#define VELA_MAC_COMMAND_MAX_LENGTH                 15
-
-/*
- * FRMPayload overhead to be used when setting the Radio.SetMaxPayloadLength
- * in RxWindowSetup function.
- * Maximum PHYPayload = MaxPayloadOfDatarate/MaxPayloadOfDatarateRepeater + VELA_MAC_FRMPAYLOAD_OVERHEAD
- */
-#define VELA_MAC_FRMPAYLOAD_OVERHEAD                13 // MHDR(1) + FHDR(7) + Port(1) + MIC(4)
 
 /*
  * VelaMac internal states
  */
-enum eVelaMacState
-{
-    MAC_IDLE          = 0x00000000,
-    MAC_TX_RUNNING    = 0x00000001,
-    MAC_RX            = 0x00000002,
-    MAC_ACK_REQ       = 0x00000004,
-    MAC_ACK_RETRY     = 0x00000008,
-    MAC_TX_DELAYED    = 0x00000010,
-    MAC_TX_CONFIG     = 0x00000020,
-    MAC_RX_ABORT      = 0x00000040,
-};
+typedef enum{
+    MAC_TX,
+    MAC_RX
+}VelaMacStates;
 
 static RadioEvents_t radioEvents;
 static macCallbacks* macEvents;
 
-/*
- * Device IEEE EUI
- */
-static uint8_t *VelaMacDevEui;
+static volatile VelaMacStates currentState;
 
-/*
- * Application IEEE EUI
- */
-static uint8_t *VelaMacAppEui;
+volatile uint16_t pktID;
 
-/*
- * AES encryption/decryption cipher application key
- */
-static uint8_t *VelaMacAppKey;
+volatile dataPkt rxPkt;
+volatile int16_t rxRssi;
+volatile int8_t rxSnr;
+volatile uint16_t rxSize;
 
-/*
- * AES encryption/decryption cipher network session key
- */
-static uint8_t VelaMacNwkSKey[] =
-{
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-};
-
-/*
- * AES encryption/decryption cipher application session key
- */
-static uint8_t VelaMacAppSKey[] =
-{
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-};
-
-/*
- * Device nonce is a random value extracted by issuing a sequence of RSSI
- * measurements
- */
-static uint16_t VelaMacDevNonce;
-
-/*
- * Network ID ( 3 bytes )
- */
-static uint32_t VelaMacNetID;
-
-/*
- * Device (MAC) Address
- */
-static uint32_t VelaMacDevAddr;
-
-/*
- * VelaMac internal state
- */
-uint32_t VelaMacState = MAC_IDLE;
+volatile dataPkt txPkt;
+volatile uint16_t txSize;
+volatile uint8_t numOfFailed = 0;
+volatile bool waitForAck = false;
 
 /*!
  * Indicates if the MAC layer has already joined a network.
@@ -136,11 +73,11 @@ static bool IsVelaMacNetworkJoined = false;
  */
 static void ResetMacParameters( void );
 
-static void OnRadioTxDone (void);
+static void OnRadioTxDone (bool ack);
 static void OnRadioRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr);
 static void OnRadioRxError (void);
 static void OnRadioTxTimeout (void);
-static void OnRadioRxTimeout (void);
+static void OnRadioRxTimeout (uint16_t timeout);
 
 /*****************************************************************************
  *                        FUNCTION IMPLEMENTATIONS
@@ -149,6 +86,7 @@ VelaMacStatus VelaMacInitialization (uint8_t linkID, macCallbacks* callbacks){
 	macEvents = callbacks; // callbacks back to nwk layer
 	ResetMacParameters();
 
+	pktID = 0;
 	// Initialize timers here.....
 
 	// Initialize radio callbacks
@@ -165,21 +103,30 @@ VelaMacStatus VelaMacInitialization (uint8_t linkID, macCallbacks* callbacks){
 }
 
 VelaMacStatus VelaMacSend (uint8_t linkID, uint8_t nwkPayload[], int size){
+	currentState = MAC_TX;
 	dataPkt pkt;
 	pkt.data.myAddr = MY_ADDR;
 	pkt.data.toAddr = 0x00;
 	pkt.data.msgType = COMMAND;
-	pkt.data.pktID = 0;
-	pkt.data.myType = 0;
+	pkt.data.pktID = pktID;
 	memcpy(&pkt.data.nwkPayload, nwkPayload, size);
+
+	memcpy (&txPkt.pkt, pkt.pkt, size + MAX_MAC_HEADER);
+	txSize = size + MAX_MAC_HEADER;
+
 	printf("size rx in mac: %d", size);
 	//RFSetTxConfig(23, 0, 12,1, 10, true, false, 1000);
-	RFSetTxConfig(23, 9, 10,1, 20, false, false, 1000);
+	RFSetTxConfig(23, 9, 12,1, 20, false, true, 1000);
 	printf("MAC sending: ");
-	debug_print_pkt(pkt.pkt , sizeof(pkt.pkt) - (MAX_NWK_PAYLOAD -size));
+	debug_print_pkt(pkt.pkt , size + MAX_MAC_HEADER);
 	printf("size of pkt.pkt: %d\n", sizeof(pkt.pkt));
-	printf("size of pkt im sending: %d\n", sizeof(pkt.pkt) - (MAX_NWK_PAYLOAD -size));
-	RFSend(pkt.pkt,sizeof(pkt.pkt) - (MAX_NWK_PAYLOAD -size));
+	printf("size of pkt im sending: %d\n", size + MAX_MAC_HEADER);
+	RFSend(pkt.pkt, size + MAX_MAC_HEADER);
+	if (pktID < 65535)
+		pktID++;
+	else
+		pktID = 0;
+	return VELAMAC_STATUS_OK;
 }
 /*****************************************************************************
  *                            LOCAL FUNCTIONS
@@ -188,35 +135,131 @@ static void ResetMacParameters (void){
 	IsVelaMacNetworkJoined = false;
 }
 
-static void OnRadioTxDone (void){
+static void OnRadioTxDone (bool ack){
 	printf("Sent OK MAC\n");
-	macEvents->MacTxDone();
+	//macEvents->MacTxDone(ack);
+
+#ifdef PKT_ACK
+	if (ack == true){
+		printf ("sent ack\n");
+		//RFSetRxConfig(9, 12,1, 50, REPEAT_TIMEOUT, false, 20, false, false);
+
+//	#ifdef COORDINATOR
+//		//UARTSend(rxPkt.pkt, rxSize);
+//		UARTSendRssi(rxPkt.pkt, rxSize, rxRssi);
+//		//SPISend(SERVER, rxPkt.pkt, rxSize);
+//		RFSetRxConfig(9, 12,1, 50, 1000, false, 20, true, true);
+//		RFSetRx(1000);
+//	#endif
+		macEvents->MacRxDone(rxPkt.data.nwkPayload,
+					rxSize - sizeof rxPkt.data.msgType - sizeof rxPkt.data.myAddr -
+							sizeof rxPkt.data.pktID -
+							sizeof rxPkt.data.toAddr, rxRssi, rxSnr);
+	}
+	else{
+		printf ("sent pkt\n");
+		waitForAck = true;
+		RFSetRxConfig(9, 12,1, 30, ACK_TIMEOUT, false, 20, true, false);
+		RFSetRx(1000);
+	}
+
+#endif
 }
 
 static void OnRadioRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr){
-//	printf("Message received (MAC): ");
-//	debug_print_pkt(payload , size);
+	//printf("Message received (MAC): ");
+	//debug_print_pkt(payload , size);
 	dataPkt pkt;
 	memcpy (&pkt.pkt, payload, size);
-//	printf("Pkt received (MAC): ");
-//	debug_print_pkt(pkt.pkt , size);
-	macEvents->MacRxDone(pkt.data.nwkPayload,
-			size - sizeof pkt.data.msgType - sizeof pkt.data.myAddr -
-					sizeof pkt.data.myType - sizeof pkt.data.pktID -
-					sizeof pkt.data.toAddr, rssi, snr);
+	memcpy (&rxPkt.pkt, payload, size);
+	rxSize = size;
+	rxRssi = rssi;
+	rxSnr = snr;
+	//printf("Pkt received (MAC): ");
+	//debug_print_pkt(pkt.pkt , size);
+
+#ifdef COORDINATOR
+	UARTSendRssi(rxPkt.pkt, rxSize, rxRssi);
+#endif
+
+#ifdef PKT_ACK
+	if (rxPkt.data.msgType != ACKNOWLEDGE && !waitForAck){
+		printf("sending ack\n");
+		// received a new packet
+		SendAck();
+	}
+	else if(rxPkt.data.msgType == ACKNOWLEDGE){
+		// received an ack for the msg i sent
+		printf("received ack\n");
+		waitForAck = false;
+		numOfFailed = 0;
+		macEvents->MacTxDone(true);
+	}
+//	else {
+//		macEvents->MacTxDone(false);
+//	}
+#endif
+}
+
+void SendAck(void){
+	dataPkt ackPkt = rxPkt;
+	ackPkt.data.toAddr = rxPkt.data.myAddr;
+	ackPkt.data.myAddr = MY_ADDR;
+	ackPkt.data.msgType = ACKNOWLEDGE;
+
+	//RFSetTxConfig(23, 0, 12,1, 10, true, false, 1000);
+	RFSetTxConfig(23, 9, 12,1, 20, false, true, 5555); // timeout is 5555 to signify transmitting ack
+	printf("MAC sending ack: ");
+	debug_print_pkt(ackPkt.pkt , MAX_MAC_HEADER);// rxSize);
+	printf("Time on air: %d\n", RFGetTimeOnAir(MAX_MAC_HEADER));
+	printf("size of ackPkt.pkt: %d\n", sizeof(ackPkt.pkt));
+	printf("size of ackPkt im sending: %d\n", MAX_MAC_HEADER);//rxSize);
+	RFSend(ackPkt.pkt,MAX_MAC_HEADER);//rxSize);
 }
 
 static void OnRadioRxError (void){
-	printf("Received error Pkt\n");
+	printf("Received error Pkt MAC\n");
 	macEvents->MacRxError();
 }
 
 static void OnRadioTxTimeout (void){
-	printf("TX timeout\n");
+	printf("TX timeout mac\n");
 	macEvents->MacTxTimeout();
 }
 
-static void OnRadioRxTimeout (void){
-	printf("RX timeout\n");
-	macEvents->MacRxTimeout();
+static void OnRadioRxTimeout (uint16_t timeout){
+	printf("RX timeout mac\n");
+
+	switch (timeout){
+	case REPEAT_TIMEOUT:
+		// forward received msg
+//	#ifdef COORDINATOR
+//		UARTSend(rxPkt.pkt, rxSize);
+//		RFSetRxConfig(9, 12,1, 50, 1000, false, 20, false, true);
+//		RFSetRx(1000);
+//	#endif
+//		macEvents->MacRxDone(rxPkt.data.nwkPayload,
+//					rxSize - sizeof rxPkt.data.msgType - sizeof rxPkt.data.myAddr -
+//							sizeof rxPkt.data.pktID -
+//							sizeof rxPkt.data.toAddr, rxRssi, rxSnr);
+		break;
+
+	case ACK_TIMEOUT:
+		// notify sent not ack
+		if (numOfFailed < MAX_NUM_FAILED){
+			numOfFailed++;
+			RFSetTxConfig(23, 9, 12,1, 20, false, true, 1000);
+			RFSend(txPkt.pkt,txSize);
+		}
+		else{
+			numOfFailed = 0;
+			macEvents->MacTxDone(false);
+		}
+		break;
+
+	case RX_WINDOW:
+		// back to normal
+		break;
+	}
+	//macEvents->MacRxTimeout(timeout);
 }

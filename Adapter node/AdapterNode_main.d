@@ -1,7 +1,7 @@
 # FIXED
 
 AdapterNode_main.obj: ../AdapterNode_main.c
-AdapterNode_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/Velapulsar/velapulsar.h
+AdapterNode_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Velapulsar/velapulsar.h
 AdapterNode_main.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/driverlib.h
 AdapterNode_main.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/adc14.h
 AdapterNode_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdint.h
@@ -44,25 +44,25 @@ AdapterNode_main.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP43
 AdapterNode_main.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/timer_a.h
 AdapterNode_main.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/uart.h
 AdapterNode_main.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/wdt_a.h
-AdapterNode_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/Velapulsar/comms_interface.h
+AdapterNode_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Velapulsar/comms_interface.h
 AdapterNode_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdio.h
 AdapterNode_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/linkage.h
 AdapterNode_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdarg.h
 AdapterNode_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdlib.h
-AdapterNode_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/Velapulsar/sensor_interface.h
-AdapterNode_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/Nwk/velapulsar_nwk.h
-AdapterNode_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/Mac/velapulsar_mac.h
-AdapterNode_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/rf95.h
-AdapterNode_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/spi_interface.h
-AdapterNode_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/delay.h
-AdapterNode_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/Radio/radio.h
+AdapterNode_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Velapulsar/sensor_interface.h
+AdapterNode_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Nwk/velapulsar_nwk.h
+AdapterNode_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Mac/velapulsar_mac.h
+AdapterNode_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/RF95/rf95.h
+AdapterNode_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/RF95/spi_interface.h
+AdapterNode_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/RF95/delay.h
+AdapterNode_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Radio/radio.h
 AdapterNode_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/math.h
 AdapterNode_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/_defs.h
 AdapterNode_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdio.h
 AdapterNode_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdlib.h
 
 ../AdapterNode_main.c: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/Velapulsar/velapulsar.h: 
+C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Velapulsar/velapulsar.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/driverlib.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/adc14.h: 
 C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdint.h: 
@@ -105,18 +105,18 @@ C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/timer32.h:
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/timer_a.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/uart.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/wdt_a.h: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/Velapulsar/comms_interface.h: 
+C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Velapulsar/comms_interface.h: 
 C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdio.h: 
 C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/linkage.h: 
 C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdarg.h: 
 C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdlib.h: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/Velapulsar/sensor_interface.h: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/Nwk/velapulsar_nwk.h: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/Mac/velapulsar_mac.h: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/rf95.h: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/spi_interface.h: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/delay.h: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/Radio/radio.h: 
+C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Velapulsar/sensor_interface.h: 
+C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Nwk/velapulsar_nwk.h: 
+C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Mac/velapulsar_mac.h: 
+C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/RF95/rf95.h: 
+C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/RF95/spi_interface.h: 
+C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/RF95/delay.h: 
+C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Radio/radio.h: 
 C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/math.h: 
 C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/_defs.h: 
 C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdio.h: 

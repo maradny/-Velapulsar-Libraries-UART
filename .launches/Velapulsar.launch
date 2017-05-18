@@ -24,7 +24,8 @@
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_PROJECT.Texas Instruments XDS110 USB Debug Probe/CORTEX_M4_0" value="Velapulsar"/>
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_PROJECT.Texas Instruments XDS110 USB Debug Probe_0/CORTEX_M4_0" value="Velapulsar"/>
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_TARGET_CONFIG" value="${target_config_active_default:Velapulsar}"/>
-<stringAttribute key="com.ti.ccstudio.debug.debugModel.MRU_PROGRAM.Texas Instruments XDS110 USB Debug Probe_0/CORTEX_M4_0" value="C:/Users\ghassan\Dropbox\Apps\CCS Cloud\Velapulsar\Adapter node\Velapulsar.out"/>
+<stringAttribute key="com.ti.ccstudio.debug.debugModel.MRU_PROGRAM.Texas Instruments XDS110 USB Debug Probe/CORTEX_M4_0" value="C:/Users\ghassan\Dropbox\Apps\CCS Cloud\velapulsar\Adapter node\Velapulsar.out"/>
+<stringAttribute key="com.ti.ccstudio.debug.debugModel.MRU_PROGRAM.Texas Instruments XDS110 USB Debug Probe_0/CORTEX_M4_0" value="C:/Users\ghassan\Dropbox\Apps\CCS Cloud\velapulsar\Coordinator - KIT\Velapulsar.out"/>
 <mapAttribute key="com.ti.ccstudio.debug.ui.displayFormats">
 <mapEntry key="Texas Instruments XDS110 USB Debug Probe_0/CORTEX_M4_0@##separator##@0" value="32-Bit Hex - TI Style"/>
 </mapAttribute>

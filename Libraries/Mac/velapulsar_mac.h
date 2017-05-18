@@ -35,10 +35,15 @@
  *                                INCLUDES
  *****************************************************************************/
 #include "rf95.h"
-
+#ifdef COORDINATOR
+#include "UART_interface.h"
+#endif
 /*****************************************************************************
  *                                DEFINES
  *****************************************************************************/
+#define MAX_NWK_PAYLOAD MAX_NWK_HEADER+MAX_APP_HEADER
+#define MAX_PKT_SIZE MAX_NWK_PAYLOAD+MAX_MAC_HEADER
+
 typedef enum{
     /*!
      * Service started successfully
@@ -151,6 +156,7 @@ typedef struct sVelaMacParams
 
 typedef enum{
 	COMMAND,
+	ACKNOWLEDGE,
 	FORWARD,
 	REPORT,
 	LONG_REPORT
@@ -167,7 +173,6 @@ typedef struct{
 	uint32_t	myAddr;
 	uint32_t	toAddr;
 	messageType msgType;
-	uint16_t	myType;
 	uint8_t		nwkPayload[MAX_NWK_PAYLOAD];
 }macPayLoad;
 
@@ -177,11 +182,11 @@ typedef union{
 }dataPkt;
 
 typedef struct{
-	void    ( *MacTxDone )( void );
+	void    ( *MacTxDone )( bool ack );
 	void    ( *MacRxDone )( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr );
 	void    ( *MacRxError )( void );
 	void    ( *MacTxTimeout )( void );
-	void    ( *MacRxTimeout )( void );
+	void    ( *MacRxTimeout )( uint16_t timeout );
 }macCallbacks;
 
 /*****************************************************************************

@@ -28,7 +28,7 @@
  */
  
  /* my address */
--DMY_ADDR=0x12345678
+-DMY_ADDR=0x00000005
 
 /* my Shovel */
 -DMY_SHOVEL=1

@@ -45,11 +45,11 @@ static macCallbacks macEvents;
  */
 static void ResetNwkParameters( void );
 
-static void OnMacTxDone (void);
+static void OnMacTxDone (bool ack);
 static void OnMacRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr);
 static void OnMacRxError (void);
 static void OnMacTxTimeout (void);
-static void OnMacRxTimeout (void);
+static void OnMacRxTimeout (uint16_t timeout);
 
 /*****************************************************************************
  *                        FUNCTION IMPLEMENTATIONS
@@ -61,7 +61,7 @@ VelaMacStatus VelaNwkInitialization(nwkCallbacks* callbacks, uint8_t linkID){
 	macEvents.MacRxDone = OnMacRxDone;
 	macEvents.MacRxError = OnMacRxError;
 	macEvents.MacTxTimeout = OnMacTxTimeout;
-	macEvents.MacRxTimeout = OnMacTxTimeout;
+	macEvents.MacRxTimeout = OnMacRxTimeout;
 
 	return VelaMacInitialization(linkID, &macEvents);
 }
@@ -75,15 +75,15 @@ VelaMacStatus VelaNwkSend (uint8_t linkID, uint8_t appPayload[], int size){
 	memcpy(&pkt.data.appPayload, appPayload, size);
 
 	printf("NWK sending: ");
-	debug_print_pkt(pkt.pkt , sizeof(pkt.pkt) - (MAX_APP_PAYLOAD -size));
-	return VelaMacSend(linkID, pkt.pkt, sizeof(pkt.pkt) - (MAX_APP_PAYLOAD -size));
+	debug_print_pkt(pkt.pkt , sizeof(pkt.pkt) - (MAX_APP_HEADER -size));
+	return VelaMacSend(linkID, pkt.pkt, sizeof(pkt.pkt) - (MAX_APP_HEADER -size));
 }
 /*****************************************************************************
  *                            LOCAL FUNCTIONS
  *****************************************************************************/
-static void OnMacTxDone (void){
-	printf("Sent OK NWK\n");
-	nwkEvents->NwkTxDone();
+static void OnMacTxDone (bool ack){
+	//printf("Sent OK NWK\n");
+	nwkEvents->NwkTxDone(ack);
 }
 
 static void OnMacRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr){
@@ -99,16 +99,16 @@ static void OnMacRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t s
 }
 
 static void OnMacRxError (void){
-	printf("Received error Pkt\n");
+	printf("Received error Pkt NWK\n");
 	nwkEvents->NwkRxError();
 }
 
 static void OnMacTxTimeout (void){
-	printf("TX timeout\n");
+	printf("TX timeout nwk\n");
 	nwkEvents->NwkTxTimeout();
 }
 
-static void OnMacRxTimeout (void){
-	printf("RX timeout\n");
-	nwkEvents->NwkRxTimeout();
+static void OnMacRxTimeout (uint16_t timeout){
+	printf("RX timeout nwk\n");
+	nwkEvents->NwkRxTimeout(timeout);
 }

@@ -134,7 +134,8 @@ bool RFInit(RadioEvents_t *events){
 //    TimerInit( &RxTimeoutSyncWord, SX1276OnTimeoutIrq );
 
 	if (!RFInitModem(MODEM_LORA))
-		return false;
+		if(!RFInitModem(MODEM_LORA))
+			return false;
 
 	RFIrqInit();
 
@@ -219,6 +220,7 @@ void RFSetRxConfig( uint32_t bandwidth, uint32_t datarate,
 	settings.LoRa.FixLen = fixLen;
 	settings.LoRa.PayloadLen = payloadLen;
 	settings.LoRa.CrcOn = crcOn;
+	settings.LoRa.RxTimeout = symbTimeout;
 	settings.LoRa.RxContinuous = rxContinuous;
 
 	if (datarate > 12){
@@ -260,7 +262,8 @@ void RFSetTxConfig(int8_t power, uint32_t bandwidth, uint32_t datarate,
 	paConfig = paConfig | 0x70; // select max power
 
 	if (power > 17){
-		paDac = paDac | 0x07; // Turn on DAC for 20dbm
+		//paDac = paDac | 0x07; // Turn on DAC for 20dbm
+		paDac = 0x87;
 		if (power > 20){
 			power = 20;
 		}
@@ -307,6 +310,7 @@ void RFSetTxConfig(int8_t power, uint32_t bandwidth, uint32_t datarate,
     RFWrite(REG_26_MODEM_CONFIG3, (settings.LoRa.LowDatarateOptimize << 3));
     RFWrite(REG_20_PREAMBLE_MSB, (uint8_t)((preambleLen >> 8) & 0xFF));
     RFWrite(REG_21_PREAMBLE_LSB, (uint8_t)(preambleLen &0xFF));
+    RFSetChannel (DEFAULT_FREQ);
 }
 
 uint32_t RFGetTimeOnAir (uint8_t pktLen){
@@ -346,6 +350,10 @@ uint32_t RFGetTimeOnAir (uint8_t pktLen){
 	return airTime;
 }
 
+uint32_t RFGetSymbolTime (void){
+
+}
+
 void RFSend (uint8_t *buffer, uint8_t size){
 	uint32_t txTimeout = 0;
 
@@ -364,7 +372,7 @@ void RFSend (uint8_t *buffer, uint8_t size){
 	// write payload buffer
 	RFWriteFifo (buffer, size);
 	txTimeout = settings.LoRa.TxTimeout;
-	printf("sending %d bytes\n", size);
+	//printf("sending %d bytes\n", size);
 	RFSetTx (txTimeout);
 }
 
@@ -487,17 +495,36 @@ void RFReadBuffer(uint8_t reg, uint8_t* dest, uint8_t len){
 void PORT2_IRQHandler(void){
 	uint32_t status;
 	status = MAP_GPIO_getEnabledInterruptStatus(INT_PORT);
-	if (status == INT_PIN){
+	//printf("port interrupt is: %x\n", status);
+	uint8_t irq_flags;
+	if (status == INT_PIN || status == INT1_PIN){
 		MAP_GPIO_clearInterruptFlag(INT_PORT, status);
-		uint8_t irq_flags = RFRead(REG_12_IRQ_FLAGS);
+		irq_flags = RFRead(REG_12_IRQ_FLAGS);
+		//printf("flags are: %x\n", irq_flags);
+		//printf("current state: %s", settings.State);
 		switch (settings.State){
 		case RF_RX_RUNNING:
-			if(irq_flags & (RX_TIMEOUT | PAYLOAD_CRC_ERROR)){
-				if (!settings.LoRa.RxContinuous){
-					settings.State = RF_IDLE;
-				}
+			if(irq_flags & PAYLOAD_CRC_ERROR){
+				printf("CRC Error\n");
+				//if (!settings.LoRa.RxContinuous){
+					//settings.State = RF_IDLE;
+					RFSetStby();
+				//}
 				if ( (RadioEvents != 0) && (RadioEvents->RxError != 0)){
+					//Get Pkt
+					settings.LoRaPacketHandler.Size = RFRead(REG_13_RX_NB_BYTES);
+					printf("received %d bytes\n", settings.LoRaPacketHandler.Size);
+					RFWrite(REG_0D_FIFO_ADDR_PTR, RFRead(REG_10_FIFO_RX_CURRENT_ADDR));
+					RFReadBuffer(REG_00_FIFO, RxTxBuffer, settings.LoRaPacketHandler.Size);
+					debug_print_pkt(RxTxBuffer , settings.LoRaPacketHandler.Size);
 					RadioEvents->RxError();
+				}
+			}
+			else if (irq_flags & RX_TIMEOUT){
+				settings.State = RF_IDLE;
+
+				if ( (RadioEvents != 0) && (RadioEvents->RxTimeout != 0)){
+					RadioEvents->RxTimeout(settings.LoRa.RxTimeout);
 				}
 			}
 			else if(irq_flags & RX_DONE){
@@ -548,14 +575,29 @@ void PORT2_IRQHandler(void){
 			if (irq_flags & TX_DONE){
 				settings.State = RF_IDLE;
 				if ( (RadioEvents != 0) && (RadioEvents->TxDone != 0)){
-					RadioEvents->TxDone();
+					RadioEvents->TxDone(false);
+				}
+			}
+			break;
+		case RF_TX_ACK_RUNNING:
+			if (irq_flags & TX_DONE){
+				settings.State = RF_IDLE;
+				if ( (RadioEvents != 0) && (RadioEvents->TxDone != 0)){
+					RadioEvents->TxDone(true);
 				}
 			}
 			break;
 		}
 	}
 	//RFSetStby();
-	RFWrite(REG_12_IRQ_FLAGS, 0xff); // Clear all IRQ flags
+	RFWrite (REG_0F_FIFO_RX_BASE_ADDR, 0);
+	RFWrite (REG_0D_FIFO_ADDR_PTR, 0);
+	while (irq_flags != 0){
+		RFWrite(REG_12_IRQ_FLAGS, 0xFF); // Clear all IRQ flags
+		irq_flags = RFRead(REG_12_IRQ_FLAGS);
+		//printf("flags are: %x\n", irq_flags);
+		delay_ms(5);
+	}
 }
 
 /*****************************************************************************
@@ -569,6 +611,14 @@ void RFIrqInit(void){
 
 	MAP_Interrupt_setPriority(INT_PORT + 50, 0x40);
 	MAP_Interrupt_enableInterrupt(INT_PORT + 50);
+
+	MAP_GPIO_setAsInputPinWithPullDownResistor(INT1_PORT, INT1_PIN);
+	MAP_GPIO_clearInterruptFlag(INT1_PORT, INT1_PIN);
+	GPIO_interruptEdgeSelect(INT1_PORT, INT1_PIN, GPIO_LOW_TO_HIGH_TRANSITION);
+	MAP_GPIO_enableInterrupt(INT1_PORT, INT1_PIN);
+
+	MAP_Interrupt_setPriority(INT1_PORT + 50, 0x40);
+	MAP_Interrupt_enableInterrupt(INT1_PORT + 50);
 	MAP_Interrupt_enableMaster();
 }
 
@@ -594,12 +644,16 @@ void RFSetTx (uint32_t timeout){
 	// Set interrupt on tx
 	RFWrite(REG_40_DIO_MAPPING1, 0x40); // Interrupt on TxDone
 
-	settings.State = RF_TX_RUNNING;
-
-	uint8_t val = RFRead(REG_01_OP_MODE);
-	printf("val: %x\n", val);
-	val = RFRead(REG_24_HOP_PERIOD);
-	printf("val: %x\n", val);
+	if (timeout == 5555){
+		settings.State = RF_TX_ACK_RUNNING;
+	}
+	else{
+		settings.State = RF_TX_RUNNING;
+	}
+//	uint8_t val = RFRead(REG_01_OP_MODE);
+//	printf("val: %x\n", val);
+//	val = RFRead(REG_24_HOP_PERIOD);
+//	printf("val: %x\n", val);
 	// Start timer with timeout
 	RFSetOpMode (MODE_TX);
 	//delay_ms(timeout);

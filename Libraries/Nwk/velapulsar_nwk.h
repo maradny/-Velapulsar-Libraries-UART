@@ -41,7 +41,7 @@ typedef struct{
 	uint8_t		myShovel;
 	uint8_t		myUnit;
 	uint16_t	myType;
-	uint8_t		appPayload[MAX_APP_PAYLOAD];
+	uint8_t		appPayload[MAX_APP_HEADER];
 }nwkPayLoad;
 
 typedef union{
@@ -50,11 +50,11 @@ typedef union{
 }nwkDataPkt;
 
 typedef struct{
-	void    ( *NwkTxDone )( void );
+	void    ( *NwkTxDone )( bool ack );
 	void    ( *NwkRxDone )( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr );
 	void    ( *NwkRxError )( void );
 	void    ( *NwkTxTimeout )( void );
-	void    ( *NwkRxTimeout )( void );
+	void    ( *NwkRxTimeout )( uint16_t timeout );
 }nwkCallbacks;
 
 /*****************************************************************************

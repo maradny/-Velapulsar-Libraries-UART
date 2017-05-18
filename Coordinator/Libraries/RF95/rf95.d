@@ -46,7 +46,7 @@ Libraries/RF95/rf95.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MS
 Libraries/RF95/rf95.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/wdt_a.h
 Libraries/RF95/rf95.obj: ../Libraries/RF95/spi_interface.h
 Libraries/RF95/rf95.obj: ../Libraries/RF95/delay.h
-Libraries/RF95/rf95.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/Radio/radio.h
+Libraries/RF95/rf95.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Radio/radio.h
 Libraries/RF95/rf95.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/math.h
 Libraries/RF95/rf95.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/linkage.h
 Libraries/RF95/rf95.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/_defs.h
@@ -97,7 +97,7 @@ C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/uart.h:
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/wdt_a.h: 
 ../Libraries/RF95/spi_interface.h: 
 ../Libraries/RF95/delay.h: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/Radio/radio.h: 
+C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Radio/radio.h: 
 C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/math.h: 
 C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/linkage.h: 
 C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/_defs.h: 

@@ -115,5 +115,6 @@ SUBDIRS := \
 Libraries/Mac \
 Libraries/Nwk \
 Libraries/RF95 \
+Libraries/UART \
 Libraries/Velapulsar \
 

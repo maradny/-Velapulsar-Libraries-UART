@@ -27,15 +27,6 @@
  * contact TRL at www.queenstrl.ca.
  */
 
-/* Maximum size of Network application payload. Do not change unless
- * protocol changes are reflected in different maximum network
- * application payload size.
- */
--DMAX_NWK_PAYLOAD=4
-
-/* Maximum size of application payload. */
--DMAX_APP_PAYLOAD=5
-
 /* default Link token */
 -DDEFAULT_LINK_TOKEN=0x01020304
 

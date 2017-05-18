@@ -5,7 +5,7 @@ const eUSCI_SPI_MasterConfig spiMasterConfig =
 {
 #ifdef KIT
 		EUSCI_B_SPI_CLOCKSOURCE_SMCLK,             // SMCLK Clock Source
-		3000000,                                   // SMCLK = DCO = 3MHZ
+		12000000,                                   // SMCLK = DCO = 3MHZ
 		1000000,                                    // SPICLK = 5Mhz
 		EUSCI_B_SPI_MSB_FIRST,                     // MSB First
 		EUSCI_B_SPI_PHASE_DATA_CAPTURED_ONFIRST_CHANGED_ON_NEXT,    // Phase
@@ -46,3 +46,30 @@ void initSPI(void){
     SPI_initMaster(SPI_PORT, &spiMasterConfig);
     SPI_enableModule(SPI_PORT);
 }
+
+#ifdef COORDINATOR
+void SPISend (spiSlave slave, uint8_t *data, int size){
+	if (slave == SERVER){
+		GPIO_setOutputLowOnPin(SERVER_CS_PORT, SERVER_CS_PIN);
+		while (size--){
+			SPI_transmitData(SPI_PORT, *data++);
+			delay_ms(1);
+		}
+		delay_ms(10);
+		GPIO_setOutputHighOnPin(SERVER_CS_PORT, SERVER_CS_PIN);
+	}
+}
+
+void SPI_Read (spiSlave slave, uint8_t *dest, int size){
+	if (slave == SERVER){
+		GPIO_setOutputLowOnPin(SERVER_CS_PORT, SERVER_CS_PIN);
+		while (size--){
+			SPI_transmitData(SPI_PORT, 0);
+			delay_ms(2);
+			*dest++ = SPI_receiveData(SPI_PORT);
+		}
+		delay_ms(10);
+		GPIO_setOutputHighOnPin(SERVER_CS_PORT, SERVER_CS_PIN);
+	}
+}
+#endif

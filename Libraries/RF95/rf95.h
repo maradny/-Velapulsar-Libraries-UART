@@ -49,6 +49,8 @@
 #define CS_PIN      GPIO_PIN6
 #define INT_PORT    GPIO_PORT_P2
 #define INT_PIN     GPIO_PIN5
+#define INT1_PORT	GPIO_PORT_P2
+#define INT1_PIN    GPIO_PIN4
 #else
 #define RST_PORT    GPIO_PORT_P1
 #define RST_PIN     GPIO_PIN4
@@ -56,9 +58,15 @@
 #define CS_PIN      GPIO_PIN0
 #define INT_PORT    GPIO_PORT_P1
 #define INT_PIN     GPIO_PIN5
+#define INT1_PORT	GPIO_PORT_P1
+#define INT1_PIN    GPIO_PIN6
 #endif
 
+#ifndef F_433
 #define DEFAULT_FREQ    915.0
+#else
+#define DEFAULT_FREQ    433.0
+#endif
 #define DEFAULT_POWER   23
 
 // This is the maximum number of interrupts the driver can support
@@ -295,6 +303,7 @@ typedef struct
     uint8_t  PayloadLen;
     bool     CrcOn;
     bool     RxContinuous;
+    uint16_t RxTimeout;
     uint32_t TxTimeout;
 }RadioLoRaSettings_t;
 
@@ -484,6 +493,16 @@ bool RFCheckRfFrequency( uint32_t frequency );
  * \retval airTime        Computed airTime (us) for the given packet payload length
  */
 uint32_t RFGetTimeOnAir(uint8_t pktLen );
+
+/*!
+ * \brief Computes one symbol time on air in us
+ *
+ * \Remark Can only be called once SetRxConfig or SetTxConfig have been called
+ *
+ *
+ * \retval airTime        Computed airTime (us) for one symbol time
+ */
+uint32_t RFGetSymbolTime (void);
 
 /*!
  * \brief Sends the buffer of size. Prepares the packet to be sent and sets

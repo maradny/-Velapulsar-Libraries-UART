@@ -73,7 +73,7 @@ uint8_t buf[20];
 uint8_t len = sizeof(buf);
 uint32_t goodPkts = 0;
 
-int main (void){
+	int main (void){
 	initEndNode();
 
 	while(1){
@@ -110,7 +110,7 @@ void initEndNode(void){
 	/* Initialize board */
 	initClocks();
 	initPeripherals();
-	//initSensors();
+	Init_Sensors();
 
 //	payload = &packet.data.payload;
 //	currentSensorData = &packet.data.payload.sensorData;
@@ -125,30 +125,22 @@ void operate(void)
     //RFSetTxConfig(23, 9, 10,1, 20, true, false, 1000);
 
     while(1){
-        printf("Sending to sink\n");
-
-        uint8_t radioPacket[20] = "Hello World #      ";
-
-        sprintf(radioPacket+13, "%d", packetNum++);
-        printf("Sending "); printf(radioPacket); printf("\n");
-        radioPacket[19] = 0;
-
         appDataPkt pkt;
         pkt.data.sensorData.battery = FULL;
-        pkt.data.sensorData.claw = true;
-        pkt.data.sensorData.magnetic = true;
-        pkt.data.sensorData.light = true;
-        printf("Sending ");
-        debug_print_pkt(pkt.pkt , sizeof(pkt.pkt));
-        printf("Sending....\n"); delay_ms(10);
+        pkt.data.sensorData.claw = Get_Claw();
+        pkt.data.sensorData.magnetic = Get_Magnetic();
+        pkt.data.sensorData.light = Get_Light();
+//        printf("Sending ");
+//        debug_print_pkt(pkt.pkt , sizeof(pkt.pkt));
+//        printf("Sending....\n"); delay_ms(10);
 //        RFSend(packetNum, 1);
         //RFSend(radioPacket, 20);
         CommsSend(0, pkt);
 
-        while (RFGetStatus() == RF_TX_RUNNING){
-        	delay_ms(50);
-        }
-        delay_ms(1000);
+//        while (RFGetStatus() == RF_TX_RUNNING){
+//        	delay_ms(50);
+//        }
+        //delay_ms(1000);
 //        printf("Modem Config1: %X\n",spiRead(REG_1D_MODEM_CONFIG1));
 //        printf("Modem Config2: %X\n",spiRead(REG_1E_MODEM_CONFIG2));
 //        printf("Modem Config3: %X\n",spiRead(REG_26_MODEM_CONFIG3));

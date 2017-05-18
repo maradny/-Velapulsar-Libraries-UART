@@ -2,7 +2,7 @@
 
 Libraries/Mac/velapulsar_mac.obj: ../Libraries/Mac/velapulsar_mac.c
 Libraries/Mac/velapulsar_mac.obj: ../Libraries/Mac/velapulsar_mac.h
-Libraries/Mac/velapulsar_mac.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/rf95.h
+Libraries/Mac/velapulsar_mac.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/RF95/rf95.h
 Libraries/Mac/velapulsar_mac.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/driverlib.h
 Libraries/Mac/velapulsar_mac.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/adc14.h
 Libraries/Mac/velapulsar_mac.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdint.h
@@ -45,16 +45,16 @@ Libraries/Mac/velapulsar_mac.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/dri
 Libraries/Mac/velapulsar_mac.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/timer_a.h
 Libraries/Mac/velapulsar_mac.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/uart.h
 Libraries/Mac/velapulsar_mac.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/wdt_a.h
-Libraries/Mac/velapulsar_mac.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/spi_interface.h
-Libraries/Mac/velapulsar_mac.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/delay.h
-Libraries/Mac/velapulsar_mac.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/Radio/radio.h
+Libraries/Mac/velapulsar_mac.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/RF95/spi_interface.h
+Libraries/Mac/velapulsar_mac.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/RF95/delay.h
+Libraries/Mac/velapulsar_mac.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Radio/radio.h
 Libraries/Mac/velapulsar_mac.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/math.h
 Libraries/Mac/velapulsar_mac.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/linkage.h
 Libraries/Mac/velapulsar_mac.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/_defs.h
 
 ../Libraries/Mac/velapulsar_mac.c: 
 ../Libraries/Mac/velapulsar_mac.h: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/rf95.h: 
+C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/RF95/rf95.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/driverlib.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/adc14.h: 
 C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdint.h: 
@@ -97,9 +97,9 @@ C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/timer32.h:
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/timer_a.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/uart.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/wdt_a.h: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/spi_interface.h: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/RF95/delay.h: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/Velapulsar/Libraries/Radio/radio.h: 
+C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/RF95/spi_interface.h: 
+C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/RF95/delay.h: 
+C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Radio/radio.h: 
 C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/math.h: 
 C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/linkage.h: 
 C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/_defs.h: 

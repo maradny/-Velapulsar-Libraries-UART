@@ -32,6 +32,7 @@ typedef enum
     RF_IDLE = 0,
     RF_RX_RUNNING,
     RF_TX_RUNNING,
+	RF_TX_ACK_RUNNING,
     RF_CAD,
 	RF_SLEEP,
 }RadioState_t;
@@ -44,7 +45,7 @@ typedef struct
     /*!
      * \brief  Tx Done callback prototype.
      */
-    void    ( *TxDone )( void );
+    void    ( *TxDone )( bool acknowledge );
     /*!
      * \brief  Tx Timeout callback prototype.
      */
@@ -63,7 +64,7 @@ typedef struct
     /*!
      * \brief  Rx Timeout callback prototype.
      */
-    void    ( *RxTimeout )( void );
+    void    ( *RxTimeout )( uint16_t timeout );
     /*!
      * \brief Rx Error callback prototype.
      */

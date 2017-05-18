@@ -37,6 +37,8 @@
  *                                DEFINES
  *****************************************************************************/
 static nwkCallbacks nwkEvents;
+static volatile bool txFlag = false;
+static volatile bool isCoordinator = false;
 
 /*****************************************************************************
  *                        LOCAL FUNCTION PROTOYPES
@@ -46,11 +48,12 @@ static nwkCallbacks nwkEvents;
  */
 static void ResetParameters( void );
 
-static void OnTxDone (void);
+static void OnTxDone (bool ack);
 static void OnRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr);
 static void OnRxError (void);
 static void OnTxTimeout (void);
-static void OnRxTimeout (void);
+static void OnRxTimeout (uint16_t timeout);
+void ReceivedCmd(uint8_t *data, int size);
 
 /*****************************************************************************
  *                        FUNCTION IMPLEMENTATIONS
@@ -59,6 +62,9 @@ VelaMacStatus CommsSend(uint8_t linkID, appDataPkt pkt){// change later after im
 	printf("APP sending: ");
 	debug_print_pkt(pkt.pkt , sizeof(pkt.pkt));
 	VelaNwkSend (linkID, pkt.pkt, sizeof(pkt.pkt));
+	while (!txFlag);
+	txFlag = false;
+	return  VELAMAC_STATUS_OK;
 }
 
 VelaMacStatus CommsInit(uint8_t linkID){
@@ -66,11 +72,19 @@ VelaMacStatus CommsInit(uint8_t linkID){
 		nwkEvents.NwkRxDone = OnRxDone;
 		nwkEvents.NwkRxError = OnRxError;
 		nwkEvents.NwkTxTimeout = OnTxTimeout;
-		nwkEvents.NwkRxTimeout = OnTxTimeout;
-
+		nwkEvents.NwkRxTimeout = OnRxTimeout;
+#ifdef COORDINATOR
+		UARTrx = ReceivedCmd;
+#endif
 		return VelaNwkInitialization(&nwkEvents, linkID);
 }
 
+void CommsStartContinuousRx(void){
+	isCoordinator = true;
+	//RFSetRxConfig(0, 12,1, 20, 1000000, true, 20, false, true);
+	RFSetRxConfig(9, 12,1, 30, 1000, false, 20, true, true);
+	RFSetRx(1000);
+}
 /*****************************************************************************
  *                            LOCAL FUNCTIONS
  *****************************************************************************/
@@ -78,27 +92,44 @@ static void ResetParameters (void){
 	//IsVelaMacNetworkJoined = false;
 }
 
-static void OnTxDone (void){
-	printf("Sent OK APP\n");
+static void OnTxDone (bool ack){
+	//printf("Sent OK APP\n");
+	if (ack){
+		printf ("acknowledged\n");
+	}
+	else{
+		printf (" Not acknowledged\n");
+	}
+	txFlag = true;
 }
 
 static void OnRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr){
-	printf("Message received (APP): ");
+
+	printf("Message received (APP): %d, ", rssi);
 	debug_print_pkt(payload , size);
 	appDataPkt pkt;
 	memcpy (&pkt.pkt, payload, size);
-	PktReceived(0, pkt);
+	PktReceived(0, pkt, rssi);
+	if (isCoordinator)
+		CommsStartContinuousRx();
 }
 
 static void OnRxError (void){
-	printf("Received error Pkt\n");
-    RFSetRx(1000);
+	printf("Received error Pkt APP\n");
+	txFlag = true;
+	if (isCoordinator)
+		CommsStartContinuousRx();
 }
 
 static void OnTxTimeout (void){
-	printf("TX timeout\n");
+	printf("TX timeout app\n");
 }
 
-static void OnRxTimeout (void){
-	printf("RX timeout\n");
+static void OnRxTimeout (uint16_t timeout){
+	printf("RX timeout app\n");
+}
+
+void ReceivedCmd(uint8_t *data, int size){
+	//implement commands here
+	printf("received command\n");
 }

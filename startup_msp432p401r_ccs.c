@@ -35,6 +35,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * --/COPYRIGHT--*/
 #include <stdint.h>
+#include <driverlib.h>
 
 /* Forward declaration of the default fault handlers. */
 static void resetISR(void);
@@ -58,6 +59,8 @@ extern unsigned long __STACK_END;
 extern void SysTick_Handler(void);
 extern void PORT2_IRQHandler(void);
 extern void RTC_AlarmHandler(void);
+extern void UARTA0_Handler(void);
+extern void ADC14_IRQHandler(void);
 
 /* To be added by user */
 
@@ -102,7 +105,7 @@ void (* const interruptVectors[])(void) =
     defaultISR,                             /* TA2_N ISR                 */
     defaultISR,                             /* TA3_0 ISR                 */
     defaultISR,                             /* TA3_N ISR                 */
-    defaultISR,                             /* EUSCIA0 ISR               */
+    UARTA0_Handler,                             /* EUSCIA0 ISR               */
     defaultISR,                             /* EUSCIA1 ISR               */
     defaultISR,                             /* EUSCIA2 ISR               */
     defaultISR,                             /* EUSCIA3 ISR               */
@@ -110,7 +113,7 @@ void (* const interruptVectors[])(void) =
     defaultISR,                             /* EUSCIB1 ISR               */
     defaultISR,                             /* EUSCIB2 ISR               */
     defaultISR,                             /* EUSCIB3 ISR               */
-    defaultISR,                             /* ADC14 ISR                 */
+	ADC14_IRQHandler,                       /* ADC14 ISR                 */
     defaultISR,                             /* T32_INT1 ISR              */
     defaultISR,                             /* T32_INT2 ISR              */
     defaultISR,                             /* T32_INTC ISR              */
@@ -177,6 +180,7 @@ static void nmiISR(void)
     #pragma diag_push
     #pragma CHECK_ULP("-2.1")
 
+	MAP_ResetCtl_initiateHardReset();
     /* Enter an infinite loop. */
     while(1)
     {
@@ -195,6 +199,7 @@ static void faultISR(void)
     #pragma diag_push
     #pragma CHECK_ULP("-2.1")
 
+	MAP_ResetCtl_initiateHardReset();
     /* Enter an infinite loop. */
     while(1)
     {
@@ -213,6 +218,7 @@ static void defaultISR(void)
     #pragma diag_push
     #pragma CHECK_ULP("-2.1")
 
+	MAP_ResetCtl_initiateHardReset();
     /* Enter an infinite loop. */
     while(1)
     {
