@@ -133,9 +133,12 @@ bool RFInit(RadioEvents_t *events){
 //    TimerInit( &RxTimeoutTimer, SX1276OnTimeoutIrq );
 //    TimerInit( &RxTimeoutSyncWord, SX1276OnTimeoutIrq );
 
-	if (!RFInitModem(MODEM_LORA))
+	if (!RFInitModem(MODEM_LORA)){
+		printf ("Failed, trying again...\n");
 		if(!RFInitModem(MODEM_LORA))
 			return false;
+	}
+
 
 	RFIrqInit();
 
@@ -513,7 +516,7 @@ void PORT2_IRQHandler(void){
 				if ( (RadioEvents != 0) && (RadioEvents->RxError != 0)){
 					//Get Pkt
 					settings.LoRaPacketHandler.Size = RFRead(REG_13_RX_NB_BYTES);
-					printf("received %d bytes\n", settings.LoRaPacketHandler.Size);
+					//printf("received %d bytes\n", settings.LoRaPacketHandler.Size);
 					RFWrite(REG_0D_FIFO_ADDR_PTR, RFRead(REG_10_FIFO_RX_CURRENT_ADDR));
 					RFReadBuffer(REG_00_FIFO, RxTxBuffer, settings.LoRaPacketHandler.Size);
 					debug_print_pkt(RxTxBuffer , settings.LoRaPacketHandler.Size);
@@ -560,7 +563,7 @@ void PORT2_IRQHandler(void){
 
 				//Get Pkt
 				settings.LoRaPacketHandler.Size = RFRead(REG_13_RX_NB_BYTES);
-				printf("received %d bytes\n", settings.LoRaPacketHandler.Size);
+				//printf("received %d bytes\n", settings.LoRaPacketHandler.Size);
 				RFWrite(REG_0D_FIFO_ADDR_PTR, RFRead(REG_10_FIFO_RX_CURRENT_ADDR));
 				RFReadBuffer(REG_00_FIFO, RxTxBuffer, settings.LoRaPacketHandler.Size);
 				if (!settings.LoRa.RxContinuous){

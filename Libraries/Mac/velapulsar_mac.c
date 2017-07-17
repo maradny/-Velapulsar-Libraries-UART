@@ -178,26 +178,35 @@ static void OnRadioRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t
 	//printf("Pkt received (MAC): ");
 	//debug_print_pkt(pkt.pkt , size);
 
-#ifdef COORDINATOR
+#if defined(COORDINATOR)
 	UARTSendRssi(rxPkt.pkt, rxSize, rxRssi);
+#elif defined(SNIFFER)
+	UARTSend(rxPkt.pkt, rxSize);
 #endif
 
 #ifdef PKT_ACK
-	if (rxPkt.data.msgType != ACKNOWLEDGE && !waitForAck){
-		printf("sending ack\n");
-		// received a new packet
-		SendAck();
-	}
-	else if(rxPkt.data.msgType == ACKNOWLEDGE){
-		// received an ack for the msg i sent
-		printf("received ack\n");
-		waitForAck = false;
-		numOfFailed = 0;
-		macEvents->MacTxDone(true);
-	}
-//	else {
-//		macEvents->MacTxDone(false);
-//	}
+	#ifndef SNIFFER
+		if (rxPkt.data.msgType != ACKNOWLEDGE && !waitForAck){
+			printf("sending ack\n");
+			// received a new packet
+			SendAck();
+		}
+		else if(rxPkt.data.msgType == ACKNOWLEDGE){
+			// received an ack for the msg i sent
+			printf("received ack\n");
+			waitForAck = false;
+			numOfFailed = 0;
+			macEvents->MacTxDone(true);
+		}
+	//	else {
+	//		macEvents->MacTxDone(false);
+	//	}
+	#else
+		macEvents->MacRxDone(rxPkt.data.nwkPayload,
+					rxSize - sizeof rxPkt.data.msgType - sizeof rxPkt.data.myAddr -
+							sizeof rxPkt.data.pktID -
+							sizeof rxPkt.data.toAddr, rxRssi, rxSnr);
+	#endif
 #endif
 }
 

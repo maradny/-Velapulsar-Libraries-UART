@@ -40,9 +40,15 @@ volatile int rxAvailable = 0;
 const eUSCI_UART_Config uartConfig =
 {
         EUSCI_A_UART_CLOCKSOURCE_SMCLK,          // SMCLK Clock Source
+#ifdef SNIFFER
+		78,//9600                                  // BRDIV = 78
+		2,//9600                                       // UCxBRF = 2
+		0,//9600                                       // UCxBRS = 0
+#else
         6,//19,//78,//9600                                  // BRDIV = 78
         8,//8,//2,//9600                                       // UCxBRF = 2
         0x20,//0xAA,//9600                                       // UCxBRS = 0
+#endif
         EUSCI_A_UART_NO_PARITY,                  // No Parity
         EUSCI_A_UART_LSB_FIRST,                  // LSB First
         EUSCI_A_UART_ONE_STOP_BIT,               // One stop bit
@@ -87,21 +93,21 @@ void UARTSend (uint8_t *data, int size){
 	int i =0;
 	uint8_t byte[2];
 	for (i ; i < size ; i++){
-		//sprintf(byte, "%02x", data[i]);
-		//printf("byte: %s", byte);
-		//MAP_UART_transmitData(EUSCI_A0_BASE, byte[0]);
-		MAP_UART_transmitData(EUSCI_A0_BASE, data[i]);
-//		if (byte[1] != 0x00){
-//			MAP_UART_transmitData(EUSCI_A0_BASE, byte[1]);
-//		}
-
+		sprintf(byte, "%02x", data[i]);
+		printf("byte: %s", byte);
+		MAP_UART_transmitData(EUSCI_A0_BASE, byte[0]);
+		//MAP_UART_transmitData(EUSCI_A0_BASE, data[i]);
+		if (byte[1] != 0x00){
+			MAP_UART_transmitData(EUSCI_A0_BASE, byte[1]);
+		}
+		MAP_UART_transmitData(EUSCI_A0_BASE, ' ');
 		//printf("sending: %x\n", data[i]);
 	}
 
 	// Send footer
 	MAP_UART_transmitData (EUSCI_A0_BASE, UEND_CHAR); // UART end char
 	//MAP_UART_transmitData (EUSCI_A0_BASE, UEND_CHAR); // UART end char
-	//MAP_UART_transmitData (EUSCI_A0_BASE, '\n'); // UART end char
+	MAP_UART_transmitData (EUSCI_A0_BASE, '\n'); // UART end char
 }
 
 void UARTSendRssi (uint8_t *data, int size, int16_t rssi){

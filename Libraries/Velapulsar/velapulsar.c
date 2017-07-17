@@ -58,7 +58,7 @@ void initPeripherals (void){
 	/* Initialize ports */
 	initPorts();
 
-#ifdef COORDINATOR
+#if defined (COORDINATOR) || defined (SNIFFER)
 	UARTinit();
 #endif
 
