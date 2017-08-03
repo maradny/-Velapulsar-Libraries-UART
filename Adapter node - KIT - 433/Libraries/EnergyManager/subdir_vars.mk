@@ -6,21 +6,21 @@ SHELL = cmd.exe
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../Libraries/Mac/velapulsar_mac.c 
+../Libraries/EnergyManager/energy_man.c 
 
 C_DEPS += \
-./Libraries/Mac/velapulsar_mac.d 
+./Libraries/EnergyManager/energy_man.d 
 
 OBJS += \
-./Libraries/Mac/velapulsar_mac.obj 
+./Libraries/EnergyManager/energy_man.obj 
 
 OBJS__QUOTED += \
-"Libraries\Mac\velapulsar_mac.obj" 
+"Libraries\EnergyManager\energy_man.obj" 
 
 C_DEPS__QUOTED += \
-"Libraries\Mac\velapulsar_mac.d" 
+"Libraries\EnergyManager\energy_man.d" 
 
 C_SRCS__QUOTED += \
-"../Libraries/Mac/velapulsar_mac.c" 
+"../Libraries/EnergyManager/energy_man.c" 
 
 
