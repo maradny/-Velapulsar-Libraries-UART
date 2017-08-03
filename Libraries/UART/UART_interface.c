@@ -107,7 +107,7 @@ void UARTSend (uint8_t *data, int size){
 	// Send footer
 	MAP_UART_transmitData (EUSCI_A0_BASE, UEND_CHAR); // UART end char
 	//MAP_UART_transmitData (EUSCI_A0_BASE, UEND_CHAR); // UART end char
-	MAP_UART_transmitData (EUSCI_A0_BASE, '\n'); // UART end char
+	//MAP_UART_transmitData (EUSCI_A0_BASE, '\n'); // UART end char
 }
 
 void UARTSendRssi (uint8_t *data, int size, int16_t rssi){

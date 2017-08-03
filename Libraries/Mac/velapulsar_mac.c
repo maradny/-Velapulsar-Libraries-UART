@@ -116,7 +116,7 @@ VelaMacStatus VelaMacSend (uint8_t linkID, uint8_t nwkPayload[], int size){
 
 	printf("size rx in mac: %d", size);
 	//RFSetTxConfig(23, 0, 12,1, 10, true, false, 1000);
-	RFSetTxConfig(23, 9, 12,1, 20, false, true, 1000);
+	RFSetTxConfig(23, 9, 12,1, 6, false, true, 1000);
 	printf("MAC sending: ");
 	debug_print_pkt(pkt.pkt , size + MAX_MAC_HEADER);
 	printf("size of pkt.pkt: %d\n", sizeof(pkt.pkt));
@@ -159,7 +159,7 @@ static void OnRadioTxDone (bool ack){
 	else{
 		printf ("sent pkt\n");
 		waitForAck = true;
-		RFSetRxConfig(9, 12,1, 30, ACK_TIMEOUT, false, 20, true, false);
+		RFSetRxConfig(9, 12,1, 6, ACK_TIMEOUT, false, 20, true, false);
 		RFSetRx(1000);
 	}
 
@@ -217,7 +217,7 @@ void SendAck(void){
 	ackPkt.data.msgType = ACKNOWLEDGE;
 
 	//RFSetTxConfig(23, 0, 12,1, 10, true, false, 1000);
-	RFSetTxConfig(23, 9, 12,1, 20, false, true, 5555); // timeout is 5555 to signify transmitting ack
+	RFSetTxConfig(23, 9, 12,1, 6, false, true, 5555); // timeout is 5555 to signify transmitting ack
 	printf("MAC sending ack: ");
 	debug_print_pkt(ackPkt.pkt , MAX_MAC_HEADER);// rxSize);
 	printf("Time on air: %d\n", RFGetTimeOnAir(MAX_MAC_HEADER));
@@ -257,7 +257,7 @@ static void OnRadioRxTimeout (uint16_t timeout){
 		// notify sent not ack
 		if (numOfFailed < MAX_NUM_FAILED){
 			numOfFailed++;
-			RFSetTxConfig(23, 9, 12,1, 20, false, true, 1000);
+			RFSetTxConfig(23, 9, 12,1, 6, false, true, 1000);
 			RFSend(txPkt.pkt,txSize);
 		}
 		else{

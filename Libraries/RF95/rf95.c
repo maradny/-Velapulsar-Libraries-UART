@@ -321,21 +321,25 @@ uint32_t RFGetTimeOnAir (uint8_t pktLen){
 	double bw = 0.0;
 	switch(settings.LoRa.Bandwidth){
 	case 7:
-		bw = 125e3;
+		bw = 125;
 		break;
 	case 8:
-		bw = 250e3;
+		bw = 250;
 		break;
 	case 9:
-		bw = 500e3;
+		bw = 500;
 		break;
 	}
 
 	// Symbol rate : time for one symbol (secs)
 	double rs = bw / (1 << settings.LoRa.Datarate);
 	double ts = 1 / rs;
+	printf("symbolic time: %f\n",ts);
 	// time of preamble
-	double tPreamble = (settings.LoRa.PreambleLen + 4.25) * ts;
+	double tPreamble = ts;
+	tPreamble = tPreamble* ((double)settings.LoRa.PreambleLen + 4.25) ;
+	printf("preamble length: %d\n",settings.LoRa.PreambleLen);
+	printf("preamble time: %d\n",tPreamble);
 	// Symbol length of payload and time
 	double tmp = ceil( ( 8 * pktLen - 4 * settings.LoRa.Datarate +
 						 28 + 16 * settings.LoRa.CrcOn -

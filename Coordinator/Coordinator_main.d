@@ -1,21 +1,21 @@
 # FIXED
 
 Coordinator_main.obj: ../Coordinator_main.c
-Coordinator_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Velapulsar/velapulsar.h
+Coordinator_main.obj: C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/Velapulsar/velapulsar.h
 Coordinator_main.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/driverlib.h
 Coordinator_main.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/adc14.h
-Coordinator_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdint.h
-Coordinator_main.obj: C:/ti/ccsv6/ccs_base/arm/include/msp.h
-Coordinator_main.obj: C:/ti/ccsv6/ccs_base/arm/include/msp432p401r.h
-Coordinator_main.obj: C:/ti/ccsv6/ccs_base/arm/include/msp_compatibility.h
-Coordinator_main.obj: C:/ti/ccsv6/ccs_base/arm/include/CMSIS/cmsis_ccs.h
-Coordinator_main.obj: C:/ti/ccsv6/ccs_base/arm/include/msp432p401r_classic.h
-Coordinator_main.obj: C:/ti/ccsv6/ccs_base/arm/include/CMSIS/core_cm4.h
-Coordinator_main.obj: C:/ti/ccsv6/ccs_base/arm/include/CMSIS/core_cmInstr.h
-Coordinator_main.obj: C:/ti/ccsv6/ccs_base/arm/include/CMSIS/core_cmFunc.h
-Coordinator_main.obj: C:/ti/ccsv6/ccs_base/arm/include/CMSIS/core_cmSimd.h
-Coordinator_main.obj: C:/ti/ccsv6/ccs_base/arm/include/system_msp432p401r.h
-Coordinator_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdbool.h
+Coordinator_main.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdint.h
+Coordinator_main.obj: C:/ti/ccsv7/ccs_base/arm/include/msp.h
+Coordinator_main.obj: C:/ti/ccsv7/ccs_base/arm/include/msp432p401r.h
+Coordinator_main.obj: C:/ti/ccsv7/ccs_base/arm/include/msp_compatibility.h
+Coordinator_main.obj: C:/ti/ccsv7/ccs_base/arm/include/CMSIS/cmsis_ccs.h
+Coordinator_main.obj: C:/ti/ccsv7/ccs_base/arm/include/msp432p401r_classic.h
+Coordinator_main.obj: C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cm4.h
+Coordinator_main.obj: C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmInstr.h
+Coordinator_main.obj: C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmFunc.h
+Coordinator_main.obj: C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmSimd.h
+Coordinator_main.obj: C:/ti/ccsv7/ccs_base/arm/include/system_msp432p401r.h
+Coordinator_main.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdbool.h
 Coordinator_main.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/aes256.h
 Coordinator_main.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/comp_e.h
 Coordinator_main.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/cpu.h
@@ -44,42 +44,43 @@ Coordinator_main.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP43
 Coordinator_main.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/timer_a.h
 Coordinator_main.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/uart.h
 Coordinator_main.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/wdt_a.h
-Coordinator_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Velapulsar/comms_interface.h
-Coordinator_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdio.h
-Coordinator_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/linkage.h
-Coordinator_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdarg.h
-Coordinator_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdlib.h
-Coordinator_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Velapulsar/sensor_interface.h
-Coordinator_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Nwk/velapulsar_nwk.h
-Coordinator_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Mac/velapulsar_mac.h
-Coordinator_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/RF95/rf95.h
-Coordinator_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/RF95/spi_interface.h
-Coordinator_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/RF95/delay.h
-Coordinator_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Radio/radio.h
-Coordinator_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/math.h
-Coordinator_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/_defs.h
-Coordinator_main.obj: C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/UART/UART_interface.h
-Coordinator_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdio.h
-Coordinator_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdlib.h
-Coordinator_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdio.h
-Coordinator_main.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdlib.h
+Coordinator_main.obj: C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/Velapulsar/comms_interface.h
+Coordinator_main.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdio.h
+Coordinator_main.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/linkage.h
+Coordinator_main.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdarg.h
+Coordinator_main.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdlib.h
+Coordinator_main.obj: C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/Velapulsar/sensor_interface.h
+Coordinator_main.obj: C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/Nwk/velapulsar_nwk.h
+Coordinator_main.obj: C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/Mac/velapulsar_mac.h
+Coordinator_main.obj: C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/RF95/rf95.h
+Coordinator_main.obj: C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/RF95/spi_interface.h
+Coordinator_main.obj: C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/RF95/delay.h
+Coordinator_main.obj: C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/Radio/radio.h
+Coordinator_main.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/math.h
+Coordinator_main.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/_defs.h
+Coordinator_main.obj: C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/UART/UART_interface.h
+Coordinator_main.obj: C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/EnergyManager/energy_man.h
+Coordinator_main.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdio.h
+Coordinator_main.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdlib.h
+Coordinator_main.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdio.h
+Coordinator_main.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdlib.h
 
 ../Coordinator_main.c: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Velapulsar/velapulsar.h: 
+C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/Velapulsar/velapulsar.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/driverlib.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/adc14.h: 
-C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdint.h: 
-C:/ti/ccsv6/ccs_base/arm/include/msp.h: 
-C:/ti/ccsv6/ccs_base/arm/include/msp432p401r.h: 
-C:/ti/ccsv6/ccs_base/arm/include/msp_compatibility.h: 
-C:/ti/ccsv6/ccs_base/arm/include/CMSIS/cmsis_ccs.h: 
-C:/ti/ccsv6/ccs_base/arm/include/msp432p401r_classic.h: 
-C:/ti/ccsv6/ccs_base/arm/include/CMSIS/core_cm4.h: 
-C:/ti/ccsv6/ccs_base/arm/include/CMSIS/core_cmInstr.h: 
-C:/ti/ccsv6/ccs_base/arm/include/CMSIS/core_cmFunc.h: 
-C:/ti/ccsv6/ccs_base/arm/include/CMSIS/core_cmSimd.h: 
-C:/ti/ccsv6/ccs_base/arm/include/system_msp432p401r.h: 
-C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdbool.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdint.h: 
+C:/ti/ccsv7/ccs_base/arm/include/msp.h: 
+C:/ti/ccsv7/ccs_base/arm/include/msp432p401r.h: 
+C:/ti/ccsv7/ccs_base/arm/include/msp_compatibility.h: 
+C:/ti/ccsv7/ccs_base/arm/include/CMSIS/cmsis_ccs.h: 
+C:/ti/ccsv7/ccs_base/arm/include/msp432p401r_classic.h: 
+C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cm4.h: 
+C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmInstr.h: 
+C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmFunc.h: 
+C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmSimd.h: 
+C:/ti/ccsv7/ccs_base/arm/include/system_msp432p401r.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdbool.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/aes256.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/comp_e.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/cpu.h: 
@@ -108,22 +109,23 @@ C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/timer32.h:
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/timer_a.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/uart.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/wdt_a.h: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Velapulsar/comms_interface.h: 
-C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdio.h: 
-C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/linkage.h: 
-C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdarg.h: 
-C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdlib.h: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Velapulsar/sensor_interface.h: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Nwk/velapulsar_nwk.h: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Mac/velapulsar_mac.h: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/RF95/rf95.h: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/RF95/spi_interface.h: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/RF95/delay.h: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/Radio/radio.h: 
-C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/math.h: 
-C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/_defs.h: 
-C:/Users/ghassan/Dropbox/Apps/CCS\ Cloud/velapulsar/Libraries/UART/UART_interface.h: 
-C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdio.h: 
-C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdlib.h: 
-C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdio.h: 
-C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdlib.h: 
+C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/Velapulsar/comms_interface.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdio.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/linkage.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdarg.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdlib.h: 
+C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/Velapulsar/sensor_interface.h: 
+C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/Nwk/velapulsar_nwk.h: 
+C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/Mac/velapulsar_mac.h: 
+C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/RF95/rf95.h: 
+C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/RF95/spi_interface.h: 
+C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/RF95/delay.h: 
+C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/Radio/radio.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/math.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/_defs.h: 
+C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/UART/UART_interface.h: 
+C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/EnergyManager/energy_man.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdio.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdlib.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdio.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdlib.h: 
