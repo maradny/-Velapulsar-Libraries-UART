@@ -39,6 +39,7 @@
 #include "comms_interface.h"
 #include "sensor_interface.h"
 #include "delay.h"
+#include "energy_man.h"
 
 /* Standard Includes */
 #include <stdint.h>

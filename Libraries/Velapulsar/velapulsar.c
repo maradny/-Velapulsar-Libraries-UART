@@ -58,7 +58,7 @@ void initPeripherals (void){
 	/* Initialize ports */
 	initPorts();
 
-#ifdef COORDINATOR
+#if defined (COORDINATOR) || defined (SNIFFER)
 	UARTinit();
 #endif
 
@@ -109,6 +109,7 @@ void initClocks (void){
     MAP_PCM_setCoreVoltageLevel(PCM_VCORE1);
     MAP_FlashCtl_setWaitState(FLASH_BANK0, 2);
     MAP_FlashCtl_setWaitState(FLASH_BANK1, 2);
+
     CS_startHFXT(false);
 
     /* Initializing the clock source as follows:
@@ -118,11 +119,20 @@ void initClocks (void){
      *      SMCLK = DCO/4 = 750kHz
      *      BCLK  = REFO = 32kHz
      */
+#if defined (COORDINATOR) || defined (SNIFFER)
+    MAP_CS_initClockSignal(CS_MCLK, CS_HFXTCLK_SELECT, CS_CLOCK_DIVIDER_1);
+    // MAP_CS_initClockSignal(CS_ACLK, CS_REFOCLK_SELECT, CS_CLOCK_DIVIDER_2);
+    // MAP_CS_initClockSignal(CS_HSMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_2);
+    MAP_CS_initClockSignal(CS_SMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
+    // MAP_CS_initClockSignal(CS_BCLK, CS_REFOCLK_SELECT, CS_CLOCK_DIVIDER_1);
+#else
     MAP_CS_initClockSignal(CS_MCLK, CS_HFXTCLK_SELECT, CS_CLOCK_DIVIDER_8);
     // MAP_CS_initClockSignal(CS_ACLK, CS_REFOCLK_SELECT, CS_CLOCK_DIVIDER_2);
     // MAP_CS_initClockSignal(CS_HSMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_2);
     MAP_CS_initClockSignal(CS_SMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
     // MAP_CS_initClockSignal(CS_BCLK, CS_REFOCLK_SELECT, CS_CLOCK_DIVIDER_1);
+#endif
+
 
     /*
      *  Getting all of the frequency values of the CLK sources using the

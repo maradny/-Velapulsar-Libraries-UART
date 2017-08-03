@@ -127,7 +127,7 @@ void operate(void)
     while(1){
         appDataPkt pkt;
         pkt.data.sensorData.battery = FULL;
-        pkt.data.sensorData.claw = Get_Claw();
+        pkt.data.sensorData.claw = 1;//Get_Claw();
         pkt.data.sensorData.magnetic = Get_Magnetic();
         pkt.data.sensorData.light = Get_Light();
 //        printf("Sending ");
@@ -136,7 +136,7 @@ void operate(void)
 //        RFSend(packetNum, 1);
         //RFSend(radioPacket, 20);
         CommsSend(0, pkt);
-
+        printf("Time on Air: %d\n",RFGetTimeOnAir(30));
 //        while (RFGetStatus() == RF_TX_RUNNING){
 //        	delay_ms(50);
 //        }

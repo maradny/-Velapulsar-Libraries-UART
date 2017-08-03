@@ -133,9 +133,12 @@ bool RFInit(RadioEvents_t *events){
 //    TimerInit( &RxTimeoutTimer, SX1276OnTimeoutIrq );
 //    TimerInit( &RxTimeoutSyncWord, SX1276OnTimeoutIrq );
 
-	if (!RFInitModem(MODEM_LORA))
+	if (!RFInitModem(MODEM_LORA)){
+		printf ("Failed, trying again...\n");
 		if(!RFInitModem(MODEM_LORA))
 			return false;
+	}
+
 
 	RFIrqInit();
 
@@ -318,21 +321,25 @@ uint32_t RFGetTimeOnAir (uint8_t pktLen){
 	double bw = 0.0;
 	switch(settings.LoRa.Bandwidth){
 	case 7:
-		bw = 125e3;
+		bw = 125;
 		break;
 	case 8:
-		bw = 250e3;
+		bw = 250;
 		break;
 	case 9:
-		bw = 500e3;
+		bw = 500;
 		break;
 	}
 
 	// Symbol rate : time for one symbol (secs)
 	double rs = bw / (1 << settings.LoRa.Datarate);
 	double ts = 1 / rs;
+	printf("symbolic time: %f\n",ts);
 	// time of preamble
-	double tPreamble = (settings.LoRa.PreambleLen + 4.25) * ts;
+	double tPreamble = ts;
+	tPreamble = tPreamble* ((double)settings.LoRa.PreambleLen + 4.25) ;
+	printf("preamble length: %d\n",settings.LoRa.PreambleLen);
+	printf("preamble time: %d\n",tPreamble);
 	// Symbol length of payload and time
 	double tmp = ceil( ( 8 * pktLen - 4 * settings.LoRa.Datarate +
 						 28 + 16 * settings.LoRa.CrcOn -
@@ -513,7 +520,7 @@ void PORT2_IRQHandler(void){
 				if ( (RadioEvents != 0) && (RadioEvents->RxError != 0)){
 					//Get Pkt
 					settings.LoRaPacketHandler.Size = RFRead(REG_13_RX_NB_BYTES);
-					printf("received %d bytes\n", settings.LoRaPacketHandler.Size);
+					//printf("received %d bytes\n", settings.LoRaPacketHandler.Size);
 					RFWrite(REG_0D_FIFO_ADDR_PTR, RFRead(REG_10_FIFO_RX_CURRENT_ADDR));
 					RFReadBuffer(REG_00_FIFO, RxTxBuffer, settings.LoRaPacketHandler.Size);
 					debug_print_pkt(RxTxBuffer , settings.LoRaPacketHandler.Size);
@@ -560,7 +567,7 @@ void PORT2_IRQHandler(void){
 
 				//Get Pkt
 				settings.LoRaPacketHandler.Size = RFRead(REG_13_RX_NB_BYTES);
-				printf("received %d bytes\n", settings.LoRaPacketHandler.Size);
+				//printf("received %d bytes\n", settings.LoRaPacketHandler.Size);
 				RFWrite(REG_0D_FIFO_ADDR_PTR, RFRead(REG_10_FIFO_RX_CURRENT_ADDR));
 				RFReadBuffer(REG_00_FIFO, RxTxBuffer, settings.LoRaPacketHandler.Size);
 				if (!settings.LoRa.RxContinuous){
