@@ -513,6 +513,12 @@ uint32_t RFGetSymbolTime (void);
  */
 void RFSend( uint8_t *buffer, uint8_t size );
 
+void RFSendWithDefault( uint8_t *buffer, uint8_t size, uint8_t msgtype);
+
+void RFRxWithDefault (void);
+
+void RFRxWithDefaultContinuous(void);
+
 /*!
  * \brief Sets the radio in sleep mode
  */
