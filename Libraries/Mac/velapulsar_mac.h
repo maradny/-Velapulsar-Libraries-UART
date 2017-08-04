@@ -155,31 +155,95 @@ typedef struct sVelaMacParams
 }VelaMacParams;
 
 typedef enum{
-	COMMAND,
-	ACKNOWLEDGE,
-	FORWARD,
+	MODE_CHANGE,
+	JOIN_REQUEST,
+	REQUEST_APPROVAL,
 	REPORT,
-	LONG_REPORT
+	ACKNOWLEDGE
 }messageType;
 
-typedef enum{
-	RESET,
-	GOTO_STATE,
-	NO_CMD
-}command;
+//typedef enum{
+//	RESET,
+//	GOTO_STATE,
+//	NO_CMD
+//}command;
 
+//PACKETS!!!
 typedef struct{
-	uint16_t	pktID;
-	uint32_t	myAddr;
-	uint32_t	toAddr;
-	messageType msgType;
-	uint8_t		nwkPayload[MAX_NWK_PAYLOAD];
-}macPayLoad;
-//hello
+    messageType msgType;
+    uint32_t    myAddr;
+    uint8_t     mode;
+}mode_change;
+
 typedef union{
-	macPayLoad	data;
-	uint8_t		pkt[sizeof(macPayLoad)];
-}dataPkt;
+    mode_change  data;
+    uint8_t     pkt[sizeof(mode_change)];
+}mode_changePkt;
+/////////////////////////////////////////////////////
+typedef struct{
+    messageType msgType;
+    uint32_t    myAddr;
+    uint32_t    toAddr;
+    uint8_t     size;
+    uint16_t    pktID;
+}join_request;
+
+typedef union{
+    join_request  data;
+    uint8_t     pkt[sizeof(join_request)];
+}join_requestPkt;
+/////////////////////////////////////////////////////
+typedef struct{
+    messageType msgType;
+    uint32_t    myAddr;
+    uint32_t    toAddr;
+    uint8_t     short_Add;
+    uint8_t     coord_secret;
+    uint16_t    time;
+    uint16_t    pktID;
+}request_Approval;
+
+typedef union{
+   request_Approval  data;
+   uint8_t     pkt[sizeof(request_Approval)];
+}request_ApprovalPkt;
+/////////////////////////////////////////////////////
+typedef struct{
+    messageType msgType;
+    uint8_t     short_Add;
+    uint8_t     coord_secret;
+    uint16_t    payload;
+    uint16_t    pktID;
+}report;
+typedef union{
+   report       data;
+   uint8_t      pkt[sizeof(report)];
+}reportPkt;
+/////////////////////////////////////////////////////
+typedef struct{
+    messageType msgType;
+    uint8_t     short_Add;
+    uint16_t    time;
+    uint16_t    pktID;
+}Ack;
+
+typedef union{
+   Ack  data;
+   uint8_t     pkt[sizeof(Ack)];
+}AckPkt;
+/////////////////////////////////////////////////////
+//typedef struct{
+//	uint16_t	pktID;
+//	uint32_t	myAddr;
+//	uint32_t	toAddr;
+//	messageType msgType;
+//	uint8_t		nwkPayload[MAX_NWK_PAYLOAD];
+//}macPayLoad;
+//
+//typedef union{
+//	macPayLoad	data;
+//	uint8_t		pkt[sizeof(macPayLoad)];
+//}dataPkt;
 
 typedef struct{
 	void    ( *MacTxDone )( bool ack );
