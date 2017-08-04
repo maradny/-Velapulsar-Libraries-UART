@@ -41,8 +41,6 @@
 /*****************************************************************************
  *                                DEFINES
  *****************************************************************************/
-#define MAX_NWK_PAYLOAD MAX_NWK_HEADER+MAX_APP_HEADER
-#define MAX_PKT_SIZE MAX_NWK_PAYLOAD+MAX_MAC_HEADER
 
 typedef enum{
     /*!
@@ -91,68 +89,6 @@ typedef enum{
     VELAMAC_STATUS_DEVICE_OFF,
 }VelaMacStatus;
 
-/*!
- * Enumeration containing the status of the operation of a MAC service
- */
-typedef enum
-{
-    /*!
-     * Service performed successfully
-     */
-	VELAMAC_EVENT_INFO_STATUS_OK = 0,
-    /*!
-     * An error occured during the execution of the service
-     */
-	VELAMAC_EVENT_INFO_STATUS_ERROR,
-    /*!
-     * A Tx timeouit occured
-     */
-	VELAMAC_EVENT_INFO_STATUS_TX_TIMEOUT,
-    /*!
-     * An Rx timeout occured on receive window 2
-     */
-	VELAMAC_EVENT_INFO_STATUS_RX2_TIMEOUT,
-    /*!
-     * An Rx error occured on receive window 2
-     */
-	VELAMAC_EVENT_INFO_STATUS_RX2_ERROR,
-    /*!
-     * An error occured in the join procedure
-     */
-	VELAMAC_EVENT_INFO_STATUS_JOIN_FAIL,
-    /*!
-     * A frame with an invalid downlink counter was received. The
-     * downlink counter of the frame was equal to the local copy
-     * of the downlink counter of the node.
-     */
-	VELAMAC_EVENT_INFO_STATUS_DOWNLINK_REPEATED,
-    /*!
-     * The node has lost MAX_FCNT_GAP or more frames.
-     */
-	VELAMAC_EVENT_INFO_STATUS_DOWNLINK_TOO_MANY_FRAMES_LOSS,
-    /*!
-     * An address error occured
-     */
-	VELAMAC_EVENT_INFO_STATUS_ADDRESS_FAIL,
-    /*!
-     * message integrity check failure
-     */
-    VELAMAC_EVENT_INFO_STATUS_MIC_FAIL,
-}VelaMacEventInfoStatus;
-
-/*!
- * Global MAC layer parameters
- */
-typedef struct sVelaMacParams
-{
-    int8_t ChannelsTxPower;
-    int8_t ChannelsDatarate;
-    uint32_t MaxRxWindow;
-    uint32_t ReceiveDelay1;
-    uint32_t ReceiveDelay2;
-    uint32_t JoinAcceptDelay1;
-    uint32_t JoinAcceptDelay2;
-}VelaMacParams;
 
 typedef enum{
 	MODE_CHANGE,
@@ -162,13 +98,7 @@ typedef enum{
 	ACKNOWLEDGE
 }messageType;
 
-//typedef enum{
-//	RESET,
-//	GOTO_STATE,
-//	NO_CMD
-//}command;
-
-//PACKETS!!!
+/* Packets */
 typedef struct{
     messageType msgType;
     uint32_t    myAddr;
@@ -212,9 +142,10 @@ typedef struct{
     messageType msgType;
     uint8_t     short_Add;
     uint8_t     coord_secret;
-    uint16_t    payload;
+    uint8_t     payload[APP_PAYLOAD_SIZE];
     uint16_t    pktID;
 }report;
+
 typedef union{
    report       data;
    uint8_t      pkt[sizeof(report)];
@@ -231,19 +162,9 @@ typedef union{
    Ack  data;
    uint8_t     pkt[sizeof(Ack)];
 }AckPkt;
-/////////////////////////////////////////////////////
-//typedef struct{
-//	uint16_t	pktID;
-//	uint32_t	myAddr;
-//	uint32_t	toAddr;
-//	messageType msgType;
-//	uint8_t		nwkPayload[MAX_NWK_PAYLOAD];
-//}macPayLoad;
-//
-//typedef union{
-//	macPayLoad	data;
-//	uint8_t		pkt[sizeof(macPayLoad)];
-//}dataPkt;
+
+
+
 
 typedef struct{
 	void    ( *MacTxDone )( bool ack );

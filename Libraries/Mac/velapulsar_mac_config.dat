@@ -31,7 +31,7 @@
 -DMAX_NUM_FAILED=5
 
 /* Maximum size of application payload. */
--DMAX_APP_HEADER=6
+-DAPP_PAYLOAD_SIZE=7
 
 /* Maximum size of Network application payload. Do not change unless
  * protocol changes are reflected in different maximum network

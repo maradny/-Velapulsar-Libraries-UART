@@ -384,18 +384,18 @@ void RFSend (uint8_t *buffer, uint8_t size){
 }
 
 void RFSendWithDefault( uint8_t *buffer, uint8_t size, uint8_t msgtype){
-    RFSetTxConfig(23, 9, 12,1, 20, false, true, 1000);
+    RFSetTxConfig(23, 9, 12,1, 6, false, true, 1000);
     msgType = msgtype;
     RFSend (buffer, size);
 }
 
 void RFRxWithDefault(void){
-    RFSetRxConfig(9, 12,1, 30, ACK_TIMEOUT, false, 20, true, false);
+    RFSetRxConfig(9, 12,1, 24, ACK_TIMEOUT, false, 20, true, false);
     RFSetRx(1000);
 }
 
 void RFRxWithDefaultContinuous(void){
-    RFSetRxConfig(9, 12,1, 30, ACK_TIMEOUT, false, 20, true, true);
+    RFSetRxConfig(9, 12,1, 24, ACK_TIMEOUT, false, 20, true, true);
     RFSetRx(1000);
 }
 

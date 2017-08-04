@@ -48,31 +48,17 @@ static macCallbacks* macEvents;
 
 static volatile VelaMacStates currentState;
 
-volatile uint16_t pktID;
+#ifdef COORDINATOR
+volatile uint16_t noOfConnectedNodes;
 
-volatile dataPkt rxPkt;
-volatile int16_t rxRssi;
-volatile int8_t rxSnr;
-volatile uint16_t rxSize;
+#else
 
-volatile dataPkt txPkt;
-volatile uint16_t txSize;
-volatile uint8_t numOfFailed = 0;
-volatile bool waitForAck = false;
+#endif
 
-/*!
- * Indicates if the MAC layer has already joined a network.
- */
-static bool IsVelaMacNetworkJoined = false;
 
 /*****************************************************************************
  *                        LOCAL FUNCTION PROTOYPES
  *****************************************************************************/
-/*!
- * \brief Resets MAC specific parameters to default
- */
-static void ResetMacParameters( void );
-
 static void OnRadioTxDone (bool ack);
 static void OnRadioRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr);
 static void OnRadioRxError (void);
@@ -84,9 +70,6 @@ static void OnRadioRxTimeout (uint16_t timeout);
  *****************************************************************************/
 VelaMacStatus VelaMacInitialization (uint8_t linkID, macCallbacks* callbacks){
 	macEvents = callbacks; // callbacks back to nwk layer
-	ResetMacParameters();
-
-	pktID = 0;
 	// Initialize timers here.....
 
 	// Initialize radio callbacks
@@ -131,10 +114,6 @@ VelaMacStatus VelaMacSend (uint8_t linkID, uint8_t nwkPayload[], int size){
 /*****************************************************************************
  *                            LOCAL FUNCTIONS
  *****************************************************************************/
-static void ResetMacParameters (void){
-	IsVelaMacNetworkJoined = false;
-}
-
 static void OnRadioTxDone (bool ack){
 	printf("Sent OK MAC\n");
 	//macEvents->MacTxDone(ack);
