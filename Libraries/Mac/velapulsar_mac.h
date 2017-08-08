@@ -57,7 +57,6 @@ typedef enum{
 }messageType;
 
 /*Node description*/
-
 typedef struct{
     uint8_t     ID;
     uint32_t    longAddr;
@@ -65,10 +64,6 @@ typedef struct{
     uint16_t    timeSlot;
     uint16_t    password;
 }NodeDesc
-typedef union{
-    NodeDesc  data;
-    uint8_t     pkt[sizeof(NodeDesc)];
-}NodeDescPkt;
 
 /* Packets */
 typedef struct{
@@ -151,6 +146,6 @@ typedef struct{
 /*****************************************************************************
  *                             Functions - API
  *****************************************************************************/
-VelaMacStatus MacInit(uint8_t nodeType, macCallbacks* callbacks);
-VelaMacStatus MacReport (uint8_t nwkPayload[], int size);
+VelaMacStatus MacInit(uint8_t nodeType, uint16_t dutyCycle, macCallbacks* callbacks);
+VelaMacStatus MacReport (uint8_t report[], int size);
 #endif /* LIBRARIES_MAC_VELAPULSAR_MAC_H_ */

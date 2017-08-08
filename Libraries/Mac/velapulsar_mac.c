@@ -86,7 +86,7 @@ VelaMacStatus MacInit (uint8_t nodeType, macCallbacks* callbacks){
 	return VELAMAC_STATUS_OK;
 }
 
-VelaMacStatus MacReport (uint8_t nwkPayload[], int size){
+VelaMacStatus MacReport (uint8_t report[], int size){
 	currentState = MAC_TX;
 	dataPkt pkt;
 	pkt.data.myAddr = MY_ADDR;
