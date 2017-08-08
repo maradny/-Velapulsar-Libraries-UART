@@ -68,7 +68,8 @@ static void OnRadioRxTimeout (uint16_t timeout);
 /*****************************************************************************
  *                        FUNCTION IMPLEMENTATIONS
  *****************************************************************************/
-VelaMacStatus VelaMacInitialization (uint8_t linkID, macCallbacks* callbacks){
+
+VelaMacStatus MacInit (uint8_t nodeType, macCallbacks* callbacks){
 	macEvents = callbacks; // callbacks back to nwk layer
 	// Initialize timers here.....
 
@@ -85,7 +86,7 @@ VelaMacStatus VelaMacInitialization (uint8_t linkID, macCallbacks* callbacks){
 	return VELAMAC_STATUS_OK;
 }
 
-VelaMacStatus VelaMacSend (uint8_t linkID, uint8_t nwkPayload[], int size){
+VelaMacStatus MacReport (uint8_t nwkPayload[], int size){
 	currentState = MAC_TX;
 	dataPkt pkt;
 	pkt.data.myAddr = MY_ADDR;

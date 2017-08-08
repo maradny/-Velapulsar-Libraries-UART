@@ -43,50 +43,8 @@
  *****************************************************************************/
 
 typedef enum{
-    /*!
-     * Service started successfully
-     */
-    VELAMAC_STATUS_OK,
-    /*!
-     * Service not started - LoRaMAC is busy
-     */
-    VELAMAC_STATUS_BUSY,
-    /*!
-     * Service unknown
-     */
-    VELAMAC_STATUS_SERVICE_UNKNOWN,
-    /*!
-     * Service not started - invalid parameter
-     */
-    VELAMAC_STATUS_PARAMETER_INVALID,
-    /*!
-     * Service not started - invalid frequency
-     */
-    VELAMAC_STATUS_FREQUENCY_INVALID,
-    /*!
-     * Service not started - invalid datarate
-     */
-    VELAMAC_STATUS_DATARATE_INVALID,
-    /*!
-     * Service not started - invalid frequency and datarate
-     */
-    VELAMAC_STATUS_FREQ_AND_DR_INVALID,
-    /*!
-     * Service not started - the device is not in a LoRaWAN
-     */
-    VELAMAC_STATUS_NO_NETWORK_JOINED,
-    /*!
-     * Service not started - playload lenght error
-     */
-    VELAMAC_STATUS_LENGTH_ERROR,
-    /*!
-     * Service not started - playload lenght error
-     */
-    VELAMAC_STATUS_MAC_CMD_LENGTH_ERROR,
-    /*!
-     * Service not started - the device is switched off
-     */
-    VELAMAC_STATUS_DEVICE_OFF,
+    VELAMAC_SUCCESSFUL,
+    VELAMAC_FAILURE
 }VelaMacStatus;
 
 
@@ -97,6 +55,20 @@ typedef enum{
 	REPORT,
 	ACKNOWLEDGE
 }messageType;
+
+/*Node description*/
+
+typedef struct{
+    uint8_t     ID;
+    uint32_t    longAddr;
+    uint8_t     short_Add;
+    uint16_t    timeSlot;
+    uint16_t    password;
+}NodeDesc
+typedef union{
+    NodeDesc  data;
+    uint8_t     pkt[sizeof(NodeDesc)];
+}NodeDescPkt;
 
 /* Packets */
 typedef struct{
@@ -128,7 +100,7 @@ typedef struct{
     uint32_t    myAddr;
     uint32_t    toAddr;
     uint8_t     short_Add;
-    uint8_t     coord_secret;
+    uint16_t    password;
     uint16_t    time;
     uint16_t    pktID;
 }request_Approval;
@@ -141,7 +113,7 @@ typedef union{
 typedef struct{
     messageType msgType;
     uint8_t     short_Add;
-    uint8_t     coord_secret;
+    uint16_t    password;
     uint8_t     payload[APP_PAYLOAD_SIZE];
     uint16_t    pktID;
 }report;
@@ -167,16 +139,18 @@ typedef union{
 
 
 typedef struct{
-	void    ( *MacTxDone )( bool ack );
-	void    ( *MacRxDone )( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr );
-	void    ( *MacRxError )( void );
-	void    ( *MacTxTimeout )( void );
-	void    ( *MacRxTimeout )( uint16_t timeout );
+	void    ( *MacMessageReceived )( uint8_t msgType, uint8_t size, uint32_t fromAddr,uint8_t *payload);
+    void    ( *MacReportSent )( bool sentStatus);
+    void    ( *MacCommandSent )( bool commandStatus );
+    void    ( *MacNetworkJoined )( bool NetworkStatus );
+    void    ( *MacReportingCycle )( bool ReportingStatus );
+    void    ( *MacNewNodeJoined )( NodeDescPkt);
+    void    ( *MacNodeFailedToReport )( NodeDescPkt);
 }macCallbacks;
 
 /*****************************************************************************
  *                             Functions - API
  *****************************************************************************/
-VelaMacStatus VelaMacInitialization(uint8_t linkID, macCallbacks* callbacks);
-VelaMacStatus VelaMacSend (uint8_t linkID, uint8_t nwkPayload[], int size);
+VelaMacStatus MacInit(uint8_t nodeType, macCallbacks* callbacks);
+VelaMacStatus MacReport (uint8_t nwkPayload[], int size);
 #endif /* LIBRARIES_MAC_VELAPULSAR_MAC_H_ */
