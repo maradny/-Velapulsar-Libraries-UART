@@ -41,7 +41,7 @@ typedef struct{
 	uint8_t		myShovel;
 	uint8_t		myUnit;
 	uint16_t	myType;
-	uint8_t		appPayload[MAX_APP_HEADER];
+	uint8_t		appPayload[12];
 }nwkPayLoad;
 
 typedef union{

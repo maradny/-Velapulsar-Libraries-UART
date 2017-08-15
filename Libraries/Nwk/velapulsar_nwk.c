@@ -45,11 +45,13 @@ static macCallbacks macEvents;
  */
 static void ResetNwkParameters( void );
 
-static void OnMacTxDone (bool ack);
-static void OnMacRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr);
-static void OnMacRxError (void);
-static void OnMacTxTimeout (void);
-static void OnMacRxTimeout (uint16_t timeout);
+static void OnMacCmdSent (VelaMacStatus status);
+static void OnMacMsgRx (messageType msgType, uint16_t size, uint8_t shortAddr, uint8_t *payload, int16_t rssi, int8_t snr);
+static void OnMacNetworkJoined (VelaMacStatus status);
+static void OnMacNodeJoined (NodeDesc node);
+static void OnMacFailedToReport (VelaMacStatus status);
+static void OnMacReportSent (VelaMacStatus status);
+static void OnMacCycleChange (timeCycles newCycle);
 
 /*****************************************************************************
  *                        FUNCTION IMPLEMENTATIONS
@@ -57,11 +59,13 @@ static void OnMacRxTimeout (uint16_t timeout);
 VelaMacStatus VelaNwkInitialization(nwkCallbacks* callbacks, uint8_t linkID){
 	nwkEvents = callbacks;
 
-	macEvents.MacTxDone = OnMacTxDone;
-	macEvents.MacRxDone = OnMacRxDone;
-	macEvents.MacRxError = OnMacRxError;
-	macEvents.MacTxTimeout = OnMacTxTimeout;
-	macEvents.MacRxTimeout = OnMacRxTimeout;
+	macEvents.MacCommandSent = OnMacCmdSent;
+	macEvents.MacMessageReceived = OnMacMsgRx;
+	macEvents.MacNetworkJoined = OnMacNetworkJoined;
+	macEvents.MacNewNodeJoined = OnMacNodeJoined;
+	macEvents.MacNodeFailedToReport = OnMacFailedToReport;
+	macEvents.MacReportSent = OnMacReportSent;
+	macEvents.MacReportingCycle = OnMacCycleChange;
 
 	return VelaMacInitialization(linkID, &macEvents);
 }
@@ -75,12 +79,27 @@ VelaMacStatus VelaNwkSend (uint8_t linkID, uint8_t appPayload[], int size){
 	memcpy(&pkt.data.appPayload, appPayload, size);
 
 	printf("NWK sending: ");
-	debug_print_pkt(pkt.pkt , sizeof(pkt.pkt) - (MAX_APP_HEADER -size));
-	return VelaMacSend(linkID, pkt.pkt, sizeof(pkt.pkt) - (MAX_APP_HEADER -size));
+	debug_print_pkt(pkt.pkt , sizeof(pkt.pkt) - (12 -size));
+	return VelaMacSend(linkID, pkt.pkt, sizeof(pkt.pkt) - (12 -size));
 }
 /*****************************************************************************
  *                            LOCAL FUNCTIONS
  *****************************************************************************/
+static void OnMacCmdSent (VelaMacStatus status){
+    printf("NWK command sent\n");
+    nwkEvents->NwkCmdSent();
+}
+
+static void OnMacMsgRx (messageType msgType, uint16_t size, uint8_t shortAddr, uint8_t *payload, int16_t rssi, int8_t snr){
+    printf("NWK command sent\n");
+    nwkEvents->NwkCmdSent();
+}
+static void OnMacNetworkJoined (VelaMacStatus status);
+static void OnMacNodeJoined (NodeDesc node);
+static void OnMacFailedToReport (VelaMacStatus status);
+static void OnMacReportSent (VelaMacStatus status);
+static void OnMacCycleChange (timeCycles newCycle);
+
 static void OnMacTxDone (bool ack){
 	//printf("Sent OK NWK\n");
 	nwkEvents->NwkTxDone(ack);

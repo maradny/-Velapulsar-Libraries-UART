@@ -43,17 +43,29 @@
  *****************************************************************************/
 
 typedef enum{
+    APPROVAL_TIMEOUT,
+    ACKNOWLEDGMENT_TIMEOUT,
+    WAKEUP_TIMEOUT
+}VelaMacTimeouts;
+
+typedef enum{
     VELAMAC_SUCCESSFUL,
     VELAMAC_FAILURE
 }VelaMacStatus;
 
+typedef enum{
+    CONNECTION_PHASE,
+    REPORTING_PHASE
+}timeCycles;
 
 typedef enum{
 	MODE_CHANGE,
 	JOIN_REQUEST,
 	REQUEST_APPROVAL,
+	REQUEST_DENIAL,
 	REPORT,
-	ACKNOWLEDGE
+	ACKNOWLEDGE,
+	NOT_ACKNOWLEDGED
 }messageType;
 
 /*Node description*/
@@ -63,25 +75,29 @@ typedef struct{
     uint8_t     short_Add;
     uint16_t    timeSlot;
     uint16_t    password;
-}NodeDesc
+    uint16_t    lastPktID;
+    bool        connected;
+}NodeDesc;
 
 /* Packets */
 typedef struct{
     messageType msgType;
     uint32_t    myAddr;
-    uint8_t     mode;
+    timeCycles  mode;
+    uint16_t    time;
 }mode_change;
 
 typedef union{
     mode_change  data;
     uint8_t     pkt[sizeof(mode_change)];
 }mode_changePkt;
+
 /////////////////////////////////////////////////////
+
 typedef struct{
     messageType msgType;
     uint32_t    myAddr;
     uint32_t    toAddr;
-    uint8_t     size;
     uint16_t    pktID;
 }join_request;
 
@@ -89,7 +105,9 @@ typedef union{
     join_request  data;
     uint8_t     pkt[sizeof(join_request)];
 }join_requestPkt;
+
 /////////////////////////////////////////////////////
+
 typedef struct{
     messageType msgType;
     uint32_t    myAddr;
@@ -104,7 +122,23 @@ typedef union{
    request_Approval  data;
    uint8_t     pkt[sizeof(request_Approval)];
 }request_ApprovalPkt;
+
 /////////////////////////////////////////////////////
+
+typedef struct{
+    messageType msgType;
+    uint32_t    myAddr;
+    uint32_t    toAddr;
+    uint16_t    pktID;
+}request_Denial;
+
+typedef union{
+   request_Denial  data;
+   uint8_t     pkt[sizeof(request_Denial)];
+}request_DenialPkt;
+
+/////////////////////////////////////////////////////
+
 typedef struct{
     messageType msgType;
     uint8_t     short_Add;
@@ -117,21 +151,34 @@ typedef union{
    report       data;
    uint8_t      pkt[sizeof(report)];
 }reportPkt;
+
 /////////////////////////////////////////////////////
+
 typedef struct{
     messageType msgType;
     uint8_t     short_Add;
     uint16_t    time;
     uint16_t    pktID;
-}Ack;
+}ack;
 
 typedef union{
-   Ack  data;
-   uint8_t     pkt[sizeof(Ack)];
-}AckPkt;
+   ack         data;
+   uint8_t     pkt[sizeof(ack)];
+}ackPkt;
 
+/////////////////////////////////////////////////////
 
+typedef struct{
+    messageType msgType;
+    uint8_t     short_Add;
+    uint16_t    time;
+    uint16_t    pktID;
+}nAck;
 
+typedef union{
+   nAck         data;
+   uint8_t     pkt[sizeof(nAck)];
+}nAckPkt;
 
 typedef struct{
 	void    ( *MacMessageReceived )( uint8_t msgType, uint8_t size, uint32_t fromAddr,uint8_t *payload);
@@ -139,8 +186,8 @@ typedef struct{
     void    ( *MacCommandSent )( bool commandStatus );
     void    ( *MacNetworkJoined )( bool NetworkStatus );
     void    ( *MacReportingCycle )( bool ReportingStatus );
-    void    ( *MacNewNodeJoined )( NodeDescPkt);
-    void    ( *MacNodeFailedToReport )( NodeDescPkt);
+    void    ( *MacNewNodeJoined )( NodeDesc nodeJoined);
+    void    ( *MacNodeFailedToReport )( NodeDesc nodeFailed);
 }macCallbacks;
 
 /*****************************************************************************
@@ -148,4 +195,5 @@ typedef struct{
  *****************************************************************************/
 VelaMacStatus MacInit(uint8_t nodeType, uint16_t dutyCycle, macCallbacks* callbacks);
 VelaMacStatus MacReport (uint8_t report[], int size);
+int MacRetrieveListOfNodes( NodeDesc nodesBuffer[]);
 #endif /* LIBRARIES_MAC_VELAPULSAR_MAC_H_ */

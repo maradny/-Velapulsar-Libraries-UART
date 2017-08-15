@@ -54,7 +54,7 @@ void updateCurrentSensorData (void);
 void initEndNode(void);
 void changeState(states);
 bool connect(void);
-void report (void);
+//void report (void);
 void disconnect(void);
 void operate(void);
 void diagnose(void);

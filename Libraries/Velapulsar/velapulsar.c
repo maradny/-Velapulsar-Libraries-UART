@@ -65,7 +65,7 @@ void initPeripherals (void){
 	/* Initialize radio */
 
 	printf("initializing\n");
-	if (CommsInit(0) == VELAMAC_STATUS_OK){
+	if (CommsInit(0) == VELAMAC_SUCCESSFUL){
 		printf("initialized\n");
 		//GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
 	}

@@ -99,6 +99,7 @@ static uint8_t RxTxBuffer[FIFO_SIZE];
  */
 static RadioSettings_t settings;
 
+static int lastMsgType;
 /*****************************************************************************
  *                        LOCAL FUNCTION PROTOYPES
  *****************************************************************************/
@@ -385,7 +386,7 @@ void RFSend (uint8_t *buffer, uint8_t size){
 
 void RFSendWithDefault( uint8_t *buffer, uint8_t size, uint8_t msgtype){
     RFSetTxConfig(23, 9, 12,1, 6, false, true, 1000);
-    msgType = msgtype;
+    lastMsgType = msgtype;
     RFSend (buffer, size);
 }
 

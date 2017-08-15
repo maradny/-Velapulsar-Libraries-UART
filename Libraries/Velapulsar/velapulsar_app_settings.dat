@@ -26,9 +26,6 @@
  * Should you have any questions regarding your right to use this Software,
  * contact TRL at www.queenstrl.ca.
  */
- 
- /* my address */
--DMY_ADDR=0x00000005
 
 /* my Shovel */
 -DMY_SHOVEL=1

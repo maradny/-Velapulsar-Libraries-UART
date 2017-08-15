@@ -27,6 +27,15 @@
  * contact TRL at www.queenstrl.ca.
  */
 
+/* Unit Long Address */
+-DMY_ADDRESS=0x12345678
+
+/* Broadcast Address */
+-DBROADCAST_ADDRESS=0x0
+
+/* Maximum number of connected nodes */
+-DMAX_NUM_OF_NODES=20
+
 /* Maximum number of failed TX */
 -DMAX_NUM_FAILED=5
 

@@ -64,7 +64,7 @@ VelaMacStatus CommsSend(uint8_t linkID, appDataPkt pkt){// change later after im
 	VelaNwkSend (linkID, pkt.pkt, sizeof(pkt.pkt));
 	while (!txFlag);
 	txFlag = false;
-	return  VELAMAC_STATUS_OK;
+	return  VELAMAC_SUCCESSFUL;
 }
 
 VelaMacStatus CommsInit(uint8_t linkID){
