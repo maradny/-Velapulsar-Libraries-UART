@@ -52,11 +52,13 @@ static void OnMacNodeJoined (NodeDesc node);
 static void OnMacFailedToReport (VelaMacStatus status);
 static void OnMacReportSent (VelaMacStatus status);
 static void OnMacCycleChange (timeCycles newCycle);
+static void OnMacFrameStart (void);
+static void OnMacFrameEnd (void);
 
 /*****************************************************************************
  *                        FUNCTION IMPLEMENTATIONS
  *****************************************************************************/
-VelaMacStatus VelaNwkInitialization(nwkCallbacks* callbacks, uint8_t linkID){
+VelaMacStatus VelaNwkInitialization(uint8_t nodeType, uint16_t dutyCycle, nwkCallbacks* callbacks){
 	nwkEvents = callbacks;
 
 	macEvents.MacCommandSent = OnMacCmdSent;
@@ -66,8 +68,9 @@ VelaMacStatus VelaNwkInitialization(nwkCallbacks* callbacks, uint8_t linkID){
 	macEvents.MacNodeFailedToReport = OnMacFailedToReport;
 	macEvents.MacReportSent = OnMacReportSent;
 	macEvents.MacReportingCycle = OnMacCycleChange;
-
-	return VelaMacInitialization(linkID, &macEvents);
+	macEvents.MacFrameStart = OnMacFrameStart;
+	macEvents.MacFrameEnd = OnMacFrameEnd;
+	return VelaMacInit(nodeType, dutyCycle, &macEvents);
 }
 
 VelaMacStatus VelaNwkSend (uint8_t linkID, uint8_t appPayload[], int size){
@@ -80,54 +83,50 @@ VelaMacStatus VelaNwkSend (uint8_t linkID, uint8_t appPayload[], int size){
 
 	printf("NWK sending: ");
 	debug_print_pkt(pkt.pkt , sizeof(pkt.pkt) - (12 -size));
-	return VelaMacSend(linkID, pkt.pkt, sizeof(pkt.pkt) - (12 -size));
+	return VelaMacReport(pkt.pkt, sizeof(pkt.pkt) - (12 -size));
 }
 /*****************************************************************************
  *                            LOCAL FUNCTIONS
  *****************************************************************************/
 static void OnMacCmdSent (VelaMacStatus status){
     printf("NWK command sent\n");
-    nwkEvents->NwkCmdSent();
+    nwkEvents->NwkCommandSent(VELAMAC_SUCCESSFUL);
 }
 
 static void OnMacMsgRx (messageType msgType, uint16_t size, uint8_t shortAddr, uint8_t *payload, int16_t rssi, int8_t snr){
     printf("NWK command sent\n");
-    nwkEvents->NwkCmdSent();
-}
-static void OnMacNetworkJoined (VelaMacStatus status);
-static void OnMacNodeJoined (NodeDesc node);
-static void OnMacFailedToReport (VelaMacStatus status);
-static void OnMacReportSent (VelaMacStatus status);
-static void OnMacCycleChange (timeCycles newCycle);
-
-static void OnMacTxDone (bool ack){
-	//printf("Sent OK NWK\n");
-	nwkEvents->NwkTxDone(ack);
+    nwkEvents->NwkCommandSent(VELAMAC_SUCCESSFUL);
 }
 
-static void OnMacRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr){
-	nwkDataPkt pkt;
-	memcpy (&pkt.pkt, payload, size);
-//	printf("Pkt received (NWK): ");
-//	debug_print_pkt(pkt.pkt , size);
-//	printf("Message received (NWK) %d: ", size);
-//	debug_print_pkt(payload , size);
-	nwkEvents->NwkRxDone(pkt.data.appPayload,
-			size - sizeof pkt.data.myShovel - sizeof pkt.data.myType -
-			sizeof pkt.data.myUnit, rssi, snr);
+static void OnMacNetworkJoined (VelaMacStatus status){
+    printf("NWK command sent\n");
+    nwkEvents->NwkCommandSent(VELAMAC_SUCCESSFUL);
 }
 
-static void OnMacRxError (void){
-	printf("Received error Pkt NWK\n");
-	nwkEvents->NwkRxError();
+static void OnMacNodeJoined (NodeDesc node){
+    printf("NWK command sent\n");
+    nwkEvents->NwkCommandSent(VELAMAC_SUCCESSFUL);
 }
 
-static void OnMacTxTimeout (void){
-	printf("TX timeout nwk\n");
-	nwkEvents->NwkTxTimeout();
+static void OnMacFailedToReport (VelaMacStatus status){
+    printf("NWK command sent\n");
+    nwkEvents->NwkCommandSent(VELAMAC_SUCCESSFUL);
 }
 
-static void OnMacRxTimeout (uint16_t timeout){
-	printf("RX timeout nwk\n");
-	nwkEvents->NwkRxTimeout(timeout);
+static void OnMacReportSent (VelaMacStatus status){
+    printf("NWK command sent\n");
+    nwkEvents->NwkCommandSent(VELAMAC_SUCCESSFUL);
+}
+
+static void OnMacCycleChange (timeCycles newCycle){
+    printf("NWK command sent\n");
+    nwkEvents->NwkCommandSent(VELAMAC_SUCCESSFUL);
+}
+
+static void OnMacFrameStart (void){
+	nwkEvents->NwkFrameStart();
+}
+
+static void OnMacFrameEnd (void){
+	nwkEvents->NwkFrameEnd();
 }

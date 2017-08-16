@@ -37,8 +37,7 @@
  *                                DEFINES
  *****************************************************************************/
 static nwkCallbacks nwkEvents;
-static volatile bool txFlag = false;
-static volatile bool isCoordinator = false;
+static volatile bool networkConnectionStatus;
 
 /*****************************************************************************
  *                        LOCAL FUNCTION PROTOYPES
@@ -46,44 +45,45 @@ static volatile bool isCoordinator = false;
 /*!
  * \brief Resets MAC specific parameters to default
  */
-static void ResetParameters( void );
-
-static void OnTxDone (bool ack);
-static void OnRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr);
-static void OnRxError (void);
-static void OnTxTimeout (void);
-static void OnRxTimeout (uint16_t timeout);
-void ReceivedCmd(uint8_t *data, int size);
+static void OnNwkCmdSent (VelaMacStatus status);
+static void OnNwkMsgRx (messageType msgType, uint16_t size, uint8_t shortAddr, uint8_t *payload, int16_t rssi, int8_t snr);
+static void OnNwkNetworkJoined (VelaMacStatus status);
+static void OnNwkNodeJoined (NodeDesc node);
+static void OnNwkFailedToReport (VelaMacStatus status);
+static void OnNwkReportSent (VelaMacStatus status);
+static void OnNwkCycleChange (timeCycles newCycle);
+static void OnNwkFrameStart (void);
+static void OnNwkFrameEnd (void);
 
 /*****************************************************************************
  *                        FUNCTION IMPLEMENTATIONS
  *****************************************************************************/
-VelaMacStatus CommsSend(uint8_t linkID, appDataPkt pkt){// change later after implementing mac layer
-	printf("APP sending: ");
-	debug_print_pkt(pkt.pkt , sizeof(pkt.pkt));
-	VelaNwkSend (linkID, pkt.pkt, sizeof(pkt.pkt));
-	while (!txFlag);
-	txFlag = false;
-	return  VELAMAC_SUCCESSFUL;
+VelaMacStatus CommsInitNode(){
+	nwkEvents.NwkCommandSent = OnNwkCmdSent;
+	nwkEvents.NwkMessageReceived = OnNwkMsgRx;
+	nwkEvents.NwkNetworkJoined = OnNwkNetworkJoined;
+	nwkEvents.NwkNewNodeJoined = OnNwkNodeJoined;
+	nwkEvents.NwkNodeFailedToReport = OnNwkFailedToReport;
+	nwkEvents.NwkReportSent = OnNwkReportSent;
+	nwkEvents.NwkReportingCycle = OnNwkCycleChange;
+	nwkEvents.NwkFrameStart = OnNwkFrameStart;
+	nwkEvents.NwkFrameEnd = OnNwkFrameEnd;
+
+	return VelaNwkInitialization(0, 60, &nwkEvents);
 }
 
-VelaMacStatus CommsInit(uint8_t linkID){
-		nwkEvents.NwkTxDone = OnTxDone;
-		nwkEvents.NwkRxDone = OnRxDone;
-		nwkEvents.NwkRxError = OnRxError;
-		nwkEvents.NwkTxTimeout = OnTxTimeout;
-		nwkEvents.NwkRxTimeout = OnRxTimeout;
-#ifdef COORDINATOR
-		UARTrx = ReceivedCmd;
-#endif
-		return VelaNwkInitialization(&nwkEvents, linkID);
-}
+VelaMacStatus CommsInitCoordinator(){
+	nwkEvents.NwkCommandSent = OnNwkCmdSent;
+	nwkEvents.NwkMessageReceived = OnNwkMsgRx;
+	nwkEvents.NwkNetworkJoined = OnNwkNetworkJoined;
+	nwkEvents.NwkNewNodeJoined = OnNwkNodeJoined;
+	nwkEvents.NwkNodeFailedToReport = OnNwkFailedToReport;
+	nwkEvents.NwkReportSent = OnNwkReportSent;
+	nwkEvents.NwkReportingCycle = OnNwkCycleChange;
+	nwkEvents.NwkFrameStart = OnNwkFrameStart;
+	nwkEvents.NwkFrameEnd = OnNwkFrameEnd;
 
-void CommsStartContinuousRx(void){
-	isCoordinator = true;
-	//RFSetRxConfig(0, 12,1, 20, 1000000, true, 20, false, true);
-	RFSetRxConfig(9, 12,1, 30, 1000, false, 20, true, true);
-	RFSetRx(1000);
+	return VelaNwkInitialization(1, 60, &nwkEvents);
 }
 /*****************************************************************************
  *                            LOCAL FUNCTIONS
@@ -92,44 +92,59 @@ static void ResetParameters (void){
 	//IsVelaMacNetworkJoined = false;
 }
 
-static void OnTxDone (bool ack){
-	//printf("Sent OK APP\n");
-	if (ack){
-		printf ("acknowledged\n");
+static void OnNwkCmdSent (VelaMacStatus status){
+    printf("NWK command sent\n");
+}
+
+static void OnNwkMsgRx (messageType msgType, uint16_t size, uint8_t shortAddr, uint8_t *payload, int16_t rssi, int8_t snr){
+    printf("NWK command sent\n");
+}
+
+static void OnNwkNetworkJoined (VelaMacStatus status){
+	switch (status){
+	case VELAMAC_SUCCESSFUL:
+	    printf("Connected to Network (APP)\n");
+		networkConnectionStatus = true;
+		break;
+
+	case VELAMAC_FAILURE:
+		printf("Connection to Network failed (APP)\n");
+		networkConnectionStatus = false;
+		break;
 	}
-	else{
-		printf (" Not acknowledged\n");
-	}
-	txFlag = true;
 }
 
-static void OnRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr){
-
-	printf("Message received (APP): %d, ", rssi);
-	debug_print_pkt(payload , size);
-	appDataPkt pkt;
-	memcpy (&pkt.pkt, payload, size);
-	PktReceived(0, pkt, rssi);
-	if (isCoordinator)
-		CommsStartContinuousRx();
+static void OnNwkNodeJoined (NodeDesc node){
+    printf("NWK command sent\n");
 }
 
-static void OnRxError (void){
-	printf("Received error Pkt APP\n");
-	txFlag = true;
-	if (isCoordinator)
-		CommsStartContinuousRx();
+static void OnNwkFailedToReport (VelaMacStatus status){
+    printf("NWK command sent\n");
 }
 
-static void OnTxTimeout (void){
-	printf("TX timeout app\n");
+static void OnNwkReportSent (VelaMacStatus status){
+    printf("NWK command sent\n");
 }
 
-static void OnRxTimeout (uint16_t timeout){
-	printf("RX timeout app\n");
+static void OnNwkCycleChange (timeCycles newCycle){
+    printf("Received cycle change\n");
+    switch (newCycle){
+    case CONNECTION_PHASE:
+    	break;
+
+    case REPORTING_PHASE:
+    	break;
+    }
 }
 
-void ReceivedCmd(uint8_t *data, int size){
-	//implement commands here
-	printf("received command\n");
+static void OnNwkFrameStart (void){
+	// wake up
+	printf("My frame is here!!! Yaaaay!!!\n");
+    appDataPkt pkt;
+	VelaNwkReport (pkt.pkt, sizeof(pkt.pkt));
+}
+
+static void OnNwkFrameEnd (void){
+	printf("My frame is over... NOOO!!!\n");
+	// sleep
 }

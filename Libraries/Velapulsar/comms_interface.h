@@ -57,9 +57,8 @@ typedef union{
 /*****************************************************************************
  *                             Functions - API
  *****************************************************************************/
-VelaMacStatus CommsInit(uint8_t linkID);
-VelaMacStatus CommsSend(uint8_t linkID, appDataPkt pkt);
-void CommsStartContinuousRx(void);
+VelaMacStatus CommsInitNode();
+VelaMacStatus CommsInitCoordinator();
 
 void    ( *PktReceived )( uint8_t linkID, appDataPkt pkt, int16_t rssi);
 

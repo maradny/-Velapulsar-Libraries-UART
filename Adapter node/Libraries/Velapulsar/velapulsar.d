@@ -11,7 +11,9 @@ Libraries/Velapulsar/velapulsar.obj: C:/ti/ccsv7/ccs_base/arm/include/msp_compat
 Libraries/Velapulsar/velapulsar.obj: C:/ti/ccsv7/ccs_base/arm/include/CMSIS/cmsis_ccs.h
 Libraries/Velapulsar/velapulsar.obj: C:/ti/ccsv7/ccs_base/arm/include/msp432p401r_classic.h
 Libraries/Velapulsar/velapulsar.obj: C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cm4.h
-Libraries/Velapulsar/velapulsar.obj: C:/ti/ccsv7/ccs_base/arm/include/CMSIS/cmsis_compiler.h
+Libraries/Velapulsar/velapulsar.obj: C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmInstr.h
+Libraries/Velapulsar/velapulsar.obj: C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmFunc.h
+Libraries/Velapulsar/velapulsar.obj: C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmSimd.h
 Libraries/Velapulsar/velapulsar.obj: C:/ti/ccsv7/ccs_base/arm/include/system_msp432p401r.h
 Libraries/Velapulsar/velapulsar.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdbool.h
 Libraries/Velapulsar/velapulsar.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/aes256.h
@@ -48,15 +50,15 @@ Libraries/Velapulsar/velapulsar.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.
 Libraries/Velapulsar/velapulsar.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdarg.h
 Libraries/Velapulsar/velapulsar.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdlib.h
 Libraries/Velapulsar/velapulsar.obj: ../Libraries/Velapulsar/sensor_interface.h
-Libraries/Velapulsar/velapulsar.obj: C:/Users/Ma7ma/Desktop/velapulsar/Libraries/Nwk/velapulsar_nwk.h
-Libraries/Velapulsar/velapulsar.obj: C:/Users/Ma7ma/Desktop/velapulsar/Libraries/Mac/velapulsar_mac.h
-Libraries/Velapulsar/velapulsar.obj: C:/Users/Ma7ma/Desktop/velapulsar/Libraries/RF95/rf95.h
-Libraries/Velapulsar/velapulsar.obj: C:/Users/Ma7ma/Desktop/velapulsar/Libraries/RF95/spi_interface.h
-Libraries/Velapulsar/velapulsar.obj: C:/Users/Ma7ma/Desktop/velapulsar/Libraries/RF95/delay.h
-Libraries/Velapulsar/velapulsar.obj: C:/Users/Ma7ma/Desktop/velapulsar/Libraries/Radio/radio.h
+Libraries/Velapulsar/velapulsar.obj: C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/Nwk/velapulsar_nwk.h
+Libraries/Velapulsar/velapulsar.obj: C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/Mac/velapulsar_mac.h
+Libraries/Velapulsar/velapulsar.obj: C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/RF95/rf95.h
+Libraries/Velapulsar/velapulsar.obj: C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/RF95/spi_interface.h
+Libraries/Velapulsar/velapulsar.obj: C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/RF95/delay.h
+Libraries/Velapulsar/velapulsar.obj: C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/Radio/radio.h
 Libraries/Velapulsar/velapulsar.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/math.h
 Libraries/Velapulsar/velapulsar.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/_defs.h
-Libraries/Velapulsar/velapulsar.obj: C:/Users/Ma7ma/Desktop/velapulsar/Libraries/EnergyManager/energy_man.h
+Libraries/Velapulsar/velapulsar.obj: C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/EnergyManager/energy_man.h
 Libraries/Velapulsar/velapulsar.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdio.h
 Libraries/Velapulsar/velapulsar.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdlib.h
 
@@ -71,7 +73,9 @@ C:/ti/ccsv7/ccs_base/arm/include/msp_compatibility.h:
 C:/ti/ccsv7/ccs_base/arm/include/CMSIS/cmsis_ccs.h: 
 C:/ti/ccsv7/ccs_base/arm/include/msp432p401r_classic.h: 
 C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cm4.h: 
-C:/ti/ccsv7/ccs_base/arm/include/CMSIS/cmsis_compiler.h: 
+C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmInstr.h: 
+C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmFunc.h: 
+C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmSimd.h: 
 C:/ti/ccsv7/ccs_base/arm/include/system_msp432p401r.h: 
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdbool.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/aes256.h: 
@@ -108,14 +112,14 @@ C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/linkage.h:
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdarg.h: 
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdlib.h: 
 ../Libraries/Velapulsar/sensor_interface.h: 
-C:/Users/Ma7ma/Desktop/velapulsar/Libraries/Nwk/velapulsar_nwk.h: 
-C:/Users/Ma7ma/Desktop/velapulsar/Libraries/Mac/velapulsar_mac.h: 
-C:/Users/Ma7ma/Desktop/velapulsar/Libraries/RF95/rf95.h: 
-C:/Users/Ma7ma/Desktop/velapulsar/Libraries/RF95/spi_interface.h: 
-C:/Users/Ma7ma/Desktop/velapulsar/Libraries/RF95/delay.h: 
-C:/Users/Ma7ma/Desktop/velapulsar/Libraries/Radio/radio.h: 
+C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/Nwk/velapulsar_nwk.h: 
+C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/Mac/velapulsar_mac.h: 
+C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/RF95/rf95.h: 
+C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/RF95/spi_interface.h: 
+C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/RF95/delay.h: 
+C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/Radio/radio.h: 
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/math.h: 
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/_defs.h: 
-C:/Users/Ma7ma/Desktop/velapulsar/Libraries/EnergyManager/energy_man.h: 
+C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries/EnergyManager/energy_man.h: 
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdio.h: 
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdlib.h: 

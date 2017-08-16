@@ -50,7 +50,8 @@ typedef enum{
 
 typedef enum{
     VELAMAC_SUCCESSFUL,
-    VELAMAC_FAILURE
+    VELAMAC_FAILURE,
+	VELAMAC_UNDEFINED
 }VelaMacStatus;
 
 typedef enum{
@@ -181,19 +182,21 @@ typedef union{
 }nAckPkt;
 
 typedef struct{
-	void    ( *MacMessageReceived )( uint8_t msgType, uint8_t size, uint32_t fromAddr,uint8_t *payload);
-    void    ( *MacReportSent )( bool sentStatus);
-    void    ( *MacCommandSent )( bool commandStatus );
-    void    ( *MacNetworkJoined )( bool NetworkStatus );
-    void    ( *MacReportingCycle )( bool ReportingStatus );
-    void    ( *MacNewNodeJoined )( NodeDesc nodeJoined);
-    void    ( *MacNodeFailedToReport )( NodeDesc nodeFailed);
+	void    ( *MacMessageReceived )( messageType msgType, uint16_t size, uint8_t shortAddr, uint8_t *payload, int16_t rssi, int8_t snr );
+    void    ( *MacReportSent )( VelaMacStatus status );
+    void    ( *MacCommandSent )( VelaMacStatus status );
+    void    ( *MacNetworkJoined )( VelaMacStatus status );
+    void    ( *MacReportingCycle )( timeCycles newCycle );
+    void    ( *MacNewNodeJoined )( NodeDesc node );
+    void    ( *MacNodeFailedToReport )( VelaMacStatus status );
+    void	( *MacFrameStart )( void );
+    void	( *MacFrameEnd )( void );
 }macCallbacks;
 
 /*****************************************************************************
  *                             Functions - API
  *****************************************************************************/
-VelaMacStatus MacInit(uint8_t nodeType, uint16_t dutyCycle, macCallbacks* callbacks);
-VelaMacStatus MacReport (uint8_t report[], int size);
-int MacRetrieveListOfNodes( NodeDesc nodesBuffer[]);
+VelaMacStatus VelaMacInit(uint8_t nodeType, uint16_t dutyCycle, macCallbacks* callbacks);
+VelaMacStatus VelaMacReport (uint8_t report[], int size);
+int VelaMacRetrieveListOfNodes( NodeDesc nodesBuffer[]);
 #endif /* LIBRARIES_MAC_VELAPULSAR_MAC_H_ */

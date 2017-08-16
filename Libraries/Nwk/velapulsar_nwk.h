@@ -50,17 +50,21 @@ typedef union{
 }nwkDataPkt;
 
 typedef struct{
-	void    ( *NwkTxDone )( bool ack );
-	void    ( *NwkRxDone )( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr );
-	void    ( *NwkRxError )( void );
-	void    ( *NwkTxTimeout )( void );
-	void    ( *NwkRxTimeout )( uint16_t timeout );
+	void    ( *NwkMessageReceived )( messageType msgType, uint16_t size, uint8_t shortAddr, uint8_t *payload, int16_t rssi, int8_t snr );
+    void    ( *NwkReportSent )( VelaMacStatus status );
+    void    ( *NwkCommandSent )( VelaMacStatus status );
+    void    ( *NwkNetworkJoined )( VelaMacStatus status );
+    void    ( *NwkReportingCycle )( timeCycles newCycle );
+    void    ( *NwkNewNodeJoined )( NodeDesc node );
+    void    ( *NwkNodeFailedToReport )( VelaMacStatus status );
+    void	( *NwkFrameStart )( void );
+    void	( *NwkFrameEnd )( void );
 }nwkCallbacks;
 
 /*****************************************************************************
  *                             Functions - API
  *****************************************************************************/
-VelaMacStatus VelaNwkInitialization(nwkCallbacks* callbacks, uint8_t linkID); //maybe change return type later
+VelaMacStatus VelaNwkInitialization(uint8_t nodeType, uint16_t dutyCycle, nwkCallbacks* callbacks); //maybe change return type later
 VelaMacStatus VelaNwkSend(uint8_t linkID, uint8_t appPayload[], int size);
 
 #endif /* LIBRARIES_NWK_VELAPULSAR_NWK_H_ */
