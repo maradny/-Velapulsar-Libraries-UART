@@ -66,7 +66,7 @@ static void OnRadioRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t
 static void OnRadioRxError (void);
 static void OnRadioTxTimeout (void);
 static void OnRadioRxTimeout (VelaMacTimeouts timeout);
-
+static void WaitForRand (int start, int end);
 /*****************************************************************************
  *                        FUNCTION IMPLEMENTATIONS
  *****************************************************************************/
@@ -97,6 +97,7 @@ VelaMacStatus VelaMacInit (uint8_t nodeType, uint16_t _dutyCycle, macCallbacks* 
 }
 
 VelaMacStatus VelaMacReport (uint8_t report[], int size){
+#ifdef NODE
 	currentState = MAC_TX;
 	reportPkt pkt;
 	pkt.data.msgType = REPORT;
@@ -107,7 +108,7 @@ VelaMacStatus VelaMacReport (uint8_t report[], int size){
 
 	RFSendWithDefault(pkt.pkt, sizeof(pkt.pkt), pkt.data.msgType);
 	printf("MAC sending");
-
+#endif
 	return VELAMAC_SUCCESSFUL;
 }
 
@@ -129,13 +130,14 @@ int VelaMacRetrieveListOfNodes( NodeDesc nodesBuffer[]){
 void MacCalcDutyCycles(){
     int  airTime = RFGetTimeOnAir(sizeof(reportPkt)); //returns in milliseconds
     int  wakeUpTime= 6000; //1 sec
+    int sleepTime;
     // calculate the timeOnAir of the Ack
-    sleepTime=dutyCycle-wakeUpTime-airTime-(RFGetTimeOnAir(sizeof(ackPkt))*2); //for now !!
+    sleepTime = dutyCycle - wakeUpTime - airTime - (RFGetTimeOnAir(sizeof(ackPkt))*2); //for now !!
 
     int reportingTime,connectingTime,frame;
     connectingTime= (dutyCycle-(numOfConnectedNodes*3));
     reportingTime= dutyCycle - connectingTime;
-    frame=reportingTime/numOfConnecredNodes;
+    frame=reportingTime/numOfConnectedNodes;
 
 }
 
@@ -143,7 +145,7 @@ void SendAck(reportPkt repPkt, int16_t rssi, int8_t snr){
     ackPkt ackPkt;
     //calculate new reporting time
     //ackPkt.data.time = repPkt.data.timeSlot;
-    ackPkt.data.shortAddr = repPkt.data.short_Add;
+    ackPkt.data.short_Add = repPkt.data.short_Add;
     ackPkt.data.pktID = repPkt.data.pktID;
     ackPkt.data.msgType = ACKNOWLEDGE;
 
@@ -156,7 +158,7 @@ void SendNAck(reportPkt repPkt, int16_t rssi, int8_t snr){
     nAckPkt nAckPkt;
     //calculate new reporting time
     //ackPkt.data.time = repPkt.data.timeSlot;
-    nAckPkt.data.shortAddr = repPkt.data.short_Add;
+    nAckPkt.data.short_Add = repPkt.data.short_Add;
     nAckPkt.data.pktID = repPkt.data.pktID;
     nAckPkt.data.msgType = NOT_ACKNOWLEDGED;
 
@@ -172,7 +174,7 @@ void ProcessJoinReq (join_requestPkt joinReqPkt){
    connectedNodes[numOfConnectedNodes].lastPktID= joinReqPkt.data.pktID;
    connectedNodes[numOfConnectedNodes].short_Add = 123;  //change later
    //create random password
-   srand((unsigned int)time(NULL));
+   srand((unsigned int)time(0));
    int r =rand() % 65535;
    connectedNodes[numOfConnectedNodes].password= r;
    connectedNodes[numOfConnectedNodes].connected = true;
@@ -237,7 +239,9 @@ void SleepFor(uint16_t time){
 }
 #endif
 
+static void WaitForRand (int start, int end){
 
+}
 
 
 
@@ -256,6 +260,7 @@ static void OnRadioRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t
     request_ApprovalPkt appPkt;
     ackPkt ackPkt;
     join_requestPkt joinReqPkt;
+    reportPkt repPkt;
     bool found = false;
     int i = 0;
 	switch (receivedMsgType){
@@ -340,18 +345,18 @@ static void OnRadioRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t
             if (joinReqPkt.data.myAddr == connectedNodes[i].longAddr){
                 found = true;
                 printf("CONNECTED AGAIN with ID: %d\n", i);
-                SendJoinResult (VELAMAC_SUCCESSFUL, i, joinReqPkt);
+                SendJoinResult (VELAMAC_SUCCESSFUL, i, appPkt);
                 break;
             }
         }
         if (!found){
             if (numOfConnectedNodes < MAX_NUM_OF_NODES){
                 ProcessJoinReq (joinReqPkt);
-                SendJoinResult (VELAMAC_SUCCESSFUL, numOfConnectedNodes-1, joinReqPkt);
+                SendJoinResult (VELAMAC_SUCCESSFUL, numOfConnectedNodes-1, appPkt);
             }
             else{
                 printf("FAILED TO CONNECT\n");
-                SendJoinResult (VELAMAC_FAILURE, 0, joinReqPkt);
+                SendJoinResult (VELAMAC_FAILURE, 0, appPkt);
             }
         }
 	    break;
@@ -359,7 +364,6 @@ static void OnRadioRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t
 	case REPORT:
 	    //I am a coordinator !!
 	    // copy the information
-	    reportPkt repPkt;
 	    memcpy (&repPkt.pkt, payload, size);
 
 	    int i = 0;
@@ -377,7 +381,7 @@ static void OnRadioRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t
 	        }
 	    }
 	    if (i > numOfConnectedNodes){
-	        SendNAck(repPkt);
+	        SendNAck(repPkt, rssi, snr);
 	    }
 	    break;
 #endif
@@ -412,11 +416,12 @@ static void OnRadioRxTimeout (VelaMacTimeouts timeout){
 	case ACKNOWLEDGMENT_TIMEOUT:
 	    macEvents->MacReportSent(VELAMAC_FAILURE);
 		break;
-
+#ifdef NODE
 	case WAKEUP_TIMEOUT:
 	    myNode.connected = false;
 	    macEvents->MacNetworkJoined(VELAMAC_FAILURE);
 	    //do something else
 		break;
+#endif
 	}
 }

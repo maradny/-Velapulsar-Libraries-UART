@@ -50,6 +50,7 @@ static volatile bool cmdAvailable = false;
 void ReceivedPkt(uint8_t linkID, appDataPkt pkt, int16_t rssi);
 void initSerial(void);
 void sendSerial(uint8_t* data, int size);
+void Alarm_Went_Off(void);
 
 /******************************************************************************
 * Function: Main
@@ -73,8 +74,10 @@ int main(void)
 
     PktReceived = ReceivedPkt;
 
+    printf("alarm starting\n");
 
-    CommsStartContinuousRx();
+    Set_Alarm (10000, &Alarm_Went_Off);
+
     while(1){
     	while (!cmdAvailable){
 
@@ -90,6 +93,10 @@ int _system_pre_init( void )
   WDTCTL = WDTPW | WDTHOLD;
 
   return 1;
+}
+
+void Alarm_Went_Off(void){
+	printf("ALAAAAAAAAAAARM!!!!!\n");
 }
 
 void ReceivedPkt(uint8_t linkID, appDataPkt pkt, int16_t rssi){

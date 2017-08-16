@@ -46,4 +46,6 @@ void Init_SysTick(uint32_t freq);
 uint32_t getTotal_ms(void);
 void delay_ms (int delay);
 
+bool Set_Alarm (int delay, void *callBack());
+
 #endif

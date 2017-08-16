@@ -4,18 +4,18 @@ Libraries/Velapulsar/sensor_interface.obj: ../Libraries/Velapulsar/sensor_interf
 Libraries/Velapulsar/sensor_interface.obj: ../Libraries/Velapulsar/sensor_interface.h
 Libraries/Velapulsar/sensor_interface.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/driverlib.h
 Libraries/Velapulsar/sensor_interface.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/adc14.h
-Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdint.h
-Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv6/ccs_base/arm/include/msp.h
-Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv6/ccs_base/arm/include/msp432p401r.h
-Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv6/ccs_base/arm/include/msp_compatibility.h
-Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv6/ccs_base/arm/include/CMSIS/cmsis_ccs.h
-Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv6/ccs_base/arm/include/msp432p401r_classic.h
-Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv6/ccs_base/arm/include/CMSIS/core_cm4.h
-Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv6/ccs_base/arm/include/CMSIS/core_cmInstr.h
-Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv6/ccs_base/arm/include/CMSIS/core_cmFunc.h
-Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv6/ccs_base/arm/include/CMSIS/core_cmSimd.h
-Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv6/ccs_base/arm/include/system_msp432p401r.h
-Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdbool.h
+Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdint.h
+Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv7/ccs_base/arm/include/msp.h
+Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv7/ccs_base/arm/include/msp432p401r.h
+Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv7/ccs_base/arm/include/msp_compatibility.h
+Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv7/ccs_base/arm/include/CMSIS/cmsis_ccs.h
+Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv7/ccs_base/arm/include/msp432p401r_classic.h
+Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cm4.h
+Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmInstr.h
+Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmFunc.h
+Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmSimd.h
+Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv7/ccs_base/arm/include/system_msp432p401r.h
+Libraries/Velapulsar/sensor_interface.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdbool.h
 Libraries/Velapulsar/sensor_interface.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/aes256.h
 Libraries/Velapulsar/sensor_interface.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/comp_e.h
 Libraries/Velapulsar/sensor_interface.obj: C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/cpu.h
@@ -49,18 +49,18 @@ Libraries/Velapulsar/sensor_interface.obj: C:/ti/msp/msp432ware__3.50.00.02/driv
 ../Libraries/Velapulsar/sensor_interface.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/driverlib.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/adc14.h: 
-C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdint.h: 
-C:/ti/ccsv6/ccs_base/arm/include/msp.h: 
-C:/ti/ccsv6/ccs_base/arm/include/msp432p401r.h: 
-C:/ti/ccsv6/ccs_base/arm/include/msp_compatibility.h: 
-C:/ti/ccsv6/ccs_base/arm/include/CMSIS/cmsis_ccs.h: 
-C:/ti/ccsv6/ccs_base/arm/include/msp432p401r_classic.h: 
-C:/ti/ccsv6/ccs_base/arm/include/CMSIS/core_cm4.h: 
-C:/ti/ccsv6/ccs_base/arm/include/CMSIS/core_cmInstr.h: 
-C:/ti/ccsv6/ccs_base/arm/include/CMSIS/core_cmFunc.h: 
-C:/ti/ccsv6/ccs_base/arm/include/CMSIS/core_cmSimd.h: 
-C:/ti/ccsv6/ccs_base/arm/include/system_msp432p401r.h: 
-C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdbool.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdint.h: 
+C:/ti/ccsv7/ccs_base/arm/include/msp.h: 
+C:/ti/ccsv7/ccs_base/arm/include/msp432p401r.h: 
+C:/ti/ccsv7/ccs_base/arm/include/msp_compatibility.h: 
+C:/ti/ccsv7/ccs_base/arm/include/CMSIS/cmsis_ccs.h: 
+C:/ti/ccsv7/ccs_base/arm/include/msp432p401r_classic.h: 
+C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cm4.h: 
+C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmInstr.h: 
+C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmFunc.h: 
+C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cmSimd.h: 
+C:/ti/ccsv7/ccs_base/arm/include/system_msp432p401r.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdbool.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/aes256.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/comp_e.h: 
 C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/cpu.h: 

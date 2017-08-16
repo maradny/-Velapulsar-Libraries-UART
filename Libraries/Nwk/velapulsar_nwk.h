@@ -65,6 +65,6 @@ typedef struct{
  *                             Functions - API
  *****************************************************************************/
 VelaMacStatus VelaNwkInitialization(uint8_t nodeType, uint16_t dutyCycle, nwkCallbacks* callbacks); //maybe change return type later
-VelaMacStatus VelaNwkSend(uint8_t linkID, uint8_t appPayload[], int size);
+VelaMacStatus VelaNwkReport(uint8_t appPayload[], int size);
 
 #endif /* LIBRARIES_NWK_VELAPULSAR_NWK_H_ */

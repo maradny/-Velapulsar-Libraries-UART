@@ -53,7 +53,7 @@
 #ifdef KIT
 #define CLK_FREQ				  48000000
 #else
-#define CLK_FREQ 				  16000000
+#define CLK_FREQ 				  48000000
 #endif
 
 #define FAIL_JOIN                 10   //Number of times to fail joining a network

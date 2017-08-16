@@ -65,13 +65,34 @@ void initPeripherals (void){
 	/* Initialize radio */
 
 	printf("initializing\n");
-	if (CommsInit(0) == VELAMAC_SUCCESSFUL){
+#ifdef NODE
+	if (CommsInitNode() == VELAMAC_SUCCESSFUL){
 		printf("initialized\n");
 		//GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
 	}
 	else{
 		printf("Not initialized\n");
 	}
+#else
+	#ifdef COORDINATOR
+		if (CommsInitCoordinator() == VELAMAC_SUCCESSFUL){
+			printf("initialized\n");
+			//GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
+		}
+		else{
+			printf("Not initialized\n");
+		}
+	#else
+		if (CommsInitSniffer() == VELAMAC_SUCCESSFUL){
+			printf("initialized\n");
+			//GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
+		}
+		else{
+			printf("Not initialized\n");
+		}
+	#endif
+#endif
+
 }
 
 void initPorts (void){
@@ -89,8 +110,8 @@ void initPorts (void){
 //	MAP_GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN2);
 //	GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN2);
 //
-//	MAP_GPIO_setAsOutputPin(GPIO_PORT_P4, GPIO_PIN2);
-//	GPIO_setOutputLowOnPin(GPIO_PORT_P4, GPIO_PIN2);
+	MAP_GPIO_setAsOutputPin(GPIO_PORT_P4, GPIO_PIN2);
+	GPIO_setOutputLowOnPin(GPIO_PORT_P4, GPIO_PIN2);
 }
 
 void initClocks (void){
@@ -126,7 +147,7 @@ void initClocks (void){
     MAP_CS_initClockSignal(CS_SMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
     // MAP_CS_initClockSignal(CS_BCLK, CS_REFOCLK_SELECT, CS_CLOCK_DIVIDER_1);
 #else
-    MAP_CS_initClockSignal(CS_MCLK, CS_HFXTCLK_SELECT, CS_CLOCK_DIVIDER_8);
+    MAP_CS_initClockSignal(CS_MCLK, CS_HFXTCLK_SELECT, CS_CLOCK_DIVIDER_1);//CS_CLOCK_DIVIDER_8);
     // MAP_CS_initClockSignal(CS_ACLK, CS_REFOCLK_SELECT, CS_CLOCK_DIVIDER_2);
     // MAP_CS_initClockSignal(CS_HSMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_2);
     MAP_CS_initClockSignal(CS_SMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);

@@ -73,7 +73,7 @@ VelaMacStatus VelaNwkInitialization(uint8_t nodeType, uint16_t dutyCycle, nwkCal
 	return VelaMacInit(nodeType, dutyCycle, &macEvents);
 }
 
-VelaMacStatus VelaNwkSend (uint8_t linkID, uint8_t appPayload[], int size){
+VelaMacStatus VelaNwkReport (uint8_t appPayload[], int size){
 	nwkDataPkt pkt;
 	pkt.data.myShovel = MY_SHOVEL;
 	pkt.data.myType = MY_TYPE;

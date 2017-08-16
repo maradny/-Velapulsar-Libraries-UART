@@ -135,8 +135,8 @@ void operate(void)
 //        printf("Sending....\n"); delay_ms(10);
 //        RFSend(packetNum, 1);
         //RFSend(radioPacket, 20);
-        CommsSend(0, pkt);
-        printf("Time on Air: %d\n",RFGetTimeOnAir(30));
+        //CommsSend(0, pkt);
+        //printf("Time on Air: %d\n",RFGetTimeOnAir(30));
 //        while (RFGetStatus() == RF_TX_RUNNING){
 //        	delay_ms(50);
 //        }

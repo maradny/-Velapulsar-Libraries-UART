@@ -11,7 +11,6 @@ GEN_CMDS__FLAG :=
 
 ORDERED_OBJS += \
 "./AdapterNode_main.obj" \
-"./Sniffer_main.obj" \
 "./startup_msp432p401r_ccs.obj" \
 "./system_msp432p401r.obj" \
 "./Libraries/EnergyManager/energy_man.obj" \
@@ -165,7 +164,7 @@ all: Velapulsar.out
 Velapulsar.out: $(OBJS) $(CMD_SRCS) $(LIB_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MSP432 Linker'
-	"C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/bin/armcl" --cmd_file="C:\Users\ghassan\Dropbox\Apps\CCS Cloud\velapulsar\Libraries\Nwk\velapulsar_nwk_config.dat" --cmd_file="C:\Users\ma7ma\Desktop\velapulsar\Libraries\Mac\velapulsar_mac_config.dat" --cmd_file="C:\Users\ma7ma\Desktop\velapulsar\Libraries\Velapulsar\velapulsar_app_settings.dat"  -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me -O2 --advice:power=all --gcc --define=__MSP432P401R__ --define=PKT_ACK --define=KIT --define=TARGET_IS_MSP432P4XX --define=ccs --diag_wrap=off --diag_warning=225 --display_error_number -z -m"Velapulsar.map" --stack_size=512 -i"C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/lib" -i"C:/Users/ma7ma/Desktop/velapulsar/Libraries" -i"C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include" --reread_libs --display_error_number --warn_sections --diag_wrap=off --xml_link_info="Velapulsar_linkInfo.xml" --rom_model -o "Velapulsar.out" $(ORDERED_OBJS)
+	"C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/bin/armcl" --cmd_file="C:\Users\ghassan\Dropbox\Apps\CCS Cloud\velapulsar\Libraries\Nwk\velapulsar_nwk_config.dat" --cmd_file="C:\Users\ghassan\iCloudDrive\PhD\TRL\CCS_Workspace\Velapulsar\Libraries\Mac\velapulsar_mac_config.dat" --cmd_file="C:\Users\ghassan\iCloudDrive\PhD\TRL\CCS_Workspace\Velapulsar\Libraries\Velapulsar\velapulsar_app_settings.dat"  -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me -O2 --advice:power=all --gcc --define=__MSP432P401R__ --define=NODE --define=PKT_ACK --define=KIT --define=TARGET_IS_MSP432P4XX --define=ccs --diag_wrap=off --diag_warning=225 --display_error_number -z -m"Velapulsar.map" --stack_size=512 -i"C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/lib" -i"C:/Users/ghassan/iCloudDrive/PhD/TRL/CCS_Workspace/Velapulsar/Libraries" -i"C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include" --reread_libs --diag_wrap=off --warn_sections --display_error_number --xml_link_info="Velapulsar_linkInfo.xml" --rom_model -o "Velapulsar.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -178,8 +177,8 @@ Velapulsar.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "AdapterNode_main.obj" "Sniffer_main.obj" "startup_msp432p401r_ccs.obj" "system_msp432p401r.obj" "Libraries\EnergyManager\energy_man.obj" "Libraries\Mac\velapulsar_mac.obj" "Libraries\Nwk\velapulsar_nwk.obj" "Libraries\RF95\delay.obj" "Libraries\RF95\rf95.obj" "Libraries\RF95\spi_interface.obj" "Libraries\UART\UART_interface.obj" "Libraries\Velapulsar\comms_interface.obj" "Libraries\Velapulsar\sensor_interface.obj" "Libraries\Velapulsar\velapulsar.obj" 
-	-$(RM) "AdapterNode_main.d" "Sniffer_main.d" "startup_msp432p401r_ccs.d" "system_msp432p401r.d" "Libraries\EnergyManager\energy_man.d" "Libraries\Mac\velapulsar_mac.d" "Libraries\Nwk\velapulsar_nwk.d" "Libraries\RF95\delay.d" "Libraries\RF95\rf95.d" "Libraries\RF95\spi_interface.d" "Libraries\UART\UART_interface.d" "Libraries\Velapulsar\comms_interface.d" "Libraries\Velapulsar\sensor_interface.d" "Libraries\Velapulsar\velapulsar.d" 
+	-$(RM) "AdapterNode_main.obj" "startup_msp432p401r_ccs.obj" "system_msp432p401r.obj" "Libraries\EnergyManager\energy_man.obj" "Libraries\Mac\velapulsar_mac.obj" "Libraries\Nwk\velapulsar_nwk.obj" "Libraries\RF95\delay.obj" "Libraries\RF95\rf95.obj" "Libraries\RF95\spi_interface.obj" "Libraries\UART\UART_interface.obj" "Libraries\Velapulsar\comms_interface.obj" "Libraries\Velapulsar\sensor_interface.obj" "Libraries\Velapulsar\velapulsar.obj" 
+	-$(RM) "AdapterNode_main.d" "startup_msp432p401r_ccs.d" "system_msp432p401r.d" "Libraries\EnergyManager\energy_man.d" "Libraries\Mac\velapulsar_mac.d" "Libraries\Nwk\velapulsar_nwk.d" "Libraries\RF95\delay.d" "Libraries\RF95\rf95.d" "Libraries\RF95\spi_interface.d" "Libraries\UART\UART_interface.d" "Libraries\Velapulsar\comms_interface.d" "Libraries\Velapulsar\sensor_interface.d" "Libraries\Velapulsar\velapulsar.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

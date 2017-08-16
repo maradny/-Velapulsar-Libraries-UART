@@ -6,9 +6,14 @@ volatile uint8_t    _mTime = 0;
 volatile uint8_t    _hTime = 0;
 volatile uint32_t   _totalms = 0;
 
+volatile bool alarmSet = false;
+volatile int alarmIn = 0;
+
+void (*AlarmWentOff)(void);
+
 void Init_SysTick(uint32_t freq){
     MAP_SysTick_enableModule();
-    MAP_SysTick_setPeriod(freq/1000/8);
+    MAP_SysTick_setPeriod(freq/1000);
     MAP_Interrupt_setPriority(FAULT_SYSTICK, 0x20);
     MAP_SysTick_enableInterrupt();
     MAP_Interrupt_enableMaster();   
@@ -30,12 +35,34 @@ void delay_ms(int period){
     while (_totalms - currentTime < period);
 }
 
+bool Set_Alarm (int period, void *callBack()){
+	if (alarmSet){
+		return false;
+	}
+
+	AlarmWentOff = callBack;
+	alarmSet = true;
+	alarmIn = period;
+	return true;
+}
+
 void SysTick_Handler(void){
     if (_totalms < 86400000)
         _totalms++;
     else
         _totalms = 0;
 
+    if (alarmSet){
+    	if (alarmIn > 0){
+    		alarmIn--;
+    	}
+    	if (alarmIn == 0){
+    		printf("ALAAAARM!!!!\n");
+    		AlarmWentOff();
+    		alarmSet = false;
+    	}
+
+    }
     GPIO_toggleOutputOnPin(GPIO_PORT_P4, GPIO_PIN2);
     // if (_msTime <1000){
     //     _msTime++;
