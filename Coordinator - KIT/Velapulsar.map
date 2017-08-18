@@ -1,7 +1,7 @@
 ******************************************************************************
                   TI ARM Linker PC v16.9.1                     
 ******************************************************************************
->> Linked Wed Aug 16 15:32:19 2017
+>> Linked Fri Aug 18 11:07:26 2017
 
 OUTPUT FILE NAME:   <Velapulsar.out>
 ENTRY POINT SYMBOL: "_c_int00"  address: 00005221
@@ -196,9 +196,9 @@ section   page    origin      length       input sections
                   20000d85    00000001     comms_interface.obj (.bss)
                   20000d86    00000002     (.common:lastLight)
                   20000d88    00000004     velapulsar_nwk.obj (.bss)
-                  20000d8c    00000004     (.common:PktReceived)
-                  20000d90    00000004     (.common:UARTrx)
-                  20000d94    00000004     (.common:callback)
+                  20000d8c    00000004     (.common:AlarmWentOff)
+                  20000d90    00000004     (.common:PktReceived)
+                  20000d94    00000004     (.common:UARTrx)
                   20000d98    00000004     (.common:hfxtFreq)
                   20000d9c    00000004     (.common:lfxtFreq)
                   20000da0    00000002     (.common:lastMagnetic)
@@ -364,6 +364,7 @@ GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name
 address   name                                      
 -------   ----                                      
 00003805  ADC14_IRQHandler                          
+20000d8c  AlarmWentOff                              
 0000453d  Alarm_Went_Off                            
 00005275  C$$EXIT                                   
 00004f9b  C$$IO$$                                   
@@ -412,7 +413,7 @@ address   name
 00005939  Interrupt_enableMaster                    
 00001d41  MacCalcDutyCycles                         
 00001b09  PORT2_IRQHandler                          
-20000d8c  PktReceived                               
+20000d90  PktReceived                               
 00001e25  ProcessJoinReq                            
 00001903  RFCheckRfFrequency                        
 0000196f  RFGetStatus                               
@@ -478,7 +479,7 @@ UNDEFED   SHT$$INIT_ARRAY$$Limit
 00003203  UARTSend                                  
 0000319f  UARTSendRssi                              
 00003141  UARTinit                                  
-20000d90  UARTrx                                    
+20000d94  UARTrx                                    
 00001d5f  VelaMacInit                               
 00001d3d  VelaMacReport                             
 00001d11  VelaMacRetrieveListOfNodes                
@@ -567,7 +568,6 @@ ffffffff  __c_args__
 0000536d  atoi                                      
 20000ff5  awake                                     
 ffffffff  binit                                     
-20000d94  callback                                  
 000025bd  calloc                                    
 000042e1  ceil                                      
 000042e1  ceill                                     
@@ -888,9 +888,9 @@ address   name
 20000b24  UARTBuffer                                
 20000c24  __TI_tmpnams                              
 20000d86  lastLight                                 
-20000d8c  PktReceived                               
-20000d90  UARTrx                                    
-20000d94  callback                                  
+20000d8c  AlarmWentOff                              
+20000d90  PktReceived                               
+20000d94  UARTrx                                    
 20000da0  lastMagnetic                              
 20000da4  _ftable                                   
 20000f94  _msTime                                   
