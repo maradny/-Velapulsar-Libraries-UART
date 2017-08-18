@@ -53,6 +53,8 @@ static volatile bool connected;
     static volatile uint8_t numOfConnectedNodes = 0;
     static volatile NodeDesc connectedNodes[MAX_NUM_OF_NODES];
     static volatile uint16_t dutyCycle=60;
+    static volatile int reportingTime,connectingTime,frameSize;
+    static volatile timeCycles currentPhase;
 #else
     static volatile NodeDesc myNode;
 #endif
@@ -88,6 +90,8 @@ VelaMacStatus VelaMacInit (uint8_t nodeType, uint16_t _dutyCycle, macCallbacks* 
 #ifdef COORDINATOR
 	dutyCycle = _dutyCycle;
 	MacCalcDutyCycles();
+	currentPhase = REPORTING_PHASE;
+	ChangePhase();
 #endif
 
 	RFRxWithDefaultContinuous();
@@ -134,10 +138,9 @@ void MacCalcDutyCycles(){
     // calculate the timeOnAir of the Ack
     sleepTime = dutyCycle - wakeUpTime - airTime - (RFGetTimeOnAir(sizeof(ackPkt))*2); //for now !!
 
-    int reportingTime,connectingTime,frame;
-    connectingTime= (dutyCycle-(numOfConnectedNodes*3));
-    reportingTime= dutyCycle - connectingTime;
-    frame=reportingTime/numOfConnectedNodes;
+    connectingTime = (dutyCycle-(numOfConnectedNodes*3));
+    reportingTime = dutyCycle - connectingTime;
+    frameSize = reportingTime/numOfConnectedNodes;
 
 }
 
@@ -196,6 +199,7 @@ void SendJoinResult (VelaMacStatus successful, uint8_t index, request_ApprovalPk
         appPkt.data.toAddr=connectedNodes[index].longAddr;
         appPkt.data.short_Add=connectedNodes[index].short_Add;
         appPkt.data.time=connectedNodes[index].timeSlot;
+
         RFSendWithDefault(appPkt.pkt, sizeof(appPkt.pkt), appPkt.data.msgType);
 
         printf("Sent approval for id: %d", index);
@@ -214,7 +218,23 @@ void SendJoinResult (VelaMacStatus successful, uint8_t index, request_ApprovalPk
     }
 }
 
-void SendModeChange (void){
+void ChangePhase (void){
+	switch (currentPhase){
+	case REPORTING_PHASE:
+		currentPhase = CONNECTION_PHASE;
+		Set_Alarm (connectingTime, &ChangePhase);
+		break;
+
+	case CONNECTION_PHASE:
+		currentPhase = REPORTING_PHASE;
+		Set_Alarm (reportingTime, &ChangePhase);
+		break;
+	}
+
+	SendOhaseChange();
+}
+
+void SendPhaseChange (void){
 
 }
 
