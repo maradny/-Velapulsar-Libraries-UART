@@ -94,33 +94,33 @@ static void OnMacCmdSent (VelaMacStatus status){
 }
 
 static void OnMacMsgRx (messageType msgType, uint16_t size, uint8_t shortAddr, uint8_t *payload, int16_t rssi, int8_t snr){
-    printf("NWK command sent\n");
-    nwkEvents->NwkCommandSent(VELAMAC_SUCCESSFUL);
+    printf("NWK message received\n");
+    nwkEvents->NwkMessageReceived(msgType, size, shortAddr, payload, rssi, snr);
 }
 
 static void OnMacNetworkJoined (VelaMacStatus status){
-    printf("NWK command sent\n");
-    nwkEvents->NwkCommandSent(VELAMAC_SUCCESSFUL);
+    printf("NWK network joined\n");
+    nwkEvents->NwkNetworkJoined(VELAMAC_SUCCESSFUL);
 }
 
 static void OnMacNodeJoined (NodeDesc node){
-    printf("NWK command sent\n");
-    nwkEvents->NwkCommandSent(VELAMAC_SUCCESSFUL);
+    printf("NWK new node joined\n");
+    nwkEvents->NwkNewNodeJoined(node);
 }
 
 static void OnMacFailedToReport (VelaMacStatus status){
-    printf("NWK command sent\n");
-    nwkEvents->NwkCommandSent(VELAMAC_SUCCESSFUL);
+    printf("NWK failed to report\n");
+    nwkEvents->NwkNodeFailedToReport(VELAMAC_SUCCESSFUL);
 }
 
 static void OnMacReportSent (VelaMacStatus status){
-    printf("NWK command sent\n");
-    nwkEvents->NwkCommandSent(VELAMAC_SUCCESSFUL);
+    printf("NWK report sent\n");
+    nwkEvents->NwkReportSent(VELAMAC_SUCCESSFUL);
 }
 
 static void OnMacCycleChange (timeCycles newCycle){
-    printf("NWK command sent\n");
-    nwkEvents->NwkCommandSent(VELAMAC_SUCCESSFUL);
+    printf("NWK phase change\n");
+    nwkEvents->NwkReportingCycle(VELAMAC_SUCCESSFUL);
 }
 
 static void OnMacFrameStart (void){

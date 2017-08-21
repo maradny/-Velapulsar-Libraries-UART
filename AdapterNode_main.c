@@ -128,8 +128,8 @@ void operate(void)
         appDataPkt pkt;
         pkt.data.sensorData.battery = FULL;
         pkt.data.sensorData.claw = 1;//Get_Claw();
-        pkt.data.sensorData.magnetic = Get_Magnetic();
-        pkt.data.sensorData.light = Get_Light();
+//        pkt.data.sensorData.magnetic = Get_Magnetic();
+//        pkt.data.sensorData.light = Get_Light();
 //        printf("Sending ");
 //        debug_print_pkt(pkt.pkt , sizeof(pkt.pkt));
 //        printf("Sending....\n"); delay_ms(10);

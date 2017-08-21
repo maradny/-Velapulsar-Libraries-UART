@@ -117,11 +117,11 @@ void ADC14_IRQHandler(void){
 	uint64_t status = MAP_ADC14_getEnabledInterruptStatus();
 	MAP_ADC14_clearInterruptFlag(status);
 
-	printf("ADC Interrupted: %d\n", status);
+	//printf("ADC Interrupted: %d\n", status);
 
 	if (ADC_INT1 & status){
 		lastMagnetic = MAP_ADC14_getResult(ADC_MEM0);
 		lastLight = MAP_ADC14_getResult(ADC_MEM1);
-		printf("ADC Result: %d\n", lastLight);
+		//printf("ADC Result: %d\n", lastLight);
 	}
 }

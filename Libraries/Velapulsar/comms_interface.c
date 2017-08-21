@@ -83,7 +83,21 @@ VelaMacStatus CommsInitCoordinator(){
 	nwkEvents.NwkFrameStart = OnNwkFrameStart;
 	nwkEvents.NwkFrameEnd = OnNwkFrameEnd;
 
-	return VelaNwkInitialization(1, 60, &nwkEvents);
+	return VelaNwkInitialization(1, 4, &nwkEvents);
+}
+
+VelaMacStatus CommsInitSniffer(){
+	nwkEvents.NwkCommandSent = OnNwkCmdSent;
+	nwkEvents.NwkMessageReceived = OnNwkMsgRx;
+	nwkEvents.NwkNetworkJoined = OnNwkNetworkJoined;
+	nwkEvents.NwkNewNodeJoined = OnNwkNodeJoined;
+	nwkEvents.NwkNodeFailedToReport = OnNwkFailedToReport;
+	nwkEvents.NwkReportSent = OnNwkReportSent;
+	nwkEvents.NwkReportingCycle = OnNwkCycleChange;
+	nwkEvents.NwkFrameStart = OnNwkFrameStart;
+	nwkEvents.NwkFrameEnd = OnNwkFrameEnd;
+
+	return VelaNwkInitialization(2, 0, &nwkEvents);
 }
 /*****************************************************************************
  *                            LOCAL FUNCTIONS
@@ -93,11 +107,11 @@ static void ResetParameters (void){
 }
 
 static void OnNwkCmdSent (VelaMacStatus status){
-    printf("NWK command sent\n");
+    printf("APP command sent\n");
 }
 
 static void OnNwkMsgRx (messageType msgType, uint16_t size, uint8_t shortAddr, uint8_t *payload, int16_t rssi, int8_t snr){
-    printf("NWK command sent\n");
+    printf("APP message received\n");
 }
 
 static void OnNwkNetworkJoined (VelaMacStatus status){
@@ -115,19 +129,19 @@ static void OnNwkNetworkJoined (VelaMacStatus status){
 }
 
 static void OnNwkNodeJoined (NodeDesc node){
-    printf("NWK command sent\n");
+    printf("APP new node joined\n");
 }
 
 static void OnNwkFailedToReport (VelaMacStatus status){
-    printf("NWK command sent\n");
+    printf("APP failed to report\n");
 }
 
 static void OnNwkReportSent (VelaMacStatus status){
-    printf("NWK command sent\n");
+    printf("APP report sent\n");
 }
 
 static void OnNwkCycleChange (timeCycles newCycle){
-    printf("Received cycle change\n");
+    printf("APP phase change\n");
     switch (newCycle){
     case CONNECTION_PHASE:
     	break;

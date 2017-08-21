@@ -476,7 +476,7 @@ void RFWrite(uint8_t reg, uint8_t val){
     GPIO_setOutputLowOnPin(CS_PORT, CS_PIN);
     SPI_transmitData(SPI_PORT, reg | RF_SPI_WRITE_MASK);
     SPI_transmitData(SPI_PORT, val);
-    delay_ms(10);
+    delay_ms(15);
     GPIO_setOutputHighOnPin(CS_PORT, CS_PIN);
 }
 
@@ -488,7 +488,7 @@ void RFWriteBuffer(uint8_t reg, uint8_t* src, uint8_t len)
         SPI_transmitData(SPI_PORT, *src++);
         delay_ms(1);
     }
-    delay_ms(10);
+    delay_ms(15);
     GPIO_setOutputHighOnPin(CS_PORT, CS_PIN);
 }
 
@@ -499,7 +499,7 @@ uint8_t RFRead(uint8_t reg){
     SPI_transmitData(SPI_PORT, 0);
     delay_ms(5);
     val = SPI_receiveData(SPI_PORT);
-    delay_ms(10);
+    delay_ms(15);
     GPIO_setOutputHighOnPin(CS_PORT, CS_PIN);
     return val;
 }
@@ -512,7 +512,7 @@ void RFReadBuffer(uint8_t reg, uint8_t* dest, uint8_t len){
         delay_ms(2);
         *dest++ = SPI_receiveData(SPI_PORT);
     }
-    delay_ms(10);
+    delay_ms(15);
     GPIO_setOutputHighOnPin(CS_PORT, CS_PIN);
 }
 
@@ -596,6 +596,7 @@ void PORT2_IRQHandler(void){
 			}
 			break;
 		case RF_TX_RUNNING:
+			printf ("irq flags : %d", irq_flags);
 			if (irq_flags & TX_DONE){
 				settings.State = RF_IDLE;
 				if ( (RadioEvents != 0) && (RadioEvents->TxDone != 0)){

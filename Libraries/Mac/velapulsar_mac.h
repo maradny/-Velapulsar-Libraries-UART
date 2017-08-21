@@ -74,7 +74,7 @@ typedef struct{
     uint8_t     ID;
     uint32_t    longAddr;
     uint8_t     short_Add;
-    uint16_t    timeSlot;
+    uint16_t    reportAfter;
     uint16_t    password;
     uint16_t    lastPktID;
     bool        connected;

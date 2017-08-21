@@ -75,8 +75,8 @@ int main(void)
     PktReceived = ReceivedPkt;
 
     printf("alarm starting\n");
-
-    Set_Alarm (10000, &Alarm_Went_Off);
+    printf ("Time now: %d\n",getTotal_ms());
+    //Set_Alarm (10000, &Alarm_Went_Off);
 
     while(1){
     	while (!cmdAvailable){
@@ -96,6 +96,7 @@ int _system_pre_init( void )
 }
 
 void Alarm_Went_Off(void){
+	printf ("Time now: %d\n",getTotal_ms());
 	printf("ALAAAAAAAAAAARM!!!!!\n");
 }
 

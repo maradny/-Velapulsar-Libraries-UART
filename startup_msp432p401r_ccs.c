@@ -61,6 +61,7 @@ extern void PORT2_IRQHandler(void);
 extern void RTC_AlarmHandler(void);
 extern void UARTA0_Handler(void);
 extern void ADC14_IRQHandler(void);
+extern void T32_INT1_IRQHandler(void);
 
 /* To be added by user */
 
@@ -114,7 +115,7 @@ void (* const interruptVectors[])(void) =
     defaultISR,                             /* EUSCIB2 ISR               */
     defaultISR,                             /* EUSCIB3 ISR               */
 	ADC14_IRQHandler,                       /* ADC14 ISR                 */
-    defaultISR,                             /* T32_INT1 ISR              */
+	T32_INT1_IRQHandler,                    /* T32_INT1 ISR              */
     defaultISR,                             /* T32_INT2 ISR              */
     defaultISR,                             /* T32_INTC ISR              */
     defaultISR,                             /* AES ISR                   */

@@ -74,7 +74,7 @@ int main(void)
     PktReceived = ReceivedPkt;
 
 
-    CommsStartContinuousRx();
+    //CommsStartContinuousRx();
     while(1){
     	while (!cmdAvailable){
 
