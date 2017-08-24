@@ -74,16 +74,16 @@ VelaMacStatus VelaNwkInitialization(uint8_t nodeType, uint16_t dutyCycle, nwkCal
 }
 
 VelaMacStatus VelaNwkReport (uint8_t appPayload[], int size){
-	nwkDataPkt pkt;
-	pkt.data.myShovel = MY_SHOVEL;
-	pkt.data.myType = MY_TYPE;
-	pkt.data.myUnit = MY_UNIT;
-
-	memcpy(&pkt.data.appPayload, appPayload, size);
+//	nwkDataPkt pkt;
+//	pkt.data.myShovel = MY_SHOVEL;
+//	pkt.data.myType = MY_TYPE;
+//	pkt.data.myUnit = MY_UNIT;
+//
+//	memcpy(&pkt.data.appPayload, appPayload, size);
 
 	printf("NWK sending: ");
-	debug_print_pkt(pkt.pkt , sizeof(pkt.pkt) - (12 -size));
-	return VelaMacReport(pkt.pkt, sizeof(pkt.pkt) - (12 -size));
+	debug_print_pkt(appPayload , size);
+	return VelaMacReport(appPayload , size);
 }
 /*****************************************************************************
  *                            LOCAL FUNCTIONS
@@ -120,10 +120,13 @@ static void OnMacReportSent (VelaMacStatus status){
 
 static void OnMacCycleChange (timeCycles newCycle){
     printf("NWK phase change\n");
+    printf("Time now is: %d\n", getTotal_ms());
     nwkEvents->NwkReportingCycle(VELAMAC_SUCCESSFUL);
 }
 
 static void OnMacFrameStart (void){
+	printf("My Time is NOW!!!\n");
+	printf("Time now is: %d\n", getTotal_ms());
 	nwkEvents->NwkFrameStart();
 }
 

@@ -596,7 +596,7 @@ void PORT2_IRQHandler(void){
 			}
 			break;
 		case RF_TX_RUNNING:
-			printf ("irq flags : %d", irq_flags);
+			//printf ("irq flags : %d", irq_flags);
 			if (irq_flags & TX_DONE){
 				settings.State = RF_IDLE;
 				if ( (RadioEvents != 0) && (RadioEvents->TxDone != 0)){

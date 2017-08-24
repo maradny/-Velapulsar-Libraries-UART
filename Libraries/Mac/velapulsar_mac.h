@@ -56,7 +56,8 @@ typedef enum{
 
 typedef enum{
     CONNECTION_PHASE,
-    REPORTING_PHASE
+    REPORTING_PHASE,
+	INITIALIZING_PHASE
 }timeCycles;
 
 typedef enum{
@@ -159,6 +160,7 @@ typedef struct{
     messageType msgType;
     uint8_t     short_Add;
     uint16_t    time;
+    //uint8_t		frameTime;
     uint16_t    pktID;
 }ack;
 

@@ -112,6 +112,10 @@ void initPorts (void){
 //
 	MAP_GPIO_setAsOutputPin(GPIO_PORT_P4, GPIO_PIN2);
 	GPIO_setOutputLowOnPin(GPIO_PORT_P4, GPIO_PIN2);
+
+
+	MAP_GPIO_setAsOutputPin(GPIO_PORT_P4, GPIO_PIN5);//set claw pin as output for testing
+	GPIO_setOutputLowOnPin(GPIO_PORT_P4, GPIO_PIN5);
 }
 
 void initClocks (void){

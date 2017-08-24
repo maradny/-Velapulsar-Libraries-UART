@@ -105,5 +105,5 @@ void ReceivedPkt(uint8_t linkID, appDataPkt pkt, int16_t rssi){
 	char buff[4];
 	sprintf(buff, "%d", rssi); // convert values to ascii string
 	printf("rssi: %s\n",buff);
-	printf("received this: %x, %x, %x, %x\n", pkt.data.sensorData.battery, pkt.data.sensorData.claw, pkt.data.sensorData.light, pkt.data.sensorData.magnetic);
+	//printf("received this: %x, %x, %x, %x\n", pkt.data.sensorData.battery, pkt.data.sensorData.claw, pkt.data.sensorData.light, pkt.data.sensorData.magnetic);
 }

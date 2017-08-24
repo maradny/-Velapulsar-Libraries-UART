@@ -47,17 +47,25 @@ static RadioEvents_t radioEvents;
 static macCallbacks* macEvents;
 
 static volatile VelaMacStates currentState;
-static volatile bool connected;
+static volatile timeCycles currentPhase;
+
+static volatile mode_changePkt modePkt;
+static volatile request_ApprovalPkt appPkt;
+static volatile ackPkt ackPktRx;
+static volatile join_requestPkt joinReqPkt;
+static volatile reportPkt repPkt;
 
 #ifdef COORDINATOR
     static volatile uint8_t numOfConnectedNodes = 0;
     static volatile NodeDesc connectedNodes[MAX_NUM_OF_NODES];
     static volatile uint16_t dutyCycle=60;
-    static volatile int reportingTime,connectingTime,frameSize;
-    static volatile timeCycles currentPhase;
+    static volatile int reportingTime,connectingTime;
+    static volatile uint8_t frameSize;
     static volatile uint32_t currentPhaseStartingTime;
 #else
     static volatile NodeDesc myNode;
+    static volatile bool connectionPhaseStarted;
+    static volatile bool reportingPhaseStarted;
 #endif
 
 
@@ -93,6 +101,9 @@ VelaMacStatus VelaMacInit (uint8_t nodeType, uint16_t _dutyCycle, macCallbacks* 
 	MacCalcDutyCycles();
 	currentPhase = REPORTING_PHASE;
 	ChangePhase();
+#else
+	currentPhase = INITIALIZING_PHASE;
+	NodeCycle();
 #endif
 
 	RFRxWithDefaultContinuous();
@@ -145,7 +156,7 @@ void MacCalcDutyCycles(){
 //    reportingTime = dutyCycle - connectingTime;
     connectingTime = dutyCycle/2;
     reportingTime = dutyCycle/2;
-    frameSize = reportingTime/numOfConnectedNodes;
+    frameSize = reportingTime/(numOfConnectedNodes+1);
     printf ("connectingTime: %d\n", connectingTime);
     printf ("reportingTime: %d\n", reportingTime);
     printf ("frameSize: %d\n", frameSize);
@@ -154,14 +165,19 @@ void MacCalcDutyCycles(){
 uint16_t CalcNodeReportAfter (int nodeIndex){
 	int timeSlot = frameSize * nodeIndex;
 
+	printf("timeslot: %d\n", timeSlot);
+
 	switch (currentPhase){
 	case REPORTING_PHASE:
-		return ((getTotal_ms() - currentPhaseStartingTime) + connectingTime + timeSlot); // report in next reporting phase
+		printf("Time remaining in this phase: %d", (reportingTime*1000) - (getTotal_ms() - currentPhaseStartingTime));
+		UARTSend((reportingTime*1000) - (getTotal_ms() - currentPhaseStartingTime), 32);
+		return (((reportingTime*1000) - (getTotal_ms() - currentPhaseStartingTime)) + (connectingTime*1000) + (timeSlot*1000)); // report in next reporting phase
 		break;
 
 	case CONNECTION_PHASE:
 		if (reportingTime > timeSlot){
-			return (timeSlot + connectingTime - (getTotal_ms() - currentPhaseStartingTime));
+			printf("Time remaining in this phase: %d", (connectingTime*1000) - (getTotal_ms() - currentPhaseStartingTime));
+			return ((timeSlot*1000) + (connectingTime*1000) - (getTotal_ms() - currentPhaseStartingTime));
 		}
 		break;
 
@@ -179,6 +195,7 @@ void SendAck(reportPkt repPkt, int16_t rssi, int8_t snr){
     }
 
     ackPkt.data.time = CalcNodeReportAfter (index);
+    //ackPkt.data.frameTime = frameSize;
     ackPkt.data.short_Add = repPkt.data.short_Add;
     ackPkt.data.pktID = repPkt.data.pktID;
     ackPkt.data.msgType = ACKNOWLEDGE;
@@ -206,7 +223,21 @@ void ProcessJoinReq (join_requestPkt joinReqPkt){
    connectedNodes[numOfConnectedNodes].longAddr= joinReqPkt.data.myAddr;
    connectedNodes[numOfConnectedNodes].ID= numOfConnectedNodes;
    connectedNodes[numOfConnectedNodes].lastPktID= joinReqPkt.data.pktID;
-   connectedNodes[numOfConnectedNodes].short_Add = 123;  //change later
+   srand((unsigned int)time(getTotal_ms()));
+   uint8_t shortAdd =0;
+   bool found = true;
+   int i =0;
+   while (found){
+	   shortAdd = rand() % (0xFF);
+	   found = false;
+	   for (i = 0 ; i<numOfConnectedNodes ; i++){
+		   if (shortAdd == connectedNodes[i].short_Add){
+			   found = true;
+			   break;
+		   }
+	   }
+   }
+   connectedNodes[numOfConnectedNodes].short_Add = shortAdd;  //change later
    //create random password
    srand((unsigned int)time(0));
    int r =rand() % 65535;
@@ -288,11 +319,41 @@ void SendPhaseChange (void){
 }
 
 #else
+
+void NodeCycle(){
+	switch (currentPhase){
+	case INITIALIZING_PHASE:
+		if (connectionPhaseStarted){
+			if (myNode.connected == false){
+				SendJoinReq(modePkt.data.time);
+			}
+			else{
+				//sleep until next reporting cycle
+			}
+		}
+		else{
+
+		}
+		break;
+	case REPORTING_PHASE:
+//		currentPhase = CONNECTION_PHASE;
+//		printf ("Time now: %d\n",getTotal_ms());
+//		Set_Alarm (connectingTime * 1000, &ChangePhase);
+		break;
+
+	case CONNECTION_PHASE:
+//		currentPhase = REPORTING_PHASE;
+//		printf ("Time now: %d\n",getTotal_ms());
+//		Set_Alarm (reportingTime * 1000, &ChangePhase);
+		break;
+	}
+}
+
 void SendJoinReq (uint16_t phaseTime){
     //make the join packet and send it to the coordinator
     join_requestPkt reqPkt;
     reqPkt.data.msgType = JOIN_REQUEST;
-    reqPkt.data.myAddr = myNode.longAddr;
+    reqPkt.data.myAddr = MY_ADDRESS;
     reqPkt.data.toAddr = BROADCAST_ADDRESS;
     reqPkt.data.pktID = myNode.lastPktID;
 
@@ -310,7 +371,7 @@ void SleepFor(uint16_t time){
 
 static void WaitForRand (int start, int end){
 	srand((unsigned int)time(0));
-	int r =rand() % (end);
+	int r =rand() % (end*1000);
 	printf("end was: %d\n", end*1000);
 	printf("random time to wait was: %d\n", r);
 	printf ("Time now: %d\n",getTotal_ms());
@@ -322,7 +383,8 @@ static void WaitForRand (int start, int end){
 
 static void OnRadioTxDone (bool ack){
 #ifdef NODE
-    RFRxWithDefault();
+    //RFRxWithDefault();
+	RFRxWithDefaultContinuous();
 #else
     RFRxWithDefaultContinuous();
 #endif
@@ -334,11 +396,6 @@ static void OnRadioRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t
 	UARTSendRssi(payload, size, rssi);
 #else
     messageType receivedMsgType = *payload;
-    mode_changePkt modePkt;
-    request_ApprovalPkt appPkt;
-    ackPkt ackPkt;
-    join_requestPkt joinReqPkt;
-    reportPkt repPkt;
     bool found = false;
     int i = 0;
     debug_print_pkt(payload, size);
@@ -348,22 +405,21 @@ static void OnRadioRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t
     	printf("received mode change \n");
         memcpy(&modePkt.pkt, payload, size);
         if (modePkt.data.mode == CONNECTION_PHASE){
-            if (myNode.connected == false){
-                SendJoinReq(modePkt.data.time);
-            }
-            else{
-                //sleep until next reporting cycle
-            }
+        	connectionPhaseStarted = true;
+        	reportingPhaseStarted = false;
         }
         else{
-            //wait for my frame and start reporting
+        	connectionPhaseStarted = false;
+        	reportingPhaseStarted = true;
         }
-
+        //currentPhase = modePkt.data.mode;
+        Set_Alarm (1, &NodeCycle); // cycle in a second
         macEvents->MacReportingCycle(modePkt.data.mode);
 	    break;
 
     case REQUEST_APPROVAL:
         // I am a NODE !
+    	printf("got approval!!! YAAAAAAY \n");
         // Get the connection Information and wait for my reporting time
         memcpy(&appPkt.pkt, payload, size);
         //////
@@ -374,10 +430,12 @@ static void OnRadioRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t
             myNode.password = appPkt.data.password;
             myNode.short_Add = appPkt.data.short_Add;
             myNode.reportAfter = appPkt.data.time;
-
             //inform the nwk layer
             macEvents->MacNetworkJoined(VELAMAC_SUCCESSFUL);
 
+            printf("I need to report in: %d\n", myNode.reportAfter);
+            printf("Time now is: %d\n", getTotal_ms());
+            Set_Alarm (myNode.reportAfter, macEvents->MacFrameStart); // cycle in a second
             //sleep until timeslot
             //SleepFor(myNode.reportAfter);
             //macEvents->MacReportingCycle(REPORTING_PHASE);
@@ -390,23 +448,29 @@ static void OnRadioRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t
 
     case ACKNOWLEDGE:
         //I am a Node I sent a message and just received the acknowledgment
-        memcpy (&ackPkt.pkt, payload, size);
+        memcpy (&ackPktRx.pkt, payload, size);
 
-        // 1- increment the packet ID
-        if (myNode.lastPktID < 65535)
-            myNode.lastPktID++;
-        else
-            myNode.lastPktID = 0;
+        if (myNode.short_Add == ackPktRx.data.short_Add){
+        	// 1- increment the packet ID
+			if (myNode.lastPktID < 65535)
+				myNode.lastPktID++;
+			else
+				myNode.lastPktID = 0;
 
-        // 2- extract next report time
-        myNode.reportAfter = ackPkt.data.time;
+			// 2- extract next report time
+			myNode.reportAfter = ackPktRx.data.time;
 
-        // finally- inform upper layer that report was sent successfully
-        macEvents->MacReportSent(VELAMAC_SUCCESSFUL);
+			// finally- inform upper layer that report was sent successfully
+			macEvents->MacReportSent(VELAMAC_SUCCESSFUL);
+
+			printf("I need to report again in: %d\n", myNode.reportAfter);
+			printf("Time now is: %d\n", getTotal_ms());
+			Set_Alarm (myNode.reportAfter, macEvents->MacFrameStart); // cycle in a second
+        }
 
         // sleep until report time is close by
-        SleepFor(myNode.reportAfter);
-        macEvents->MacReportingCycle(REPORTING_PHASE);
+        //SleepFor(myNode.reportAfter);
+        //macEvents->MacReportingCycle(REPORTING_PHASE);
         // 4-
         break;
     case NOT_ACKNOWLEDGED:
@@ -432,7 +496,7 @@ static void OnRadioRxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t
         if (!found){
             if (numOfConnectedNodes < MAX_NUM_OF_NODES){
                 ProcessJoinReq (joinReqPkt);
-                delay_ms(700); //remove later
+                //delay_ms(700); //remove later
                 SendJoinResult (VELAMAC_SUCCESSFUL, numOfConnectedNodes-1, appPkt);
             }
             else{

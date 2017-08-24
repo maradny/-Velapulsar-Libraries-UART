@@ -1,37 +1,37 @@
 ******************************************************************************
                   TI ARM Linker PC v16.9.1                     
 ******************************************************************************
->> Linked Wed Aug 16 14:04:17 2017
+>> Linked Thu Aug 24 12:01:00 2017
 
 OUTPUT FILE NAME:   <Velapulsar.out>
-ENTRY POINT SYMBOL: "_c_int00"  address: 00004d35
+ENTRY POINT SYMBOL: "_c_int00"  address: 00005185
 
 
 MEMORY CONFIGURATION
 
          name            origin    length      used     unused   attr    fill
 ----------------------  --------  ---------  --------  --------  ----  --------
-  MAIN                  00000000   00040000  0000575c  0003a8a4  R  X
+  MAIN                  00000000   00020000  00005bc8  0001a438  R  X
   INFO                  00200000   00004000  00000000  00004000  R  X
-  SRAM_CODE             01000000   00010000  000010ed  0000ef13  RW X
-  SRAM_DATA             20000000   00010000  000010ed  0000ef13  RW  
+  SRAM_CODE             01000000   00008000  00001123  00006edd  RW X
+  SRAM_DATA             20000000   00008000  00001123  00006edd  RW  
 
 
 SEGMENT ALLOCATION MAP
 
 run origin  load origin   length   init length attrs members
 ----------  ----------- ---------- ----------- ----- -------
-00000000    00000000    00005760   00005760    r-x
+00000000    00000000    00005bc8   00005bc8    r-x
   00000000    00000000    00000140   00000140    r-- .intvecs
-  00000140    00000140    000053d0   000053d0    r-x .text
-  00005510    00005510    00000184   00000184    r-- .const
-  00005698    00005698    000000c8   000000c8    r-- .cinit
-20000000    20000000    00000eed   00000000    rw-
+  00000140    00000140    00005834   00005834    r-x .text
+  00005974    00005974    00000184   00000184    r-- .const
+  00005af8    00005af8    000000d0   000000d0    r-- .cinit
+20000000    20000000    00000f25   00000000    rw-
   20000000    20000000    00000800   00000000    rw- .sysmem
-  20000800    20000800    000004a4   00000000    rw- .bss
-  20000ca4    20000ca4    00000249   00000000    rw- .data
-2000fe00    2000fe00    00000200   00000000    rw-
-  2000fe00    2000fe00    00000200   00000000    rw- .stack
+  20000800    20000800    000004ce   00000000    rw- .bss
+  20000cd0    20000cd0    00000255   00000000    rw- .data
+20007e00    20007e00    00000200   00000000    rw-
+  20007e00    20007e00    00000200   00000000    rw- .stack
 
 
 SECTION ALLOCATION MAP
@@ -44,131 +44,132 @@ section   page    origin      length       input sections
 
 .binit     0    00000000    00000000     
 
-.text      0    00000140    000053d0     
+.text      0    00000140    00005834     
                   00000140    0000113e     rtsv7M4_T_le_v4SPD16_eabi.lib : _printfi.obj (.text)
                   0000127e    00000002                                   : mpu_init.obj (.text)
                   00001280    00000a90     rf95.obj (.text)
                   00001d10    000003d0     rtsv7M4_T_le_v4SPD16_eabi.lib : memory.obj (.text)
-                  000020e0    00000324                                   : trgdrv.obj (.text)
-                  00002404    00000318     velapulsar.obj (.text)
-                  0000271c    0000030c     rtsv7M4_T_le_v4SPD16_eabi.lib : lowlev.obj (.text)
-                  00002a28    0000021c     velapulsar_mac.obj (.text)
-                  00002c44    000001f4     rtsv7M4_T_le_v4SPD16_eabi.lib : ull_div_t2.obj (.text)
-                  00002e38    000001ec     UART_interface.obj (.text)
-                  00003024    000001e4     system_msp432p401r.obj (.text)
-                  00003208    000001c4     rtsv7M4_T_le_v4SPD16_eabi.lib : fopen.obj (.text)
-                  000033cc    000001c0     sensor_interface.obj (.text)
-                  0000358c    000001b6     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_add_t2.obj (.text)
-                  00003742    00000002                                   : startup.obj (.text)
-                  00003744    000001a0     comms_interface.obj (.text)
-                  000038e4    00000180     velapulsar_nwk.obj (.text)
-                  00003a64    00000136     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_div_t2.obj (.text)
-                  00003b9a    00000002     --HOLE-- [fill = 0]
-                  00003b9c    00000134                                   : fputs.obj (.text)
-                  00003cd0    000000fc                                   : fd_mul_t2.obj (.text)
-                  00003dcc    000000fc                                   : s_scalbn.obj (.text)
-                  00003ec8    000000f8                                   : s_ceil.obj (.text)
-                  00003fc0    000000f8                                   : s_floor.obj (.text)
-                  000040b8    000000dc                                   : setvbuf.obj (.text)
-                  00004194    000000c8                                   : fflush.obj (.text)
-                  0000425c    000000ac     delay.obj (.text)
-                  00004308    000000ac     rtsv7M4_T_le_v4SPD16_eabi.lib : _io_perm.obj (.text)
-                  000043b4    0000009c     msp432p4xx_driverlib.lib : cs.o (.text:CS_startHFXTWithTimeout)
-                  00004450    0000009c                              : cs.o (.text:CS_startLFXTWithTimeout)
-                  000044ec    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.obj (.text)
-                  00004588    00000098                                   : fclose.obj (.text)
-                  00004620    00000098                                   : fputc.obj (.text)
-                  000046b8    00000088     msp432p4xx_driverlib.lib : spi.o (.text:SPI_initMaster)
-                  00004740    00000086     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_cmp_t2.obj (.text:__aeabi_cdcmple)
-                  000047c6    00000086                                   : fd_cmp_t2.obj (.text:__aeabi_cdrcmple)
-                  0000484c    0000007a                                   : memset_t2.obj (.text)
-                  000048c6    00000002     --HOLE-- [fill = 0]
-                  000048c8    00000070     msp432p4xx_driverlib.lib : cs.o (.text:_CSGetHFXTFrequency)
-                  00004938    00000070     rtsv7M4_T_le_v4SPD16_eabi.lib : autoinit.obj (.text)
-                  000049a8    00000070                                   : printf.obj (.text)
-                  00004a18    00000068                                   : copy_decompress_lzss.obj (.text:decompress:lzss)
-                  00004a80    00000068                                   : trgmsg.obj (.text)
-                  00004ae8    00000064     msp432p4xx_driverlib.lib : interrupt.o (.text:Interrupt_enableInterrupt)
-                  00004b4c    00000064                              : rtc_c.o (.text:RTC_C_getCalendarTime)
-                  00004bb0    00000064     rtsv7M4_T_le_v4SPD16_eabi.lib : fseek.obj (.text)
-                  00004c14    00000064                                   : s_frexp.obj (.text)
-                  00004c78    00000060                                   : sprintf.obj (.text)
-                  00004cd8    0000005c     msp432p4xx_driverlib.lib : rtc_c.o (.text:RTC_C_initCalendar)
-                  00004d34    00000054     rtsv7M4_T_le_v4SPD16_eabi.lib : boot.obj (.text)
-                  00004d88    00000054                                   : exit.obj (.text)
-                  00004ddc    00000054                                   : ltoa.obj (.text)
-                  00004e30    00000050     msp432p4xx_driverlib.lib : rtc_c.o (.text:RTC_C_clearInterruptFlag)
-                  00004e80    0000004c     rtsv7M4_T_le_v4SPD16_eabi.lib : atoi.obj (.text)
-                  00004ecc    0000004c                                   : cpy_tbl.obj (.text)
-                  00004f18    00000048     AdapterNode_main.obj (.text)
-                  00004f60    00000048     msp432p4xx_driverlib.lib : gpio.o (.text:GPIO_setAsPeripheralModuleFunctionInputPin)
-                  00004fa8    00000048                              : rtc_c.o (.text:RTC_C_getEnabledInterruptStatus)
-                  00004ff0    00000048     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_toi_t2.obj (.text)
-                  00005038    00000044                                   : fd_tou_t2.obj (.text)
-                  0000507c    00000040     msp432p4xx_driverlib.lib : rtc_c.o (.text:RTC_C_enableInterrupt)
-                  000050bc    00000036     rtsv7M4_T_le_v4SPD16_eabi.lib : strncpy.obj (.text)
-                  000050f2    00000002     --HOLE-- [fill = 0]
-                  000050f4    00000034     startup_msp432p401r_ccs.obj (.text)
-                  00005128    00000030     msp432p4xx_driverlib.lib : gpio.o (.text:GPIO_setAsInputPinWithPullDownResistor)
-                  00005158    00000030                              : spi.o (.text:is_A_Module)
-                  00005188    0000002e     rtsv7M4_T_le_v4SPD16_eabi.lib : i_tofd_t2.obj (.text)
-                  000051b6    00000002     --HOLE-- [fill = 0]
-                  000051b8    0000002c     msp432p4xx_driverlib.lib : rtc_c.o (.text:RTC_C_getInterruptStatus)
-                  000051e4    00000028     spi_interface.obj (.text)
-                  0000520c    00000024     msp432p4xx_driverlib.lib : cs.o (.text:CS_setDCOCenteredFrequency)
-                  00005230    00000024                              : gpio.o (.text:GPIO_setAsOutputPin)
-                  00005254    00000024                              : rtc_c.o (.text:RTC_C_setCalendarAlarm)
-                  00005278    00000024                              : rtc_c.o (.text:RTC_C_startClock)
-                  0000529c    00000020                              : gpio.o (.text:GPIO_interruptEdgeSelect)
-                  000052bc    00000020                              : spi.o (.text:SPI_transmitData)
-                  000052dc    00000020     rtsv7M4_T_le_v4SPD16_eabi.lib : memchr.obj (.text)
-                  000052fc    00000020                                   : u_tofd_t2.obj (.text)
-                  0000531c    0000001c                                   : memccpy.obj (.text)
-                  00005338    0000001a     msp432p4xx_driverlib.lib : spi.o (.text:SPI_enableModule)
-                  00005352    0000001a                              : spi.o (.text:SPI_receiveData)
-                  0000536c    00000018                              : gpio.o (.text:GPIO_getInputPinValue)
-                  00005384    00000018                              : gpio.o (.text:GPIO_setOutputLowOnPin)
-                  0000539c    00000018     rtsv7M4_T_le_v4SPD16_eabi.lib : args_main.obj (.text)
-                  000053b4    00000018                                   : strcmp.obj (.text)
-                  000053cc    00000016                                   : strchr.obj (.text)
-                  000053e2    00000002     --HOLE-- [fill = 0]
-                  000053e4    00000014     msp432p4xx_driverlib.lib : cs.o (.text:CS_setExternalClockSourceFrequency)
-                  000053f8    00000014                              : gpio.o (.text:GPIO_setOutputHighOnPin)
-                  0000540c    00000014                              : gpio.o (.text:GPIO_toggleOutputOnPin)
-                  00005420    00000014     rtsv7M4_T_le_v4SPD16_eabi.lib : _lock.obj (.text)
-                  00005434    00000014                                   : s_copysign.obj (.text)
-                  00005448    00000014                                   : strcpy.obj (.text)
-                  0000545c    00000014                                   : strlen.obj (.text)
-                  00005470    00000010     msp432p4xx_driverlib.lib : interrupt.o (.text:Interrupt_enableMaster)
-                  00005480    00000010                              : sysctl.o (.text:SysCtl_disableNMISource)
-                  00005490    00000010                              : sysctl.o (.text:SysCtl_enableNMISource)
-                  000054a0    0000000e     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_none.obj (.text:decompress:none)
-                  000054ae    0000000c     msp432p4xx_driverlib.lib : cpu.o (.text:CPU_cpsie)
-                  000054ba    0000000c                              : spi.o (.text:EUSCI_A_SPI_enable)
-                  000054c6    0000000c                              : spi.o (.text:EUSCI_B_SPI_enable)
-                  000054d2    00000002     --HOLE-- [fill = 0]
-                  000054d4    0000000c                              : sysctl.o (.text:SysCtl_getNMISourceStatus)
-                  000054e0    0000000c     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_zero_init.obj (.text:decompress:ZI)
-                  000054ec    00000006     msp432p4xx_driverlib.lib : cs.o (.text:CS_startHFXT)
-                  000054f2    00000006                              : cs.o (.text:CS_startLFXT)
-                  000054f8    00000006                              : spi.o (.text:EUSCI_A_SPI_receiveData)
-                  000054fe    00000006                              : spi.o (.text:EUSCI_B_SPI_receiveData)
-                  00005504    00000004                              : spi.o (.text:EUSCI_A_SPI_transmitData)
-                  00005508    00000004                              : spi.o (.text:EUSCI_B_SPI_transmitData)
-                  0000550c    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.obj (.text)
+                  000020e0    000003b8     velapulsar_mac.obj (.text)
+                  00002498    00000344     velapulsar.obj (.text)
+                  000027dc    00000324     rtsv7M4_T_le_v4SPD16_eabi.lib : trgdrv.obj (.text)
+                  00002b00    0000030c                                   : lowlev.obj (.text)
+                  00002e0c    00000270     comms_interface.obj (.text)
+                  0000307c    0000025c     velapulsar_nwk.obj (.text)
+                  000032d8    0000022c     UART_interface.obj (.text)
+                  00003504    000001f4     rtsv7M4_T_le_v4SPD16_eabi.lib : ull_div_t2.obj (.text)
+                  000036f8    000001e4     system_msp432p401r.obj (.text)
+                  000038dc    000001c4     rtsv7M4_T_le_v4SPD16_eabi.lib : fopen.obj (.text)
+                  00003aa0    000001b6                                   : fd_add_t2.obj (.text)
+                  00003c56    00000002                                   : startup.obj (.text)
+                  00003c58    00000184     delay.obj (.text)
+                  00003ddc    00000184     sensor_interface.obj (.text)
+                  00003f60    00000136     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_div_t2.obj (.text)
+                  00004096    00000002     --HOLE-- [fill = 0]
+                  00004098    00000134                                   : fputs.obj (.text)
+                  000041cc    000000fc                                   : fd_mul_t2.obj (.text)
+                  000042c8    000000fc                                   : s_scalbn.obj (.text)
+                  000043c4    000000f8                                   : s_ceil.obj (.text)
+                  000044bc    000000f8                                   : s_floor.obj (.text)
+                  000045b4    000000dc                                   : setvbuf.obj (.text)
+                  00004690    000000c8                                   : fflush.obj (.text)
+                  00004758    000000ac                                   : _io_perm.obj (.text)
+                  00004804    0000009c     msp432p4xx_driverlib.lib : cs.o (.text:CS_startHFXTWithTimeout)
+                  000048a0    0000009c                              : cs.o (.text:CS_startLFXTWithTimeout)
+                  0000493c    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.obj (.text)
+                  000049d8    00000098                                   : fclose.obj (.text)
+                  00004a70    00000098                                   : fputc.obj (.text)
+                  00004b08    00000088     msp432p4xx_driverlib.lib : spi.o (.text:SPI_initMaster)
+                  00004b90    00000086     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_cmp_t2.obj (.text:__aeabi_cdcmple)
+                  00004c16    00000086                                   : fd_cmp_t2.obj (.text:__aeabi_cdrcmple)
+                  00004c9c    0000007a                                   : memset_t2.obj (.text)
+                  00004d16    00000002     --HOLE-- [fill = 0]
+                  00004d18    00000070     msp432p4xx_driverlib.lib : cs.o (.text:_CSGetHFXTFrequency)
+                  00004d88    00000070     rtsv7M4_T_le_v4SPD16_eabi.lib : autoinit.obj (.text)
+                  00004df8    00000070                                   : printf.obj (.text)
+                  00004e68    00000068                                   : copy_decompress_lzss.obj (.text:decompress:lzss)
+                  00004ed0    00000068                                   : trgmsg.obj (.text)
+                  00004f38    00000064     msp432p4xx_driverlib.lib : interrupt.o (.text:Interrupt_enableInterrupt)
+                  00004f9c    00000064                              : rtc_c.o (.text:RTC_C_getCalendarTime)
+                  00005000    00000064     rtsv7M4_T_le_v4SPD16_eabi.lib : fseek.obj (.text)
+                  00005064    00000064                                   : s_frexp.obj (.text)
+                  000050c8    00000060                                   : sprintf.obj (.text)
+                  00005128    0000005c     msp432p4xx_driverlib.lib : rtc_c.o (.text:RTC_C_initCalendar)
+                  00005184    00000054     rtsv7M4_T_le_v4SPD16_eabi.lib : boot.obj (.text)
+                  000051d8    00000054                                   : exit.obj (.text)
+                  0000522c    00000054                                   : ltoa.obj (.text)
+                  00005280    00000050     msp432p4xx_driverlib.lib : rtc_c.o (.text:RTC_C_clearInterruptFlag)
+                  000052d0    0000004c     rtsv7M4_T_le_v4SPD16_eabi.lib : atoi.obj (.text)
+                  0000531c    0000004c                                   : cpy_tbl.obj (.text)
+                  00005368    0000004c                                   : rand.obj (.text)
+                  000053b4    00000048     msp432p4xx_driverlib.lib : gpio.o (.text:GPIO_setAsPeripheralModuleFunctionInputPin)
+                  000053fc    00000048                              : rtc_c.o (.text:RTC_C_getEnabledInterruptStatus)
+                  00005444    00000048     rtsv7M4_T_le_v4SPD16_eabi.lib : fd_toi_t2.obj (.text)
+                  0000548c    00000044                                   : fd_tou_t2.obj (.text)
+                  000054d0    00000040     msp432p4xx_driverlib.lib : rtc_c.o (.text:RTC_C_enableInterrupt)
+                  00005510    00000036     rtsv7M4_T_le_v4SPD16_eabi.lib : strncpy.obj (.text)
+                  00005546    00000002     --HOLE-- [fill = 0]
+                  00005548    00000034     AdapterNode_main.obj (.text)
+                  0000557c    00000034     startup_msp432p401r_ccs.obj (.text)
+                  000055b0    00000030     msp432p4xx_driverlib.lib : spi.o (.text:is_A_Module)
+                  000055e0    0000002e     rtsv7M4_T_le_v4SPD16_eabi.lib : i_tofd_t2.obj (.text)
+                  0000560e    00000002     --HOLE-- [fill = 0]
+                  00005610    0000002c     msp432p4xx_driverlib.lib : rtc_c.o (.text:RTC_C_getInterruptStatus)
+                  0000563c    00000028     spi_interface.obj (.text)
+                  00005664    00000024     msp432p4xx_driverlib.lib : cs.o (.text:CS_setDCOCenteredFrequency)
+                  00005688    00000024                              : gpio.o (.text:GPIO_setAsOutputPin)
+                  000056ac    00000024                              : rtc_c.o (.text:RTC_C_setCalendarAlarm)
+                  000056d0    00000024                              : rtc_c.o (.text:RTC_C_startClock)
+                  000056f4    00000020                              : gpio.o (.text:GPIO_interruptEdgeSelect)
+                  00005714    00000020                              : spi.o (.text:SPI_transmitData)
+                  00005734    00000020     rtsv7M4_T_le_v4SPD16_eabi.lib : memchr.obj (.text)
+                  00005754    00000020                                   : u_tofd_t2.obj (.text)
+                  00005774    0000001c                                   : memccpy.obj (.text)
+                  00005790    0000001a     msp432p4xx_driverlib.lib : spi.o (.text:SPI_enableModule)
+                  000057aa    0000001a                              : spi.o (.text:SPI_receiveData)
+                  000057c4    00000018                              : gpio.o (.text:GPIO_getInputPinValue)
+                  000057dc    00000018                              : gpio.o (.text:GPIO_setOutputLowOnPin)
+                  000057f4    00000018     rtsv7M4_T_le_v4SPD16_eabi.lib : args_main.obj (.text)
+                  0000580c    00000018                                   : strcmp.obj (.text)
+                  00005824    00000016                                   : strchr.obj (.text)
+                  0000583a    00000002     --HOLE-- [fill = 0]
+                  0000583c    00000014     msp432p4xx_driverlib.lib : cs.o (.text:CS_setExternalClockSourceFrequency)
+                  00005850    00000014                              : gpio.o (.text:GPIO_setOutputHighOnPin)
+                  00005864    00000014                              : gpio.o (.text:GPIO_toggleOutputOnPin)
+                  00005878    00000014     rtsv7M4_T_le_v4SPD16_eabi.lib : _lock.obj (.text)
+                  0000588c    00000014                                   : s_copysign.obj (.text)
+                  000058a0    00000014                                   : strcpy.obj (.text)
+                  000058b4    00000014                                   : strlen.obj (.text)
+                  000058c8    00000010     msp432p4xx_driverlib.lib : interrupt.o (.text:Interrupt_enableMaster)
+                  000058d8    00000010                              : sysctl.o (.text:SysCtl_disableNMISource)
+                  000058e8    00000010                              : sysctl.o (.text:SysCtl_enableNMISource)
+                  000058f8    0000000e     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_none.obj (.text:decompress:none)
+                  00005906    0000000e                                   : time.obj (.text)
+                  00005914    0000000c     msp432p4xx_driverlib.lib : cpu.o (.text:CPU_cpsie)
+                  00005920    0000000c                              : spi.o (.text:EUSCI_A_SPI_enable)
+                  0000592c    0000000c                              : spi.o (.text:EUSCI_B_SPI_enable)
+                  00005938    0000000c                              : sysctl.o (.text:SysCtl_getNMISourceStatus)
+                  00005944    0000000c     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_zero_init.obj (.text:decompress:ZI)
+                  00005950    00000006     msp432p4xx_driverlib.lib : cs.o (.text:CS_startHFXT)
+                  00005956    00000006                              : cs.o (.text:CS_startLFXT)
+                  0000595c    00000006                              : spi.o (.text:EUSCI_A_SPI_receiveData)
+                  00005962    00000006                              : spi.o (.text:EUSCI_B_SPI_receiveData)
+                  00005968    00000004                              : spi.o (.text:EUSCI_A_SPI_transmitData)
+                  0000596c    00000004                              : spi.o (.text:EUSCI_B_SPI_transmitData)
+                  00005970    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.obj (.text)
 
-.const     0    00005510    00000184     
-                  00005510    00000101     rtsv7M4_T_le_v4SPD16_eabi.lib : ctype.obj (.const:.string:_ctypes_)
-                  00005611    00000003     --HOLE-- [fill = 0]
-                  00005614    00000040     msp432p4xx_driverlib.lib : interrupt.o (.const)
-                  00005654    00000024     UART_interface.obj (.const:uartConfig)
-                  00005678    0000001c     spi_interface.obj (.const:spiMasterConfig)
+.const     0    00005974    00000184     
+                  00005974    00000101     rtsv7M4_T_le_v4SPD16_eabi.lib : ctype.obj (.const:.string:_ctypes_)
+                  00005a75    00000003     --HOLE-- [fill = 0]
+                  00005a78    00000040     msp432p4xx_driverlib.lib : interrupt.o (.const)
+                  00005ab8    00000024     UART_interface.obj (.const:uartConfig)
+                  00005adc    0000001c     spi_interface.obj (.const:spiMasterConfig)
 
-.cinit     0    00005698    000000c8     
-                  00005698    000000a4     (.cinit..data.load) [load image, compression = lzss]
-                  0000573c    0000000c     (__TI_handler_table)
-                  00005748    00000008     (.cinit..bss.load) [load image, compression = zero_init]
-                  00005750    00000010     (__TI_cinit_table)
+.cinit     0    00005af8    000000d0     
+                  00005af8    000000ab     (.cinit..data.load) [load image, compression = lzss]
+                  00005ba3    00000001     --HOLE-- [fill = 0]
+                  00005ba4    0000000c     (__TI_handler_table)
+                  00005bb0    00000008     (.cinit..bss.load) [load image, compression = zero_init]
+                  00005bb8    00000010     (__TI_cinit_table)
 
 .init_array 
 *          0    00000000    00000000     UNINITIALIZED
@@ -177,7 +178,7 @@ section   page    origin      length       input sections
                   20000000    00000008     rtsv7M4_T_le_v4SPD16_eabi.lib : memory.obj (.sysmem)
                   20000008    000007f8     --HOLE--
 
-.bss       0    20000800    000004a4     UNINITIALIZED
+.bss       0    20000800    000004ce     UNINITIALIZED
                   20000800    00000120     rtsv7M4_T_le_v4SPD16_eabi.lib : trgmsg.obj (.bss:_CIOBUF_)
                   20000920    00000100     rf95.obj (.bss:RxTxBuffer)
                   20000a20    00000100     (.common:UARTBuffer)
@@ -187,38 +188,44 @@ section   page    origin      length       input sections
                   20000c10    00000024     comms_interface.obj (.bss:nwkEvents)
                   20000c34    0000001c     velapulsar.obj (.bss:calendarTime)
                   20000c50    0000001c     velapulsar_mac.obj (.bss:radioEvents)
-                  20000c6c    0000000d     velapulsar_mac.obj (.bss:myNode)
-                  20000c79    00000008     rtsv7M4_T_le_v4SPD16_eabi.lib : trgdrv.obj (.bss:parmbuf)
-                  20000c81    00000001     comms_interface.obj (.bss)
-                  20000c82    00000002     (.common:lastLight)
-                  20000c84    00000008     rf95.obj (.bss)
-                  20000c8c    00000005     velapulsar_mac.obj (.bss)
-                  20000c91    00000001     --HOLE--
-                  20000c92    00000002     (.common:lastMagnetic)
-                  20000c94    00000004     velapulsar_nwk.obj (.bss)
-                  20000c98    00000004     (.common:UARTrx)
-                  20000c9c    00000004     (.common:hfxtFreq)
-                  20000ca0    00000004     (.common:lfxtFreq)
+                  20000c6c    00000010     velapulsar_mac.obj (.bss:appPkt)
+                  20000c7c    0000000d     velapulsar_mac.obj (.bss:myNode)
+                  20000c89    00000008     velapulsar_mac.obj (.bss:modePkt)
+                  20000c91    00000008     rtsv7M4_T_le_v4SPD16_eabi.lib : trgdrv.obj (.bss:parmbuf)
+                  20000c99    00000001     comms_interface.obj (.bss)
+                  20000c9a    00000002     (.common:lastCapicitive)
+                  20000c9c    00000008     rf95.obj (.bss)
+                  20000ca4    00000008     velapulsar_mac.obj (.bss)
+                  20000cac    00000006     velapulsar_mac.obj (.bss:ackPktRx)
+                  20000cb2    00000002     (.common:lastInductive)
+                  20000cb4    00000004     velapulsar_nwk.obj (.bss)
+                  20000cb8    00000004     (.common:AlarmWentOff)
+                  20000cbc    00000004     (.common:UARTrx)
+                  20000cc0    00000004     (.common:hfxtFreq)
+                  20000cc4    00000004     (.common:lfxtFreq)
+                  20000cc8    00000004     (.common:tickFrequency)
+                  20000ccc    00000002     (.common:lastLight)
 
-.data      0    20000ca4    00000249     UNINITIALIZED
-                  20000ca4    000000f0     rtsv7M4_T_le_v4SPD16_eabi.lib : defs.obj (.data:_ftable)
-                  20000d94    000000d0                                   : lowlev.obj (.data:$O1$$)
-                  20000e64    00000030     msp432p4xx_driverlib.lib : gpio.o (.data:GPIO_PORT_TO_BASE)
-                  20000e94    00000010     rtsv7M4_T_le_v4SPD16_eabi.lib : defs.obj (.data)
-                  20000ea4    0000000c                                   : exit.obj (.data:$O1$$)
-                  20000eb0    0000000c                                   : memory.obj (.data:$O1$$)
-                  20000ebc    0000000c     delay.obj (.data)
-                  20000ec8    00000008     rtsv7M4_T_le_v4SPD16_eabi.lib : _lock.obj (.data:$O1$$)
-                  20000ed0    00000008     AdapterNode_main.obj (.data)
-                  20000ed8    00000004     UART_interface.obj (.data)
-                  20000edc    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : errno.obj (.data)
-                  20000ee0    00000004                                   : fopen.obj (.data)
-                  20000ee4    00000004                                   : stkdepth_vars.obj (.data)
-                  20000ee8    00000004     system_msp432p401r.obj (.data)
-                  20000eec    00000001     velapulsar.obj (.data)
+.data      0    20000cd0    00000255     UNINITIALIZED
+                  20000cd0    000000f0     rtsv7M4_T_le_v4SPD16_eabi.lib : defs.obj (.data:_ftable)
+                  20000dc0    000000d0                                   : lowlev.obj (.data:$O1$$)
+                  20000e90    00000030     msp432p4xx_driverlib.lib : gpio.o (.data:GPIO_PORT_TO_BASE)
+                  20000ec0    00000014     delay.obj (.data)
+                  20000ed4    00000010     rtsv7M4_T_le_v4SPD16_eabi.lib : defs.obj (.data)
+                  20000ee4    0000000c                                   : exit.obj (.data:$O1$$)
+                  20000ef0    0000000c                                   : memory.obj (.data:$O1$$)
+                  20000efc    00000008                                   : _lock.obj (.data:$O1$$)
+                  20000f04    00000008     AdapterNode_main.obj (.data)
+                  20000f0c    00000004     UART_interface.obj (.data)
+                  20000f10    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : errno.obj (.data)
+                  20000f14    00000004                                   : fopen.obj (.data)
+                  20000f18    00000004                                   : rand.obj (.data)
+                  20000f1c    00000004                                   : stkdepth_vars.obj (.data)
+                  20000f20    00000004     system_msp432p401r.obj (.data)
+                  20000f24    00000001     velapulsar.obj (.data)
 
-.stack     0    2000fe00    00000200     UNINITIALIZED
-                  2000fe00    00000200     --HOLE--
+.stack     0    20007e00    00000200     UNINITIALIZED
+                  20007e00    00000200     --HOLE--
 
 MODULE SUMMARY
 
@@ -227,49 +234,49 @@ MODULE SUMMARY
     .\
        system_msp432p401r.obj        484     0         8      
        startup_msp432p401r_ccs.obj   52      320       0      
-       AdapterNode_main.obj          72      0         24     
+       AdapterNode_main.obj          52      0         28     
     +--+-----------------------------+-------+---------+---------+
-       Total:                        608     320       32     
+       Total:                        588     320       36     
                                                               
     .\Libraries\Mac\
-       velapulsar_mac.obj            540     0         92     
+       velapulsar_mac.obj            952     0         158    
     +--+-----------------------------+-------+---------+---------+
-       Total:                        540     0         92     
+       Total:                        952     0         158    
                                                               
     .\Libraries\Nwk\
-       velapulsar_nwk.obj            384     0         80     
+       velapulsar_nwk.obj            604     0         80     
     +--+-----------------------------+-------+---------+---------+
-       Total:                        384     0         80     
+       Total:                        604     0         80     
                                                               
     .\Libraries\RF95\
        rf95.obj                      2704    0         616    
-       delay.obj                     172     0         24     
+       delay.obj                     388     0         56     
        spi_interface.obj             40      28        0      
     +--+-----------------------------+-------+---------+---------+
-       Total:                        2916    28        640    
+       Total:                        3132    28        672    
                                                               
     .\Libraries\UART\
-       UART_interface.obj            492     36        528    
+       UART_interface.obj            556     36        528    
     +--+-----------------------------+-------+---------+---------+
-       Total:                        492     36        528    
+       Total:                        556     36        528    
                                                               
     .\Libraries\Velapulsar\
-       velapulsar.obj                792     0         58     
-       comms_interface.obj           416     0         74     
-       sensor_interface.obj          448     0         0      
+       velapulsar.obj                836     0         58     
+       comms_interface.obj           624     0         74     
+       sensor_interface.obj          388     0         0      
     +--+-----------------------------+-------+---------+---------+
-       Total:                        1656    0         132    
+       Total:                        1848    0         132    
                                                               
     C:/ti/msp/msp432ware__3.50.00.02/driverlib/driverlib/MSP432P4xx/ccs/msp432p4xx_driverlib.lib
        rtc_c.o                       524     0         0      
        cs.o                          492     0         16     
-       gpio.o                        276     0         96     
+       gpio.o                        228     0         96     
        spi.o                         312     0         0      
        interrupt.o                   116     64        0      
        sysctl.o                      44      0         0      
        cpu.o                         12      0         0      
     +--+-----------------------------+-------+---------+---------+
-       Total:                        1776    64        112    
+       Total:                        1728    64        112    
                                                               
     C:\ti\ccsv7\tools\compiler\ti-cgt-arm_16.9.1.LTS\lib\rtsv7M4_T_le_v4SPD16_eabi.lib
        _printfi.obj                  4414    0         0      
@@ -305,6 +312,7 @@ MODULE SUMMARY
        sprintf.obj                   96      0         0      
        boot.obj                      84      0         0      
        ltoa.obj                      84      0         0      
+       rand.obj                      76      0         8      
        atoi.obj                      76      0         0      
        cpy_tbl.obj                   76      0         0      
        fd_toi_t2.obj                 72      0         0      
@@ -322,6 +330,7 @@ MODULE SUMMARY
        strcpy.obj                    20      0         0      
        strlen.obj                    20      0         0      
        copy_decompress_none.obj      14      0         0      
+       time.obj                      14      0         0      
        copy_zero_init.obj            12      0         0      
        errno.obj                     0       0         8      
        stkdepth_vars.obj             0       0         8      
@@ -329,25 +338,25 @@ MODULE SUMMARY
        mpu_init.obj                  2       0         0      
        startup.obj                   2       0         0      
     +--+-----------------------------+-------+---------+---------+
-       Total:                        13072   257       1928   
+       Total:                        13162   257       1936   
                                                               
        Heap:                         0       0         4096   
        Stack:                        0       0         1024   
-       Linker Generated:             0       200       0      
+       Linker Generated:             0       207       0      
     +--+-----------------------------+-------+---------+---------+
-       Grand Total:                  21444   905       8664   
+       Grand Total:                  22570   912       8774   
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 00005750 records: 2, size/record: 8, table size: 16
-	.data: load addr=00005698, load size=000000a4 bytes, run addr=20000ca4, run size=00000249 bytes, compression=lzss
-	.bss: load addr=00005748, load size=00000008 bytes, run addr=20000800, run size=000004a4 bytes, compression=zero_init
+__TI_cinit_table @ 00005bb8 records: 2, size/record: 8, table size: 16
+	.data: load addr=00005af8, load size=000000ab bytes, run addr=20000cd0, run size=00000255 bytes, compression=lzss
+	.bss: load addr=00005bb0, load size=00000008 bytes, run addr=20000800, run size=000004ce bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 0000573c records: 3, size/record: 4, table size: 12
+__TI_handler_table @ 00005ba4 records: 3, size/record: 4, table size: 12
 	index: 0, handler: __TI_decompress_lzss
 	index: 1, handler: __TI_decompress_none
 	index: 2, handler: __TI_zero_init
@@ -357,52 +366,56 @@ GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name
 
 address   name                                      
 -------   ----                                      
-000034fd  ADC14_IRQHandler                          
-00004d89  C$$EXIT                                   
-00004aaf  C$$IO$$                                   
-000054af  CPU_cpsie                                 
-0000520d  CS_setDCOCenteredFrequency                
-000053e5  CS_setExternalClockSourceFrequency        
-000054ed  CS_startHFXT                              
-000043b5  CS_startHFXTWithTimeout                   
-000054f3  CS_startLFXT                              
-00004451  CS_startLFXTWithTimeout                   
-000037dd  CommsInitCoordinator                      
-000037af  CommsInitNode                             
-000054bb  EUSCI_A_SPI_enable                        
-000054f9  EUSCI_A_SPI_receiveData                   
-00005505  EUSCI_A_SPI_transmitData                  
-000054c7  EUSCI_B_SPI_enable                        
-000054ff  EUSCI_B_SPI_receiveData                   
-00005509  EUSCI_B_SPI_transmitData                  
-0000536d  GPIO_getInputPinValue                     
-0000529d  GPIO_interruptEdgeSelect                  
-00005129  GPIO_setAsInputPinWithPullDownResistor    
-00005231  GPIO_setAsOutputPin                       
-00004f61  GPIO_setAsPeripheralModuleFunctionInputPin
-000053f9  GPIO_setOutputHighOnPin                   
-00005385  GPIO_setOutputLowOnPin                    
-0000540d  GPIO_toggleOutputOnPin                    
-000034e9  Get_Claw                                  
-000034d9  Get_Light                                 
-000034d3  Get_Magnetic                              
-000023bb  HOSTclock                                 
-00002383  HOSTclose                                 
-00002345  HOSTgetenv                                
-000022e9  HOSTlseek                                 
-00002297  HOSTopen                                  
-0000224b  HOSTread                                  
-000021ed  HOSTrename                                
-000021b3  HOSTtime                                  
-00002165  HOSTtime64                                
-0000212d  HOSTunlink                                
-000020e1  HOSTwrite                                 
-000034bf  Init_Claw                                 
-000033cd  Init_LightandMagnetic                     
-000034c7  Init_Sensors                              
-00004295  Init_SysTick                              
-00004ae9  Interrupt_enableInterrupt                 
-00005471  Interrupt_enableMaster                    
+00003f09  ADC14_IRQHandler                          
+20000cb8  AlarmWentOff                              
+000051d9  C$$EXIT                                   
+00004eff  C$$IO$$                                   
+00005915  CPU_cpsie                                 
+00005665  CS_setDCOCenteredFrequency                
+0000583d  CS_setExternalClockSourceFrequency        
+00005951  CS_startHFXT                              
+00004805  CS_startHFXTWithTimeout                   
+00005957  CS_startLFXT                              
+000048a1  CS_startLFXTWithTimeout                   
+00002f03  CommsInitCoordinator                      
+00002ed5  CommsInitNode                             
+00002ea7  CommsInitSniffer                          
+00005921  EUSCI_A_SPI_enable                        
+0000595d  EUSCI_A_SPI_receiveData                   
+00005969  EUSCI_A_SPI_transmitData                  
+0000592d  EUSCI_B_SPI_enable                        
+00005963  EUSCI_B_SPI_receiveData                   
+0000596d  EUSCI_B_SPI_transmitData                  
+000057c5  GPIO_getInputPinValue                     
+000056f5  GPIO_interruptEdgeSelect                  
+00005689  GPIO_setAsOutputPin                       
+000053b5  GPIO_setAsPeripheralModuleFunctionInputPin
+00005851  GPIO_setOutputHighOnPin                   
+000057dd  GPIO_setOutputLowOnPin                    
+00005865  GPIO_toggleOutputOnPin                    
+00003f05  Get_Batt                                  
+00003eff  Get_Cap                                   
+00003ef9  Get_Ind                                   
+00003ee9  Get_Light                                 
+00003ed5  Get_Magnetic                              
+00002ab7  HOSTclock                                 
+00002a7f  HOSTclose                                 
+00002a41  HOSTgetenv                                
+000029e5  HOSTlseek                                 
+00002993  HOSTopen                                  
+00002947  HOSTread                                  
+000028e9  HOSTrename                                
+000028af  HOSTtime                                  
+00002861  HOSTtime64                                
+00002829  HOSTunlink                                
+000027dd  HOSTwrite                                 
+00003ddd  Init_ADC_Sensors                          
+00003ecf  Init_Mag                                  
+00003ed1  Init_Sensors                              
+00003d0b  Init_SysTick                              
+00004f39  Interrupt_enableInterrupt                 
+000058c9  Interrupt_enableMaster                    
+000021b1  NodeCycle                                 
 00001b09  PORT2_IRQHandler                          
 00001903  RFCheckRfFrequency                        
 0000196f  RFGetStatus                               
@@ -433,198 +446,209 @@ address   name
 000012d7  RFWrite                                   
 00001281  RFWriteBuffer                             
 000012cb  RFWriteFifo                               
-0000268b  RTC_AlarmHandler                          
-00004e31  RTC_C_clearInterruptFlag                  
-0000507d  RTC_C_enableInterrupt                     
-00004b4d  RTC_C_getCalendarTime                     
-00004fa9  RTC_C_getEnabledInterruptStatus           
-000051b9  RTC_C_getInterruptStatus                  
-00004cd9  RTC_C_initCalendar                        
-00005255  RTC_C_setCalendarAlarm                    
-00005279  RTC_C_startClock                          
+0000274b  RTC_AlarmHandler                          
+00005281  RTC_C_clearInterruptFlag                  
+000054d1  RTC_C_enableInterrupt                     
+00004f9d  RTC_C_getCalendarTime                     
+000053fd  RTC_C_getEnabledInterruptStatus           
+00005611  RTC_C_getInterruptStatus                  
+00005129  RTC_C_initCalendar                        
+000056ad  RTC_C_setCalendarAlarm                    
+000056d1  RTC_C_startClock                          
 UNDEFED   SHT$$INIT_ARRAY$$Base                     
 UNDEFED   SHT$$INIT_ARRAY$$Limit                    
-00005339  SPI_enableModule                          
-000046b9  SPI_initMaster                            
-00005353  SPI_receiveData                           
-000052bd  SPI_transmitData                          
-00002aa9  SendJoinReq                               
-00002aa3  SleepFor                                  
-00005481  SysCtl_disableNMISource                   
-00005491  SysCtl_enableNMISource                    
-000054d5  SysCtl_getNMISourceStatus                 
-0000427b  SysTick_Handler                           
-20000ee8  SystemCoreClock                           
-00003077  SystemCoreClockUpdate                     
-00003025  SystemInit                                
-00002f71  UARTA0_Handler                            
+00005791  SPI_enableModule                          
+00004b09  SPI_initMaster                            
+000057ab  SPI_receiveData                           
+00005715  SPI_transmitData                          
+0000217b  SendJoinReq                               
+00003cc1  Set_Alarm                                 
+0000220f  SleepFor                                  
+000058d9  SysCtl_disableNMISource                   
+000058e9  SysCtl_enableNMISource                    
+00005939  SysCtl_getNMISourceStatus                 
+00003c9b  SysTick_Handler                           
+20000f20  SystemCoreClock                           
+0000374b  SystemCoreClockUpdate                     
+000036f9  SystemInit                                
+00003c77  T32_INT1_IRQHandler                       
+0000345d  UARTA0_Handler                            
 20000a20  UARTBuffer                                
-00002efb  UARTSend                                  
-00002e97  UARTSendRssi                              
-00002e39  UARTinit                                  
-20000c98  UARTrx                                    
-00002a6f  VelaMacInit                               
-00002a2b  VelaMacReport                             
-00002a29  VelaMacRetrieveListOfNodes                
-00003921  VelaNwkInitialization                     
-000038e5  VelaNwkReport                             
+00003417  UARTSend                                  
+00003337  UARTSendRssi                              
+000032d9  UARTinit                                  
+20000cbc  UARTrx                                    
+000021d1  VelaMacInit                               
+000020e3  VelaMacReport                             
+000020e1  VelaMacRetrieveListOfNodes                
+0000309b  VelaNwkInitialization                     
+0000307d  VelaNwkReport                             
 4000480c  WDTCTL_SYM                                
 20000800  __CIOBUF_                                 
-20010000  __STACK_END                               
+20008000  __STACK_END                               
 00000200  __STACK_SIZE                              
 00000800  __SYSMEM_SIZE                             
-00005750  __TI_CINIT_Base                           
-00005760  __TI_CINIT_Limit                          
-0000573c  __TI_Handler_Table_Base                   
-00005748  __TI_Handler_Table_Limit                  
-00004939  __TI_auto_init                            
-000032d1  __TI_cleanup                              
-20000ea4  __TI_cleanup_ptr                          
-00004589  __TI_closefile                            
-00004a19  __TI_decompress_lzss                      
-000054a1  __TI_decompress_none                      
-00004195  __TI_doflush                              
-20000ea8  __TI_dtors_ptr                            
-20000eac  __TI_enable_exit_profile_output           
-20000e94  __TI_ft_end                               
+00005bb8  __TI_CINIT_Base                           
+00005bc8  __TI_CINIT_Limit                          
+00005ba4  __TI_Handler_Table_Base                   
+00005bb0  __TI_Handler_Table_Limit                  
+00004d89  __TI_auto_init                            
+000039a5  __TI_cleanup                              
+20000ee4  __TI_cleanup_ptr                          
+000049d9  __TI_closefile                            
+00004e69  __TI_decompress_lzss                      
+000058f9  __TI_decompress_none                      
+00004691  __TI_doflush                              
+20000ee8  __TI_dtors_ptr                            
+20000eec  __TI_enable_exit_profile_output           
+20000ed4  __TI_ft_end                               
 ffffffff  __TI_pprof_out_hndl                       
 00000985  __TI_printfi                              
 ffffffff  __TI_prof_data_size                       
 ffffffff  __TI_prof_data_start                      
-0000436b  __TI_rd_ok                                
-00004ab3  __TI_readmsg                              
+000047bb  __TI_rd_ok                                
+00004f03  __TI_readmsg                              
 00000000  __TI_static_base__                        
 20000b20  __TI_tmpnams                              
-00004a81  __TI_writemsg                             
-00004309  __TI_wrt_ok                               
-000054e1  __TI_zero_init                            
-00004741  __aeabi_cdcmpeq                           
-00004741  __aeabi_cdcmple                           
-000047c7  __aeabi_cdrcmple                          
-00004ff1  __aeabi_d2iz                              
-00005039  __aeabi_d2uiz                             
-00003597  __aeabi_dadd                              
-00003a65  __aeabi_ddiv                              
-00003cd1  __aeabi_dmul                              
-0000358d  __aeabi_dsub                              
-00005189  __aeabi_i2d                               
-0000484d  __aeabi_memclr                            
-0000484d  __aeabi_memclr4                           
-0000484d  __aeabi_memclr8                           
-000044ed  __aeabi_memcpy                            
-000044ed  __aeabi_memcpy4                           
-000044ed  __aeabi_memcpy8                           
-0000484f  __aeabi_memset                            
-0000484f  __aeabi_memset4                           
-0000484f  __aeabi_memset8                           
-20000ea0  __aeabi_stderr                            
-20000e98  __aeabi_stdin                             
-20000e9c  __aeabi_stdout                            
-000052fd  __aeabi_ui2d                              
-00002c45  __aeabi_uldivmod                          
+00004ed1  __TI_writemsg                             
+00004759  __TI_wrt_ok                               
+00005945  __TI_zero_init                            
+00004b91  __aeabi_cdcmpeq                           
+00004b91  __aeabi_cdcmple                           
+00004c17  __aeabi_cdrcmple                          
+00005445  __aeabi_d2iz                              
+0000548d  __aeabi_d2uiz                             
+00003aab  __aeabi_dadd                              
+00003f61  __aeabi_ddiv                              
+000041cd  __aeabi_dmul                              
+00003aa1  __aeabi_dsub                              
+000055e1  __aeabi_i2d                               
+00004c9d  __aeabi_memclr                            
+00004c9d  __aeabi_memclr4                           
+00004c9d  __aeabi_memclr8                           
+0000493d  __aeabi_memcpy                            
+0000493d  __aeabi_memcpy4                           
+0000493d  __aeabi_memcpy8                           
+00004c9f  __aeabi_memset                            
+00004c9f  __aeabi_memset4                           
+00004c9f  __aeabi_memset8                           
+20000ee0  __aeabi_stderr                            
+20000ed8  __aeabi_stdin                             
+20000edc  __aeabi_stdout                            
+00005755  __aeabi_ui2d                              
+00003505  __aeabi_uldivmod                          
 ffffffff  __binit__                                 
 ffffffff  __c_args__                                
 0000127f  __mpu_init                                
-2000fe00  __stack                                   
-0000539d  _args_main                                
-00004d35  _c_int00                                  
-00005510  _ctypes_                                  
-20000ca4  _ftable                                   
-20000ec0  _hTime                                    
-20000ec8  _lock                                     
-20000ebf  _mTime                                    
-20000ebc  _msTime                                   
-0000542f  _nop                                      
-00005427  _register_lock                            
-00005421  _register_unlock                          
-20000ebe  _sTime                                    
+20007e00  __stack                                   
+00005907  __time32                                  
+000057f5  _args_main                                
+00005185  _c_int00                                  
+00005974  _ctypes_                                  
+20000cd0  _ftable                                   
+20000ec4  _hTime                                    
+20000efc  _lock                                     
+20000ec3  _mTime                                    
+20000ec0  _msTime                                   
+00005887  _nop                                      
+0000587f  _register_lock                            
+00005879  _register_unlock                          
+20000ec2  _sTime                                    
 20000000  _sys_memory                               
-00003743  _system_post_cinit                        
-0000550d  _system_pre_init                          
-20000ec4  _totalms                                  
-20000ecc  _unlock                                   
-20000ed1  ableToConnect                             
-00004d8d  abort                                     
-0000297d  add_device                                
-00004e81  atoi                                      
-20000eec  awake                                     
+00003c57  _system_post_cinit                        
+00005971  _system_pre_init                          
+20000ecc  _totalDays                                
+20000ec8  _totalms                                  
+20000f00  _unlock                                   
+20000f05  ableToConnect                             
+000051dd  abort                                     
+00002d61  add_device                                
+20000ed0  alarmIn                                   
+20000ece  alarmSet                                  
+000052d1  atoi                                      
+20000f24  awake                                     
 ffffffff  binit                                     
 000020b1  calloc                                    
-00003ec9  ceil                                      
-00003ec9  ceill                                     
-0000292d  close                                     
-00004ecd  copy_in                                   
-00005435  copysign                                  
-00005435  copysignl                                 
-20000ed0  currentState                              
-0000266b  debug_print_pkt                           
-00004263  delay_ms                                  
-20000edc  errno                                     
-00004d95  exit                                      
-000045ef  fclose                                    
-000041e1  fflush                                    
-00003fc1  floor                                     
-00003fc1  floorl                                    
-00003327  fopen                                     
-00004621  fputc                                     
-00003b9d  fputs                                     
+000043c5  ceil                                      
+000043c5  ceill                                     
+00002d11  close                                     
+0000531d  copy_in                                   
+0000588d  copysign                                  
+0000588d  copysignl                                 
+20000f04  currentState                              
+0000272b  debug_print_pkt                           
+00003c5f  delay_ms                                  
+20000f10  errno                                     
+000051e5  exit                                      
+00004a3f  fclose                                    
+000046dd  fflush                                    
+000044bd  floor                                     
+000044bd  floorl                                    
+000039fb  fopen                                     
+00004a71  fputc                                     
+00004099  fputs                                     
 00001dfb  free                                      
-000032fd  freopen                                   
-00004c15  frexp                                     
-00004c15  frexpl                                    
-00004bb1  fseek                                     
-0000425d  getTotal_ms                               
-20000ed4  goodPkts                                  
-00002405  initCalendar                              
-000025f1  initClocks                                
-00004f39  initEndNode                               
-00002447  initPeripherals                           
-0000243b  initPorts                                 
-000051e5  initSPI                                   
+000039d1  freopen                                   
+00005065  frexp                                     
+00005065  frexpl                                    
+00005001  fseek                                     
+00003c59  getTotal_ms                               
+20000f08  goodPkts                                  
+00002499  initCalendar                              
+000026b3  initClocks                                
+00005555  initEndNode                               
+0000250b  initPeripherals                           
+000024cf  initPorts                                 
+0000563d  initSPI                                   
 00000000  interruptVectors                          
-20000c82  lastLight                                 
-20000c92  lastMagnetic                              
-00003dcd  ldexp                                     
-00003dcd  ldexpl                                    
-20000ed3  len                                       
-20000ed2  lostConnection                            
-00002909  lseek                                     
-00004ddd  ltoa                                      
-00004f49  main                                      
-20000ee4  main_func_sp                              
+20000c9a  lastCapicitive                            
+20000cb2  lastInductive                             
+20000ccc  lastLight                                 
+000042c9  ldexp                                     
+000042c9  ldexpl                                    
+20000f07  len                                       
+20000f06  lostConnection                            
+00002ced  lseek                                     
+0000522d  ltoa                                      
+00005565  main                                      
+20000f1c  main_func_sp                              
 00001d91  malloc                                    
 00001fc5  memalign                                  
-0000531d  memccpy                                   
-000052dd  memchr                                    
-000044ed  memcpy                                    
-00004855  memset                                    
+00005775  memccpy                                   
+00005735  memchr                                    
+0000493d  memcpy                                    
+00004ca5  memset                                    
 00001d11  minit                                     
-0000285b  open                                      
-00004f19  operate                                   
-000049b1  printf                                    
-00004621  putc                                      
-000046a5  putchar                                   
-00003ca9  puts                                      
-00002837  read                                      
+00002c3f  open                                      
+00005549  operate                                   
+00004e01  printf                                    
+00004a71  putc                                      
+00004af5  putchar                                   
+000041a5  puts                                      
+0000537f  rand                                      
+00002c1b  read                                      
 00001ebd  realloc                                   
-000027ad  remove                                    
-0000280f  remove_device                             
-000027d1  rename                                    
-20000ed8  rxAvailable                               
-00003dcd  scalbn                                    
-00003dcd  scalbnl                                   
-000040b9  setvbuf                                   
-00002473  sleepFor                                  
-00005678  spiMasterConfig                           
-00004c79  sprintf                                   
-000053cd  strchr                                    
-000053b5  strcmp                                    
-00005449  strcpy                                    
-0000545d  strlen                                    
-000050bd  strncpy                                   
-00005654  uartConfig                                
-000027ad  unlink                                    
-0000271d  write                                     
+00002b91  remove                                    
+00002bf3  remove_device                             
+00002bb5  rename                                    
+20000f0c  rxAvailable                               
+000042c9  scalbn                                    
+000042c9  scalbnl                                   
+000045b5  setvbuf                                   
+00002535  sleepFor                                  
+00005adc  spiMasterConfig                           
+000050c9  sprintf                                   
+00005369  srand                                     
+00005825  strchr                                    
+0000580d  strcmp                                    
+000058a1  strcpy                                    
+000058b5  strlen                                    
+00005511  strncpy                                   
+20000cc8  tickFrequency                             
+00005907  time                                      
+00005ab8  uartConfig                                
+00002b91  unlink                                    
+00002b01  write                                     
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -673,223 +697,238 @@ address   name
 00001ebd  realloc                                   
 00001fc5  memalign                                  
 000020b1  calloc                                    
-000020e1  HOSTwrite                                 
-0000212d  HOSTunlink                                
-00002165  HOSTtime64                                
-000021b3  HOSTtime                                  
-000021ed  HOSTrename                                
-0000224b  HOSTread                                  
-00002297  HOSTopen                                  
-000022e9  HOSTlseek                                 
-00002345  HOSTgetenv                                
-00002383  HOSTclose                                 
-000023bb  HOSTclock                                 
-00002405  initCalendar                              
-0000243b  initPorts                                 
-00002447  initPeripherals                           
-00002473  sleepFor                                  
-000025f1  initClocks                                
-0000266b  debug_print_pkt                           
-0000268b  RTC_AlarmHandler                          
-0000271d  write                                     
-000027ad  remove                                    
-000027ad  unlink                                    
-000027d1  rename                                    
-0000280f  remove_device                             
-00002837  read                                      
-0000285b  open                                      
-00002909  lseek                                     
-0000292d  close                                     
-0000297d  add_device                                
-00002a29  VelaMacRetrieveListOfNodes                
-00002a2b  VelaMacReport                             
-00002a6f  VelaMacInit                               
-00002aa3  SleepFor                                  
-00002aa9  SendJoinReq                               
-00002c45  __aeabi_uldivmod                          
-00002e39  UARTinit                                  
-00002e97  UARTSendRssi                              
-00002efb  UARTSend                                  
-00002f71  UARTA0_Handler                            
-00003025  SystemInit                                
-00003077  SystemCoreClockUpdate                     
-000032d1  __TI_cleanup                              
-000032fd  freopen                                   
-00003327  fopen                                     
-000033cd  Init_LightandMagnetic                     
-000034bf  Init_Claw                                 
-000034c7  Init_Sensors                              
-000034d3  Get_Magnetic                              
-000034d9  Get_Light                                 
-000034e9  Get_Claw                                  
-000034fd  ADC14_IRQHandler                          
-0000358d  __aeabi_dsub                              
-00003597  __aeabi_dadd                              
-00003743  _system_post_cinit                        
-000037af  CommsInitNode                             
-000037dd  CommsInitCoordinator                      
-000038e5  VelaNwkReport                             
-00003921  VelaNwkInitialization                     
-00003a65  __aeabi_ddiv                              
-00003b9d  fputs                                     
-00003ca9  puts                                      
-00003cd1  __aeabi_dmul                              
-00003dcd  ldexp                                     
-00003dcd  ldexpl                                    
-00003dcd  scalbn                                    
-00003dcd  scalbnl                                   
-00003ec9  ceil                                      
-00003ec9  ceill                                     
-00003fc1  floor                                     
-00003fc1  floorl                                    
-000040b9  setvbuf                                   
-00004195  __TI_doflush                              
-000041e1  fflush                                    
-0000425d  getTotal_ms                               
-00004263  delay_ms                                  
-0000427b  SysTick_Handler                           
-00004295  Init_SysTick                              
-00004309  __TI_wrt_ok                               
-0000436b  __TI_rd_ok                                
-000043b5  CS_startHFXTWithTimeout                   
-00004451  CS_startLFXTWithTimeout                   
-000044ed  __aeabi_memcpy                            
-000044ed  __aeabi_memcpy4                           
-000044ed  __aeabi_memcpy8                           
-000044ed  memcpy                                    
-00004589  __TI_closefile                            
-000045ef  fclose                                    
-00004621  fputc                                     
-00004621  putc                                      
-000046a5  putchar                                   
-000046b9  SPI_initMaster                            
-00004741  __aeabi_cdcmpeq                           
-00004741  __aeabi_cdcmple                           
-000047c7  __aeabi_cdrcmple                          
-0000484d  __aeabi_memclr                            
-0000484d  __aeabi_memclr4                           
-0000484d  __aeabi_memclr8                           
-0000484f  __aeabi_memset                            
-0000484f  __aeabi_memset4                           
-0000484f  __aeabi_memset8                           
-00004855  memset                                    
-00004939  __TI_auto_init                            
-000049b1  printf                                    
-00004a19  __TI_decompress_lzss                      
-00004a81  __TI_writemsg                             
-00004aaf  C$$IO$$                                   
-00004ab3  __TI_readmsg                              
-00004ae9  Interrupt_enableInterrupt                 
-00004b4d  RTC_C_getCalendarTime                     
-00004bb1  fseek                                     
-00004c15  frexp                                     
-00004c15  frexpl                                    
-00004c79  sprintf                                   
-00004cd9  RTC_C_initCalendar                        
-00004d35  _c_int00                                  
-00004d89  C$$EXIT                                   
-00004d8d  abort                                     
-00004d95  exit                                      
-00004ddd  ltoa                                      
-00004e31  RTC_C_clearInterruptFlag                  
-00004e81  atoi                                      
-00004ecd  copy_in                                   
-00004f19  operate                                   
-00004f39  initEndNode                               
-00004f49  main                                      
-00004f61  GPIO_setAsPeripheralModuleFunctionInputPin
-00004fa9  RTC_C_getEnabledInterruptStatus           
-00004ff1  __aeabi_d2iz                              
-00005039  __aeabi_d2uiz                             
-0000507d  RTC_C_enableInterrupt                     
-000050bd  strncpy                                   
-00005129  GPIO_setAsInputPinWithPullDownResistor    
-00005189  __aeabi_i2d                               
-000051b9  RTC_C_getInterruptStatus                  
-000051e5  initSPI                                   
-0000520d  CS_setDCOCenteredFrequency                
-00005231  GPIO_setAsOutputPin                       
-00005255  RTC_C_setCalendarAlarm                    
-00005279  RTC_C_startClock                          
-0000529d  GPIO_interruptEdgeSelect                  
-000052bd  SPI_transmitData                          
-000052dd  memchr                                    
-000052fd  __aeabi_ui2d                              
-0000531d  memccpy                                   
-00005339  SPI_enableModule                          
-00005353  SPI_receiveData                           
-0000536d  GPIO_getInputPinValue                     
-00005385  GPIO_setOutputLowOnPin                    
-0000539d  _args_main                                
-000053b5  strcmp                                    
-000053cd  strchr                                    
-000053e5  CS_setExternalClockSourceFrequency        
-000053f9  GPIO_setOutputHighOnPin                   
-0000540d  GPIO_toggleOutputOnPin                    
-00005421  _register_unlock                          
-00005427  _register_lock                            
-0000542f  _nop                                      
-00005435  copysign                                  
-00005435  copysignl                                 
-00005449  strcpy                                    
-0000545d  strlen                                    
-00005471  Interrupt_enableMaster                    
-00005481  SysCtl_disableNMISource                   
-00005491  SysCtl_enableNMISource                    
-000054a1  __TI_decompress_none                      
-000054af  CPU_cpsie                                 
-000054bb  EUSCI_A_SPI_enable                        
-000054c7  EUSCI_B_SPI_enable                        
-000054d5  SysCtl_getNMISourceStatus                 
-000054e1  __TI_zero_init                            
-000054ed  CS_startHFXT                              
-000054f3  CS_startLFXT                              
-000054f9  EUSCI_A_SPI_receiveData                   
-000054ff  EUSCI_B_SPI_receiveData                   
-00005505  EUSCI_A_SPI_transmitData                  
-00005509  EUSCI_B_SPI_transmitData                  
-0000550d  _system_pre_init                          
-00005510  _ctypes_                                  
-00005654  uartConfig                                
-00005678  spiMasterConfig                           
-0000573c  __TI_Handler_Table_Base                   
-00005748  __TI_Handler_Table_Limit                  
-00005750  __TI_CINIT_Base                           
-00005760  __TI_CINIT_Limit                          
+000020e1  VelaMacRetrieveListOfNodes                
+000020e3  VelaMacReport                             
+0000217b  SendJoinReq                               
+000021b1  NodeCycle                                 
+000021d1  VelaMacInit                               
+0000220f  SleepFor                                  
+00002499  initCalendar                              
+000024cf  initPorts                                 
+0000250b  initPeripherals                           
+00002535  sleepFor                                  
+000026b3  initClocks                                
+0000272b  debug_print_pkt                           
+0000274b  RTC_AlarmHandler                          
+000027dd  HOSTwrite                                 
+00002829  HOSTunlink                                
+00002861  HOSTtime64                                
+000028af  HOSTtime                                  
+000028e9  HOSTrename                                
+00002947  HOSTread                                  
+00002993  HOSTopen                                  
+000029e5  HOSTlseek                                 
+00002a41  HOSTgetenv                                
+00002a7f  HOSTclose                                 
+00002ab7  HOSTclock                                 
+00002b01  write                                     
+00002b91  remove                                    
+00002b91  unlink                                    
+00002bb5  rename                                    
+00002bf3  remove_device                             
+00002c1b  read                                      
+00002c3f  open                                      
+00002ced  lseek                                     
+00002d11  close                                     
+00002d61  add_device                                
+00002ea7  CommsInitSniffer                          
+00002ed5  CommsInitNode                             
+00002f03  CommsInitCoordinator                      
+0000307d  VelaNwkReport                             
+0000309b  VelaNwkInitialization                     
+000032d9  UARTinit                                  
+00003337  UARTSendRssi                              
+00003417  UARTSend                                  
+0000345d  UARTA0_Handler                            
+00003505  __aeabi_uldivmod                          
+000036f9  SystemInit                                
+0000374b  SystemCoreClockUpdate                     
+000039a5  __TI_cleanup                              
+000039d1  freopen                                   
+000039fb  fopen                                     
+00003aa1  __aeabi_dsub                              
+00003aab  __aeabi_dadd                              
+00003c57  _system_post_cinit                        
+00003c59  getTotal_ms                               
+00003c5f  delay_ms                                  
+00003c77  T32_INT1_IRQHandler                       
+00003c9b  SysTick_Handler                           
+00003cc1  Set_Alarm                                 
+00003d0b  Init_SysTick                              
+00003ddd  Init_ADC_Sensors                          
+00003ecf  Init_Mag                                  
+00003ed1  Init_Sensors                              
+00003ed5  Get_Magnetic                              
+00003ee9  Get_Light                                 
+00003ef9  Get_Ind                                   
+00003eff  Get_Cap                                   
+00003f05  Get_Batt                                  
+00003f09  ADC14_IRQHandler                          
+00003f61  __aeabi_ddiv                              
+00004099  fputs                                     
+000041a5  puts                                      
+000041cd  __aeabi_dmul                              
+000042c9  ldexp                                     
+000042c9  ldexpl                                    
+000042c9  scalbn                                    
+000042c9  scalbnl                                   
+000043c5  ceil                                      
+000043c5  ceill                                     
+000044bd  floor                                     
+000044bd  floorl                                    
+000045b5  setvbuf                                   
+00004691  __TI_doflush                              
+000046dd  fflush                                    
+00004759  __TI_wrt_ok                               
+000047bb  __TI_rd_ok                                
+00004805  CS_startHFXTWithTimeout                   
+000048a1  CS_startLFXTWithTimeout                   
+0000493d  __aeabi_memcpy                            
+0000493d  __aeabi_memcpy4                           
+0000493d  __aeabi_memcpy8                           
+0000493d  memcpy                                    
+000049d9  __TI_closefile                            
+00004a3f  fclose                                    
+00004a71  fputc                                     
+00004a71  putc                                      
+00004af5  putchar                                   
+00004b09  SPI_initMaster                            
+00004b91  __aeabi_cdcmpeq                           
+00004b91  __aeabi_cdcmple                           
+00004c17  __aeabi_cdrcmple                          
+00004c9d  __aeabi_memclr                            
+00004c9d  __aeabi_memclr4                           
+00004c9d  __aeabi_memclr8                           
+00004c9f  __aeabi_memset                            
+00004c9f  __aeabi_memset4                           
+00004c9f  __aeabi_memset8                           
+00004ca5  memset                                    
+00004d89  __TI_auto_init                            
+00004e01  printf                                    
+00004e69  __TI_decompress_lzss                      
+00004ed1  __TI_writemsg                             
+00004eff  C$$IO$$                                   
+00004f03  __TI_readmsg                              
+00004f39  Interrupt_enableInterrupt                 
+00004f9d  RTC_C_getCalendarTime                     
+00005001  fseek                                     
+00005065  frexp                                     
+00005065  frexpl                                    
+000050c9  sprintf                                   
+00005129  RTC_C_initCalendar                        
+00005185  _c_int00                                  
+000051d9  C$$EXIT                                   
+000051dd  abort                                     
+000051e5  exit                                      
+0000522d  ltoa                                      
+00005281  RTC_C_clearInterruptFlag                  
+000052d1  atoi                                      
+0000531d  copy_in                                   
+00005369  srand                                     
+0000537f  rand                                      
+000053b5  GPIO_setAsPeripheralModuleFunctionInputPin
+000053fd  RTC_C_getEnabledInterruptStatus           
+00005445  __aeabi_d2iz                              
+0000548d  __aeabi_d2uiz                             
+000054d1  RTC_C_enableInterrupt                     
+00005511  strncpy                                   
+00005549  operate                                   
+00005555  initEndNode                               
+00005565  main                                      
+000055e1  __aeabi_i2d                               
+00005611  RTC_C_getInterruptStatus                  
+0000563d  initSPI                                   
+00005665  CS_setDCOCenteredFrequency                
+00005689  GPIO_setAsOutputPin                       
+000056ad  RTC_C_setCalendarAlarm                    
+000056d1  RTC_C_startClock                          
+000056f5  GPIO_interruptEdgeSelect                  
+00005715  SPI_transmitData                          
+00005735  memchr                                    
+00005755  __aeabi_ui2d                              
+00005775  memccpy                                   
+00005791  SPI_enableModule                          
+000057ab  SPI_receiveData                           
+000057c5  GPIO_getInputPinValue                     
+000057dd  GPIO_setOutputLowOnPin                    
+000057f5  _args_main                                
+0000580d  strcmp                                    
+00005825  strchr                                    
+0000583d  CS_setExternalClockSourceFrequency        
+00005851  GPIO_setOutputHighOnPin                   
+00005865  GPIO_toggleOutputOnPin                    
+00005879  _register_unlock                          
+0000587f  _register_lock                            
+00005887  _nop                                      
+0000588d  copysign                                  
+0000588d  copysignl                                 
+000058a1  strcpy                                    
+000058b5  strlen                                    
+000058c9  Interrupt_enableMaster                    
+000058d9  SysCtl_disableNMISource                   
+000058e9  SysCtl_enableNMISource                    
+000058f9  __TI_decompress_none                      
+00005907  __time32                                  
+00005907  time                                      
+00005915  CPU_cpsie                                 
+00005921  EUSCI_A_SPI_enable                        
+0000592d  EUSCI_B_SPI_enable                        
+00005939  SysCtl_getNMISourceStatus                 
+00005945  __TI_zero_init                            
+00005951  CS_startHFXT                              
+00005957  CS_startLFXT                              
+0000595d  EUSCI_A_SPI_receiveData                   
+00005963  EUSCI_B_SPI_receiveData                   
+00005969  EUSCI_A_SPI_transmitData                  
+0000596d  EUSCI_B_SPI_transmitData                  
+00005971  _system_pre_init                          
+00005974  _ctypes_                                  
+00005ab8  uartConfig                                
+00005adc  spiMasterConfig                           
+00005ba4  __TI_Handler_Table_Base                   
+00005bb0  __TI_Handler_Table_Limit                  
+00005bb8  __TI_CINIT_Base                           
+00005bc8  __TI_CINIT_Limit                          
 20000000  _sys_memory                               
 20000800  __CIOBUF_                                 
 20000a20  UARTBuffer                                
 20000b20  __TI_tmpnams                              
-20000c82  lastLight                                 
-20000c92  lastMagnetic                              
-20000c98  UARTrx                                    
-20000ca4  _ftable                                   
-20000e94  __TI_ft_end                               
-20000e98  __aeabi_stdin                             
-20000e9c  __aeabi_stdout                            
-20000ea0  __aeabi_stderr                            
-20000ea4  __TI_cleanup_ptr                          
-20000ea8  __TI_dtors_ptr                            
-20000eac  __TI_enable_exit_profile_output           
-20000ebc  _msTime                                   
-20000ebe  _sTime                                    
-20000ebf  _mTime                                    
-20000ec0  _hTime                                    
-20000ec4  _totalms                                  
-20000ec8  _lock                                     
-20000ecc  _unlock                                   
-20000ed0  currentState                              
-20000ed1  ableToConnect                             
-20000ed2  lostConnection                            
-20000ed3  len                                       
-20000ed4  goodPkts                                  
-20000ed8  rxAvailable                               
-20000edc  errno                                     
-20000ee4  main_func_sp                              
-20000ee8  SystemCoreClock                           
-20000eec  awake                                     
-2000fe00  __stack                                   
-20010000  __STACK_END                               
+20000c9a  lastCapicitive                            
+20000cb2  lastInductive                             
+20000cb8  AlarmWentOff                              
+20000cbc  UARTrx                                    
+20000cc8  tickFrequency                             
+20000ccc  lastLight                                 
+20000cd0  _ftable                                   
+20000ec0  _msTime                                   
+20000ec2  _sTime                                    
+20000ec3  _mTime                                    
+20000ec4  _hTime                                    
+20000ec8  _totalms                                  
+20000ecc  _totalDays                                
+20000ece  alarmSet                                  
+20000ed0  alarmIn                                   
+20000ed4  __TI_ft_end                               
+20000ed8  __aeabi_stdin                             
+20000edc  __aeabi_stdout                            
+20000ee0  __aeabi_stderr                            
+20000ee4  __TI_cleanup_ptr                          
+20000ee8  __TI_dtors_ptr                            
+20000eec  __TI_enable_exit_profile_output           
+20000efc  _lock                                     
+20000f00  _unlock                                   
+20000f04  currentState                              
+20000f05  ableToConnect                             
+20000f06  lostConnection                            
+20000f07  len                                       
+20000f08  goodPkts                                  
+20000f0c  rxAvailable                               
+20000f10  errno                                     
+20000f1c  main_func_sp                              
+20000f20  SystemCoreClock                           
+20000f24  awake                                     
+20007e00  __stack                                   
+20008000  __STACK_END                               
 4000480c  WDTCTL_SYM                                
 ffffffff  __TI_pprof_out_hndl                       
 ffffffff  __TI_prof_data_size                       
@@ -900,4 +939,4 @@ ffffffff  binit
 UNDEFED   SHT$$INIT_ARRAY$$Base                     
 UNDEFED   SHT$$INIT_ARRAY$$Limit                    
 
-[268 symbols]
+[283 symbols]

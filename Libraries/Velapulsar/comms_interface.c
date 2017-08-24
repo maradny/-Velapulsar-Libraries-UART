@@ -83,7 +83,7 @@ VelaMacStatus CommsInitCoordinator(){
 	nwkEvents.NwkFrameStart = OnNwkFrameStart;
 	nwkEvents.NwkFrameEnd = OnNwkFrameEnd;
 
-	return VelaNwkInitialization(1, 4, &nwkEvents);
+	return VelaNwkInitialization(1, 32, &nwkEvents);
 }
 
 VelaMacStatus CommsInitSniffer(){
@@ -153,8 +153,14 @@ static void OnNwkCycleChange (timeCycles newCycle){
 
 static void OnNwkFrameStart (void){
 	// wake up
-	printf("My frame is here!!! Yaaaay!!!\n");
+	printf("APP: My frame is here!!! Yaaaay!!!\n");
     appDataPkt pkt;
+    pkt.data.sensorData.capicitive = Get_Cap();
+    pkt.data.sensorData.inductive = Get_Ind();
+    pkt.data.sensorData.light = Get_Light();
+    pkt.data.sensorData.magnetic = Get_Magnetic();
+    pkt.data.sensorData.battery = Get_Batt();
+    printf("sending this much! %d", sizeof(pkt.pkt));
 	VelaNwkReport (pkt.pkt, sizeof(pkt.pkt));
 }
 

@@ -16,6 +16,7 @@ void (*AlarmWentOff)(void);
 
 void Init_SysTick(uint32_t freq){
     MAP_SysTick_enableModule();
+    printf("Frequency: %d\n",freq);
     tickFrequency = freq/1000; // ticks for 1 millisecond
     MAP_SysTick_setPeriod(tickFrequency);
     MAP_Interrupt_setPriority(FAULT_SYSTICK, 0x20);
@@ -96,7 +97,7 @@ void SysTick_Handler(void){
 //    	if (alarmIn == 0){
 //    		printf("ALAAAARM!!!!\n");
 //    		alarmSet = false;
-//    		GPIO_toggleOutputOnPin(GPIO_PORT_P4, GPIO_PIN2);
+    GPIO_toggleOutputOnPin(GPIO_PORT_P4, GPIO_PIN5);
 //    		AlarmWentOff();
 //    	}
 //

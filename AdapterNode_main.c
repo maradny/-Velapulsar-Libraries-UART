@@ -127,7 +127,7 @@ void operate(void)
     while(1){
         appDataPkt pkt;
         pkt.data.sensorData.battery = FULL;
-        pkt.data.sensorData.claw = 1;//Get_Claw();
+        //pkt.data.sensorData.claw = 1;//Get_Claw();
 //        pkt.data.sensorData.magnetic = Get_Magnetic();
 //        pkt.data.sensorData.light = Get_Light();
 //        printf("Sending ");

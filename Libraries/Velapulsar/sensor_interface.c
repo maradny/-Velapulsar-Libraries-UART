@@ -48,8 +48,8 @@ void Init_Claw(void);
  *                        FUNCTION IMPLEMENTATIONS
  *****************************************************************************/
 void Init_Sensors(void){
-	Init_LightandMagnetic();
-	Init_Claw();
+	Init_ADC_Sensors();
+	Init_Mag();
 }
 
 uint16_t Get_Light(void){
@@ -57,19 +57,27 @@ uint16_t Get_Light(void){
 	return lastLight;
 }
 
-uint16_t Get_Magnetic(void){
-	return lastMagnetic;
+uint16_t Get_Ind(void){
+	return lastInductive;
 }
 
-bool Get_Claw(void){
-	return GPIO_getInputPinValue(CLAW_PORT, CLAW_PIN);
+uint16_t Get_Cap(void){
+	return lastCapicitive;
+}
 
+bool Get_Magnetic(void){
+	return GPIO_getInputPinValue(MAGNETIC_PORT, MAGNETIC_PIN);
+
+}
+
+batteryLevel Get_Batt(void){
+	return FULL;
 }
 
 /*****************************************************************************
  *                            LOCAL FUNCTIONS
  *****************************************************************************/
-void Init_LightandMagnetic (void){
+void Init_ADC_Sensors (void){
     /* Setting Flash wait state */
     MAP_FlashCtl_setWaitState(FLASH_BANK0, 2);
     MAP_FlashCtl_setWaitState(FLASH_BANK1, 2);
@@ -109,8 +117,8 @@ void Init_LightandMagnetic (void){
     MAP_Interrupt_enableMaster();
 }
 
-void Init_Claw(void){
-	GPIO_setAsInputPinWithPullDownResistor(CLAW_PORT, CLAW_PIN);
+void Init_Mag(void){
+	//GPIO_setAsInputPinWithPullDownResistor(CLAW_PORT, CLAW_PIN);
 }
 
 void ADC14_IRQHandler(void){
@@ -120,7 +128,7 @@ void ADC14_IRQHandler(void){
 	//printf("ADC Interrupted: %d\n", status);
 
 	if (ADC_INT1 & status){
-		lastMagnetic = MAP_ADC14_getResult(ADC_MEM0);
+		lastInductive = MAP_ADC14_getResult(ADC_MEM0);
 		lastLight = MAP_ADC14_getResult(ADC_MEM1);
 		//printf("ADC Result: %d\n", lastLight);
 	}

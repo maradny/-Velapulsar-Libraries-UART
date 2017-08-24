@@ -93,14 +93,14 @@ void UARTSend (uint8_t *data, int size){
 	int i =0;
 	uint8_t byte[2];
 	for (i ; i < size ; i++){
-		sprintf(byte, "%02x", data[i]);
-		printf("byte: %s", byte);
-		MAP_UART_transmitData(EUSCI_A0_BASE, byte[0]);
+//		sprintf(byte, "%02x", data[i]);
+//		printf("byte: %s", byte);
+		MAP_UART_transmitData(EUSCI_A0_BASE, data[i]);
 		//MAP_UART_transmitData(EUSCI_A0_BASE, data[i]);
-		if (byte[1] != 0x00){
-			MAP_UART_transmitData(EUSCI_A0_BASE, byte[1]);
-		}
-		MAP_UART_transmitData(EUSCI_A0_BASE, ' ');
+//		if (byte[1] != 0x00){
+//			MAP_UART_transmitData(EUSCI_A0_BASE, byte[1]);
+//		}
+//		MAP_UART_transmitData(EUSCI_A0_BASE, ' ');
 		//printf("sending: %x\n", data[i]);
 	}
 
@@ -119,24 +119,29 @@ void UARTSendRssi (uint8_t *data, int size, int16_t rssi){
 	int i =0;
 	uint8_t byte[2];
 	for (i ; i < size ; i++){
-		//sprintf(byte, "%02x", data[i]);
-		//printf("byte: %s", byte);
-		//MAP_UART_transmitData(EUSCI_A0_BASE, byte[0]);
-		MAP_UART_transmitData(EUSCI_A0_BASE, data[i]);
-//		if (byte[1] != 0x00){
-//			MAP_UART_transmitData(EUSCI_A0_BASE, byte[1]);
-//		}
+		sprintf(byte, "%02x", data[i]);
 
+		MAP_UART_transmitData(EUSCI_A0_BASE, byte[0]);
+//		MAP_UART_transmitData(EUSCI_A0_BASE, data[i]);
+		if (byte[1] != 0x00){
+			MAP_UART_transmitData(EUSCI_A0_BASE, byte[1]);
+		}
+		MAP_UART_transmitData(EUSCI_A0_BASE, ' ');
 		//printf("sending: %x\n", data[i]);
 	}
 
-	MAP_UART_transmitData (EUSCI_A0_BASE, rssi & 0xFF); //LSB of rssi
-	MAP_UART_transmitData (EUSCI_A0_BASE, (rssi & 0xFF00) >> 8); //MSB of rssi
+	sprintf(byte, "%02x", rssi & 0xFF);
+	MAP_UART_transmitData (EUSCI_A0_BASE, byte[0]); //LSB of rssi
+	MAP_UART_transmitData (EUSCI_A0_BASE, byte[1]); //LSB of rssi
+	MAP_UART_transmitData(EUSCI_A0_BASE, ' ');
+	sprintf(byte, "%02x", (rssi & 0xFF00) >> 8);
+	MAP_UART_transmitData (EUSCI_A0_BASE, byte[0]); //MSB of rssi
+	MAP_UART_transmitData (EUSCI_A0_BASE, byte[1]); //MSB of rssi
 
 	// Send footer
 	MAP_UART_transmitData (EUSCI_A0_BASE, UEND_CHAR); // UART end char
 	//MAP_UART_transmitData (EUSCI_A0_BASE, UEND_CHAR); // UART end char
-	//MAP_UART_transmitData (EUSCI_A0_BASE, '\n'); // UART end char
+	MAP_UART_transmitData (EUSCI_A0_BASE, '\n'); // UART end char
 }
 
 /*****************************************************************************

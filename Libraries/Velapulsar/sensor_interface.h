@@ -39,12 +39,14 @@
 /*****************************************************************************
  *                                DEFINES
  *****************************************************************************/
-#define LIGHT_PORT    GPIO_PORT_P4
-#define LIGHT_PIN     GPIO_PIN7
-#define MAGNETIC_PORT GPIO_PORT_P4
-#define MAGNETIC_PIN  GPIO_PIN6
-#define CLAW_PORT	  GPIO_PORT_P4
-#define CLAW_PIN	  GPIO_PIN5
+#define LIGHT_PORT    	GPIO_PORT_P4
+#define LIGHT_PIN     	GPIO_PIN7
+#define MAGNETIC_PORT 	GPIO_PORT_P4
+#define MAGNETIC_PIN  	GPIO_PIN6
+#define CAP_PORT	  	GPIO_PORT_P4
+#define CAP_PIN	  		GPIO_PIN5
+#define IND_PORT	  	GPIO_PORT_P4
+#define IND_PIN	  		GPIO_PIN5
 
 typedef enum{
 	FULL,
@@ -62,20 +64,24 @@ typedef enum{
 
 typedef struct{
   uint16_t      light;
-  uint16_t      magnetic;
-  bool      claw;
-  batteryLevel    battery;
+  uint16_t      inductive;
+  uint16_t      capicitive;
+  bool      	magnetic;
+  batteryLevel  battery;
 }sensorData;
 
-uint16_t lastMagnetic;
+uint16_t lastInductive;
+uint16_t lastCapicitive;
 uint16_t lastLight;
 
 /*****************************************************************************
  *                             Functions - API
  *****************************************************************************/
 void Init_Sensors(void);
-uint16_t Get_Magnetic(void);
-bool Get_Claw(void);
+bool Get_Magnetic(void);
+uint16_t Get_Ind(void);
+uint16_t Get_Cap(void);
 uint16_t Get_Light(void);
+batteryLevel Get_Batt(void);
 
 #endif /* LIBRARIES_VELAPULSAR_SENSOR_INTERFACE_H_ */

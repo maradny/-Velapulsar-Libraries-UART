@@ -28,7 +28,7 @@
  */
 
 /* Unit Long Address */
--DMY_ADDRESS=0x12345678
+-DMY_ADDRESS=0x00000001
 
 /* Broadcast Address */
 -DBROADCAST_ADDRESS=0x0
